@@ -18,10 +18,10 @@ describe('typed inputs under the levers', () => {
     useLevers.getState().resetOverrides()
   })
 
-  it('collapsed by default; the exact lever value writes the lever', () => {
+  it('the exact lever value is always visible and writes the lever', () => {
     render(<LeverRail />)
-    expect(screen.queryByLabelText(/Exact value, energy index/)).toBeNull()
-    openInputs('L2')
+    expect(screen.getByLabelText(/Exact value, energy index/)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/Natural gas/)).toBeNull()
     fireEvent.change(screen.getByLabelText(/Exact value, energy index/), {
       target: { value: '137' },
     })
@@ -74,6 +74,15 @@ describe('typed inputs under the levers', () => {
     expect(within(box).getByLabelText(/Quicklime and hydrated lime, List price/)).toHaveValue(420)
     expect(within(box).getByLabelText(/Riyadh, Quicklime and hydrated lime/)).toHaveValue(520)
     expect(within(box).getByLabelText(/Nitaqat target/)).toHaveValue(50)
+  })
+
+  it('open all inputs expands every card, close all folds them', () => {
+    render(<LeverRail />)
+    fireEvent.click(screen.getByRole('button', { name: strings.inputs.openAll }))
+    expect(screen.getByLabelText(/Natural gas/)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Nitaqat target/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: strings.inputs.closeAll }))
+    expect(screen.queryByLabelText(/Natural gas/)).toBeNull()
   })
 
   it('risk appetite has no numeric inputs and says so', () => {

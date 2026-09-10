@@ -338,7 +338,9 @@ export const strings = {
     ownership: 'This is what SLIC owns after handover: the same rules, run on real numbers.',
   },
   inputs: {
-    toggle: 'Inputs',
+    toggle: 'Assumptions behind this lever',
+    openAll: 'Open all inputs',
+    closeAll: 'Close all inputs',
     hint: 'Type exact values. Every field feeds the engine directly.',
     edited: (n: number) => `${n} edited`,
     reset: 'Reset these inputs',
@@ -544,7 +546,7 @@ export const strings = {
     captions: [
       'STRATA is a dynamic strategy cockpit, built by Sia for Saudi Lime Industries and its 2027 to 2031 strategic business plan. Most strategy plans are documents, fixed on the day they are printed. STRATA is a system. The plan is computed live from six levers, and every number on screen can be traced back to the lever and the rule that produced it. All data here is illustrative.',
       'On the left are the six levers the Board controls: domestic demand outlook, energy cost, capital envelope, risk appetite, export ambition and carbon cost. Each card shows the current value, what it moves, and the assumptions it touches. Four presets, Base, Growth, Upside and Downside, set all six at once. Move any lever and the whole plan recomputes in a few milliseconds.',
-      'Sliders are for exploring. For precision, every lever card opens an Inputs section: the exact lever value, and every assumption behind it typed with its unit. Fuel prices in SAR per MMBtu and SAR per litre set the energy index. Sector volumes and growth, export potential by year, emissions by site, discount rate and terminal multiple are all yours to type. A base year card holds the 2026 actuals, list prices, unit costs and site capacity. Edited values are marked and reset in one click.',
+      'Sliders are for exploring. For precision, every lever card carries the exact value as a typed field, and opens the assumptions behind it, each typed with its unit. Fuel prices in SAR per MMBtu and SAR per litre set the energy index. Sector volumes and growth, export potential by year, emissions by site, discount rate and terminal multiple are all yours to type. A base year card holds the 2026 actuals, list prices, unit costs and site capacity. Edited values are marked and reset in one click.',
       'Behind the screen is a ten-step engine. It builds demand by sector, checks it against site capacity, moves prices with utilization, and builds cost per ton from energy and carbon. It then tests every initiative against its rules, selects a portfolio within the capital envelope, and consolidates everything into a five-year P and L, a classification of every market, and a roadmap. The engine is plain code with no license to buy, and every number lives in two data files a consultant can edit.',
       'The Financial plan view is the first thing a CFO wants to see. Four headline numbers for 2031, revenue and EBITDA against the Base case as dashed lines, capex and free cash flow by year, and the four presets side by side. When a lever moves, the numbers count to their new values, and delta chips show the change against Base: teal when favourable, coral when not.',
       'The Growth portfolio holds sixteen initiatives in three columns: in plan, deferred, and out. Every card shows capex, NPV, EBITDA, the owner, and a trigger point: the lever value that would change its status. A capital bar shows what the envelope funds. Click a card for the full initiative sheet: objective, rationale, impact, timeline, risks and KPIs.',

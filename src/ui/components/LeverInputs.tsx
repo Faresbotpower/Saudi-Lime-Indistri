@@ -94,16 +94,36 @@ export function LeverInputs({ id }: Props) {
 
   const dark = true
   return (
-    <div className="mt-3 border-t border-line-dark/60 pt-2" data-testid={`inputs-${id}`}>
+    <div className="mt-3 border-t border-line-dark/60 pt-3" data-testid={`inputs-${id}`}>
+      {exact && (
+        <NumberField
+          id={`exact-${id}`}
+          label={exact.label}
+          unit={exact.unit}
+          value={exact.value}
+          step={exact.step}
+          min={exact.min}
+          max={exact.max}
+          onChange={(v) => {
+            if (v !== undefined) exact.set(Math.min(exact.max, Math.max(exact.min, v)))
+          }}
+          dark={dark}
+        />
+      )}
       <button
         type="button"
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className={`flex w-full items-center justify-between rounded-md px-1 py-1 text-left transition-colors duration-150 ${
-          dark ? 'text-muted-dark hover:text-white' : 'text-muted hover:text-ink'
+        className={`mt-1 flex w-full items-center justify-between rounded-md border px-2.5 py-1.5 text-left transition-colors duration-150 ${
+          open
+            ? 'border-teal/60 text-white'
+            : 'border-line-dark text-muted-dark hover:border-teal/60 hover:text-white'
         }`}
       >
-        <span className="label">{I.toggle}</span>
+        <span className="text-[13px]">
+          {I.toggle}
+          <span className="num ml-1.5 text-[12px] text-muted-dark">({paths.length})</span>
+        </span>
         <span className="flex items-center gap-2 text-[12px]">
           {editedCount > 0 && (
             <span className="rounded-full bg-teal/20 px-2 py-0.5 text-teal">
@@ -138,36 +158,11 @@ export function LeverInputs({ id }: Props) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <p className={`mt-1 text-[12px] ${dark ? 'text-muted-dark' : 'text-muted'}`}>
-              {I.hint}
-            </p>
-            {exact && (
-              <div className="mt-2">
-                <NumberField
-                  id={`exact-${id}`}
-                  label={exact.label}
-                  unit={exact.unit}
-                  value={exact.value}
-                  step={exact.step}
-                  min={exact.min}
-                  max={exact.max}
-                  onChange={(v) => {
-                    if (v !== undefined) exact.set(Math.min(exact.max, Math.max(exact.min, v)))
-                  }}
-                  dark={dark}
-                />
-              </div>
-            )}
-            {groups.length === 0 && (
-              <p className={`mt-2 text-[13px] ${dark ? 'text-muted-dark' : 'text-muted'}`}>
-                {I.none}
-              </p>
-            )}
+            <p className="mt-2 text-[12px] text-muted-dark">{I.hint}</p>
+            {groups.length === 0 && <p className="mt-2 text-[13px] text-muted-dark">{I.none}</p>}
             {groups.map((g) => (
               <div key={g.id} className="mt-3">
-                <div className={`label mb-1 ${dark ? 'text-muted-dark' : 'text-muted'}`}>
-                  {g.title}
-                </div>
+                <div className="label mb-1 text-muted-dark">{g.title}</div>
                 {g.fields.map((f) => (
                   <NumberField
                     key={f.path}
@@ -189,11 +184,7 @@ export function LeverInputs({ id }: Props) {
               <button
                 type="button"
                 onClick={() => resetOverrides(paths)}
-                className={`mt-3 rounded-full border px-3 py-1 font-heading text-[12px] transition-colors duration-150 ${
-                  dark
-                    ? 'border-line-dark text-white hover:border-coral hover:text-coral'
-                    : 'border-line text-navy hover:border-coral hover:text-coral'
-                }`}
+                className="mt-3 rounded-full border border-line-dark px-3 py-1 font-heading text-[12px] text-white transition-colors duration-150 hover:border-coral hover:text-coral"
               >
                 {I.reset}
               </button>

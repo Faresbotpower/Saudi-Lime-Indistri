@@ -211,6 +211,8 @@ export function LeverRail() {
   const applyPreset = useLevers((s) => s.applyPreset)
   const explain = useLevers((s) => s.explain)
   const toggleExplain = useLevers((s) => s.toggleExplain)
+  const anyOpen = useLevers((s) => Object.values(s.inputsOpen).some(Boolean))
+  const setAllInputsOpen = useLevers((s) => s.setAllInputsOpen)
 
   return (
     <aside
@@ -243,9 +245,18 @@ export function LeverRail() {
           })}
         </div>
 
-        <div className="mb-3 flex items-center gap-2">
-          <Slash size={12} />
-          <span className="label text-muted-dark">{strings.rail.levers}</span>
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <span className="flex items-center gap-2">
+            <Slash size={12} />
+            <span className="label text-muted-dark">{strings.rail.levers}</span>
+          </span>
+          <button
+            type="button"
+            onClick={() => setAllInputsOpen(!anyOpen)}
+            className="rounded-full border border-line-dark px-2.5 py-0.5 font-heading text-[12px] text-muted-dark transition-colors duration-150 hover:border-teal hover:text-teal"
+          >
+            {anyOpen ? strings.inputs.closeAll : strings.inputs.openAll}
+          </button>
         </div>
         <div className="grid gap-3">
           {leverDefs.map((def) => (

@@ -75,6 +75,7 @@ type LeversState = {
   setOverride: (path: string, value: number | undefined) => void
   resetOverrides: (paths?: string[]) => void
   setInputsOpen: (id: string, open: boolean) => void
+  setAllInputsOpen: (open: boolean) => void
   setPrinting: (printing: boolean) => void
 }
 
@@ -165,6 +166,12 @@ export const useLevers = create<LeversState>((set) => ({
       return { overrides }
     }),
   setPrinting: (printing) => set({ printing }),
+  setAllInputsOpen: (open) =>
+    set({
+      inputsOpen: Object.fromEntries(
+        ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'base'].map((id) => [id, open]),
+      ),
+    }),
   setInputsOpen: (id, open) => set((s) => ({ inputsOpen: { ...s.inputsOpen, [id]: open } })),
   resetOverrides: (paths) =>
     set((s) => {
