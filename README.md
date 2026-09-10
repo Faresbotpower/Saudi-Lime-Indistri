@@ -28,7 +28,7 @@ UI copy lives in `src/strings.ts`. Brand notes and site screenshots are in `docs
 
 ## Build status
 
-Steps 1 to 5 of the build order in `CLAUDE.md` are complete: shell, the whole engine under `src/engine` behind `runPlan(levers, data)`, View 3 (Financial plan), View 2 (Growth portfolio) and View 1 (Strategic direction) are live. View 1 carries the Strata reveal: three bands (assumptions, initiatives, plan) that light top to bottom with connector lines when a lever or a chip is hovered, the Where-to-play 2x2 with animated bubbles, and the classification table with the change against Base. 130 tests.
+Steps 1 to 5 of the build order in `CLAUDE.md` are complete: shell, the whole engine under `src/engine` behind `runPlan(levers, data)`, Views 3, 2, 1, 4 and 5 are live: Financial plan, Growth portfolio, Strategic direction, Operations and people (year scrubber, site gauges, capex sparklines, people and supply chain panels) and Roadmap (quarterly Gantt in the five layers with ghost bars, dependency lines, critical path and milestones). View 1 carries the Strata reveal: three bands (assumptions, initiatives, plan) that light top to bottom with connector lines when a lever or a chip is hovered, the Where-to-play 2x2 with animated bubbles, and the classification table with the change against Base. 139 tests.
 
 Testing note: Chrome freezes animations in a hidden tab, so a view switch driven by the exit animation never completes there. Keep the tab visible when checking motion by hand.
 
