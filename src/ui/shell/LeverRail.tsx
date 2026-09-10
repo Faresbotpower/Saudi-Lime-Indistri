@@ -177,7 +177,7 @@ function Lever({ def }: { def: LeverDef }) {
   return (
     <section
       data-lit={lit ? 'true' : 'false'}
-      className={`group rounded-card border bg-ink-2 p-4 transition-colors duration-200 hover:border-[#2f4a5f] ${
+      className={`group min-w-0 rounded-card border bg-ink-2 p-4 transition-colors duration-200 hover:border-[#2f4a5f] ${
         lit ? 'border-teal shadow-[0_0_0_1px_var(--teal)]' : 'border-line-dark'
       }`}
       onMouseEnter={() => setHovered(def.id)}
@@ -258,7 +258,7 @@ export function LeverRail() {
             {anyOpen ? strings.inputs.closeAll : strings.inputs.openAll}
           </button>
         </div>
-        <div className="grid gap-3">
+        <div className="grid min-w-0 gap-3 [grid-template-columns:minmax(0,1fr)]">
           {leverDefs.map((def) => (
             <Lever key={def.id} def={def} />
           ))}

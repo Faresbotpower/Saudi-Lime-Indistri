@@ -94,7 +94,7 @@ export function LeverInputs({ id }: Props) {
 
   const dark = true
   return (
-    <div className="mt-3 border-t border-line-dark/60 pt-3" data-testid={`inputs-${id}`}>
+    <div className="mt-3 min-w-0 border-t border-line-dark/60 pt-3" data-testid={`inputs-${id}`}>
       {exact && (
         <NumberField
           id={`exact-${id}`}
