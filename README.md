@@ -15,7 +15,7 @@ Node 20.19 or newer, or 22.12 or newer, is recommended by Vite 8. Vercel's defau
 
 ## Deploy
 
-Import the repository in Vercel. `vercel.json` sets the build command and output directory. No environment variables, no server functions.
+Import the repository in Vercel, or run `vercel deploy --prod` from this folder. `vercel.json` sets the build command and output directory. No environment variables, no server functions. The app is static files and runs from any hosting, including a plain file server.
 
 ## How to change the numbers
 
@@ -25,6 +25,14 @@ Every number lives in two files, and nothing else needs to change:
 - `data/initiatives.json`: the initiative portfolio with viability rules.
 
 UI copy lives in `src/strings.ts`. Brand notes and site screenshots are in `docs/brand/`.
+
+## Demo in five minutes
+
+1. Open on Base, Financial plan. This is the plan.
+2. Move Energy cost to 140. EBITDA compresses, the PCC plant drops out, the roadmap re-sequences.
+3. Set Export ambition to Extended. The Jeddah terminal enters, Jeddah utilization rises, the export market appears in the classification.
+4. Open the Tracker and type a 2027 energy actual of 140. The triggers-fired panel lists the decision now due.
+5. Close on Strategic direction. Hover Capital envelope in the rail and watch the strata light up.
 
 ## Build status
 
