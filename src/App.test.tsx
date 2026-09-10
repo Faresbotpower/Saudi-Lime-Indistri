@@ -36,3 +36,15 @@ describe('shell', () => {
     expect(screen.getByText('SAR 350m')).toBeInTheDocument()
   })
 })
+
+describe('view switching', () => {
+  beforeEach(() => useLevers.getState().reset())
+
+  it('switches the main view when a tab is clicked', async () => {
+    const { findByTestId } = render(<App />)
+    fireEvent.click(screen.getByRole('tab', { name: /Growth portfolio/ }))
+    expect(await findByTestId('capital-strip')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('tab', { name: /Strategic direction/ }))
+    expect(await findByTestId('strata-reveal')).toBeInTheDocument()
+  })
+})

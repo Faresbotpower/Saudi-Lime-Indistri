@@ -28,7 +28,9 @@ UI copy lives in `src/strings.ts`. Brand notes and site screenshots are in `docs
 
 ## Build status
 
-Steps 1 to 5 of the build order in `CLAUDE.md` are complete: shell, the whole engine under `src/engine` behind `runPlan(levers, data)`, View 3 (Financial plan) wired live, and View 2 (Growth portfolio) with In, Deferred and Out columns, shared-layout card moves with a status pulse, trigger-point mini-bars, the capital envelope strip and the full RFQ initiative sheet. 115 tests.
+Steps 1 to 5 of the build order in `CLAUDE.md` are complete: shell, the whole engine under `src/engine` behind `runPlan(levers, data)`, View 3 (Financial plan), View 2 (Growth portfolio) and View 1 (Strategic direction) are live. View 1 carries the Strata reveal: three bands (assumptions, initiatives, plan) that light top to bottom with connector lines when a lever or a chip is hovered, the Where-to-play 2x2 with animated bubbles, and the classification table with the change against Base. 130 tests.
+
+Testing note: Chrome freezes animations in a hidden tab, so a view switch driven by the exit animation never completes there. Keep the tab visible when checking motion by hand.
 
 Calibration note: list prices and unit costs in the data do not reproduce the 2026 actuals on their own. The engine computes a price factor and an all-in cost factor once under the Base preset so the base year matches `baseCase.revenue` and `baseCase.ebitda`, and writes both to the trace. If you change volumes, prices or costs, expect those factors to move; keep them near 1 by updating `baseCase` too.
 

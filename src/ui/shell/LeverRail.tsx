@@ -102,6 +102,7 @@ function Lever({ def }: { def: LeverDef }) {
   const levers = useLevers((s) => s.levers)
   const setLever = useLevers((s) => s.setLever)
   const setHovered = useLevers((s) => s.setHoveredLever)
+  const lit = useLevers((s) => s.litLevers.includes(def.id))
 
   const control = (() => {
     switch (def.id) {
@@ -172,7 +173,10 @@ function Lever({ def }: { def: LeverDef }) {
 
   return (
     <section
-      className="group rounded-card border border-line-dark bg-ink-2 p-4 transition-colors duration-150 hover:border-[#2f4a5f]"
+      data-lit={lit ? 'true' : 'false'}
+      className={`group rounded-card border bg-ink-2 p-4 transition-colors duration-200 hover:border-[#2f4a5f] ${
+        lit ? 'border-teal shadow-[0_0_0_1px_var(--teal)]' : 'border-line-dark'
+      }`}
       onMouseEnter={() => setHovered(def.id)}
       onMouseLeave={() => setHovered(null)}
     >

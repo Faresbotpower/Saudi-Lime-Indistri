@@ -16,12 +16,15 @@ type LeversState = {
   view: ViewId
   explain: boolean
   hoveredLever: LeverId | null
+  /** Levers lit by a hover elsewhere (the Strata reveal), so the rail can answer. */
+  litLevers: LeverId[]
   setLever: <K extends LeverId>(id: K, value: LeverValues[K]) => void
   applyPreset: (id: ScenarioId) => void
   reset: () => void
   setView: (view: ViewId) => void
   toggleExplain: () => void
   setHoveredLever: (id: LeverId | null) => void
+  setLitLevers: (ids: LeverId[]) => void
 }
 
 const clone = (v: LeverValues): LeverValues => ({ ...v, L1: { ...v.L1 } })
@@ -45,6 +48,7 @@ export const useLevers = create<LeversState>((set) => ({
   view: 'financials',
   explain: false,
   hoveredLever: null,
+  litLevers: [],
   setLever: (id, value) =>
     set((s) => {
       const levers = { ...s.levers, [id]: value } as LeverValues
@@ -55,4 +59,5 @@ export const useLevers = create<LeversState>((set) => ({
   setView: (view) => set({ view }),
   toggleExplain: () => set((s) => ({ explain: !s.explain })),
   setHoveredLever: (hoveredLever) => set({ hoveredLever }),
+  setLitLevers: (litLevers) => set({ litLevers }),
 }))
