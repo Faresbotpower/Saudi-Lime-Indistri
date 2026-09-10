@@ -12,8 +12,8 @@ describe('walkthrough player', () => {
   })
   afterEach(() => vi.useRealTimers())
 
-  it('has eleven chapters with titles, captions and a reading pace', () => {
-    expect(chapters).toHaveLength(11)
+  it('has fourteen chapters with titles, captions and a reading pace', () => {
+    expect(chapters).toHaveLength(14)
     for (const c of chapters) {
       expect(c.title.length).toBeGreaterThan(2)
       expect(c.caption.length).toBeGreaterThan(40)
@@ -31,7 +31,7 @@ describe('walkthrough player', () => {
     )
   })
 
-  it('advances at reading pace and walks the app: presets in chapter 2, a card in chapter 5, an actual in chapter 9', () => {
+  it('advances at reading pace and walks the app: presets in chapter 2, a card in chapter 6, an actual in chapter 10', () => {
     render(<WalkthroughPlayer />)
     act(() => useLevers.getState().startWalkthrough())
     expect(useLevers.getState().view).toBe('financials')
@@ -47,12 +47,12 @@ describe('walkthrough player', () => {
           useLevers.getState().setWalkthroughStep(useLevers.getState().walkthrough.step + 1),
         )
     }
-    skipTo(4)
+    skipTo(5)
     act(() => vi.advanceTimersByTime(100))
     expect(useLevers.getState().view).toBe('portfolio')
     act(() => vi.advanceTimersByTime(16000))
     expect(useLevers.getState().openInitiativeId).toBe('pcc_plant')
-    skipTo(8)
+    skipTo(9)
     act(() => vi.advanceTimersByTime(4500))
     expect(useLevers.getState().view).toBe('tracker')
     expect(useLevers.getState().actuals).toEqual({ L2: 140 })

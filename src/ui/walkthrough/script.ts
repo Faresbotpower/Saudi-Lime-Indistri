@@ -40,6 +40,7 @@ export const chapters: Chapter[] = [
         api.closeInitiative()
         api.closeExplain()
         if (api.explain) api.toggleExplain()
+        api.setInputsOpen('L2', false)
         api.setView('financials')
       },
     },
@@ -57,6 +58,16 @@ export const chapters: Chapter[] = [
   ),
   chapter(
     3,
+    30,
+    [
+      { at: 1, run: (api) => api.setInputsOpen('L2', true) },
+      { at: 2, run: (_a, _b, focus) => focus('[data-testid="inputs-L2"]') },
+      { at: 26, run: (api) => api.setInputsOpen('L2', false) },
+    ],
+    tour('rail'),
+  ),
+  chapter(
+    4,
     28.7,
     [
       { at: 12, run: (_a, _b, focus) => focus(tour('tabs')) },
@@ -65,7 +76,7 @@ export const chapters: Chapter[] = [
     tour('main-chart'),
   ),
   chapter(
-    4,
+    5,
     23.1,
     [
       { at: 0, run: (api) => api.setView('financials') },
@@ -77,7 +88,7 @@ export const chapters: Chapter[] = [
     tour('kpis'),
   ),
   chapter(
-    5,
+    6,
     24.3,
     [
       { at: 0, run: (api) => api.setView('portfolio') },
@@ -94,7 +105,7 @@ export const chapters: Chapter[] = [
     tour('columns'),
   ),
   chapter(
-    6,
+    7,
     23.3,
     [
       { at: 0, run: (api) => api.setView('direction') },
@@ -106,7 +117,7 @@ export const chapters: Chapter[] = [
     tour('strata'),
   ),
   chapter(
-    7,
+    8,
     18.7,
     [
       { at: 0, run: (api) => api.setView('operations') },
@@ -115,20 +126,30 @@ export const chapters: Chapter[] = [
     ],
     tour('scrubber'),
   ),
-  chapter(8, 18.2, [{ at: 0, run: (api) => api.setView('roadmap') }], tour('gantt')),
+  chapter(9, 18.2, [{ at: 0, run: (api) => api.setView('roadmap') }], tour('gantt')),
   chapter(
-    9,
+    10,
     14,
     [
       { at: 0, run: (api) => api.setView('tracker') },
       { at: 4, run: (api) => api.setActual('L2', 140) },
       { at: 7.5, run: (_a, _b, focus) => focus(tour('triggers')) },
-      { at: 13.5, run: (api) => api.clearActuals() },
     ],
     tour('tracker'),
   ),
   chapter(
-    10,
+    11,
+    24,
+    [
+      { at: 0, run: (api) => api.setView('functions') },
+      { at: 8, run: (_a, _b, focus) => focus('[data-testid="function-finance"]') },
+      { at: 14, run: (_a, _b, focus) => focus('[data-testid="function-executive"]') },
+      { at: 20, run: (api) => api.clearActuals() },
+    ],
+    tour('functions'),
+  ),
+  chapter(
+    12,
     15.6,
     [
       { at: 0, run: (api) => api.setView('financials') },
@@ -156,7 +177,8 @@ export const chapters: Chapter[] = [
     ],
     tour('explain'),
   ),
-  chapter(11, 12.4, [
+  chapter(13, 18, [], tour('export')),
+  chapter(14, 14, [
     {
       at: 0,
       run: (api) => {

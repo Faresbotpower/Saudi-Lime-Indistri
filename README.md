@@ -28,7 +28,11 @@ UI copy lives in `src/strings.ts`. Brand notes and site screenshots are in `docs
 
 ## Cover page and walkthrough
 
-The app opens on a cover page: Enter goes to the cockpit, Play the walkthrough runs an eleven-chapter guided tour of what STRATA is and how each part works, on auto-pilot and silent (about four minutes at reading pace). A spotlight follows the part of the screen being described, a bar at the bottom carries the chapter title and text, and Next chapter and Stop are always available. The chapters, spotlight targets and timings are in `src/ui/walkthrough/script.ts`; the text is in `src/strings.ts` (also in `docs/walkthrough/explainer.md`). Clicking the STRATA wordmark returns to the cover.
+The app opens on a cover page: Enter goes to the cockpit, Play the walkthrough runs a fourteen-chapter guided tour of what STRATA is and how each part works, on auto-pilot and silent (about four minutes at reading pace). A spotlight follows the part of the screen being described, a bar at the bottom carries the chapter title and text, and Next chapter and Stop are always available. The chapters, spotlight targets and timings are in `src/ui/walkthrough/script.ts`; the text is in `src/strings.ts` (also in `docs/walkthrough/explainer.md`). Clicking the STRATA wordmark returns to the cover.
+
+## Impact by function and the PDF export
+
+The seventh view, Impact by function, turns the scenario into a brief for Commercial, Operations, Supply chain, Finance, People, Sustainability and the Executive: what moves against Base, the initiatives each function owns with their status, the levers that reach it, the decisions due from the tracker, and the proposal deliverable each card serves. Export PDF in the top bar prints the whole plan for the current levers and inputs as one report (strategic direction, growth portfolio, five-year financials, operations and people, roadmap, plan against actual, impact by function) with the lever settings and typed inputs on the first page; use Save as PDF in the print dialog.
 
 ## Typed inputs
 

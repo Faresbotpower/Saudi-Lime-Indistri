@@ -1,17 +1,25 @@
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { TopBar } from './ui/shell/TopBar'
 import { LeverRail } from './ui/shell/LeverRail'
 import { Tabs } from './ui/shell/Tabs'
 import { Cover } from './ui/shell/Cover'
 import { ExplainSheet } from './ui/components/ExplainSheet'
 import { WalkthroughPlayer } from './ui/walkthrough/WalkthroughPlayer'
+import { Report } from './ui/report/Report'
 import { views } from './ui/views'
 import { useLevers } from './state/levers'
 
 export default function App() {
   const view = useLevers((s) => s.view)
   const showCover = useLevers((s) => s.showCover)
+  const printing = useLevers((s) => s.printing)
+  const setPrinting = useLevers((s) => s.setPrinting)
+  useEffect(() => {
+    const done = () => setPrinting(false)
+    window.addEventListener('afterprint', done)
+    return () => window.removeEventListener('afterprint', done)
+  }, [setPrinting])
   const reduced = useReducedMotion()
   const [assembled, setAssembled] = useState(() => !useLevers.getState().showCover)
   const View = views[view]
@@ -20,7 +28,7 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <AnimatePresence>{showCover && <Cover key="cover" />}</AnimatePresence>
-      <div className="flex h-full min-w-[1024px] flex-col overflow-hidden">
+      <div id="app-shell" className="flex h-full min-w-[1024px] flex-col overflow-hidden">
         <motion.div
           initial={assembled ? false : { opacity: 0, y: -8 }}
           animate={showCover ? undefined : { opacity: 1, y: 0 }}
@@ -58,6 +66,7 @@ export default function App() {
       </div>
       <ExplainSheet />
       <WalkthroughPlayer />
+      {printing && <Report />}
     </MotionConfig>
   )
 }

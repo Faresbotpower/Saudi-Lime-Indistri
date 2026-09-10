@@ -81,6 +81,13 @@ export type PlanResult = {
     carbonCostPerTonLime: number
     exportLogisticsPerTon: number
   }
+  /** Tonnage and price signals behind the P&L, by year (base year first). */
+  volumes: {
+    servedKt: number[]
+    exportKt: number[]
+    priceIndexLime: number[]
+    utilizationLime: number[]
+  }
   classification: PlanClassification[]
   initiatives: PlanInitiative[]
   roadmap: Roadmap
@@ -285,6 +292,12 @@ function runOnce(
         cons.core.cost.energyCostPerTonByFamily.lime * cons.core.calibration.cost,
       carbonCostPerTonLime: cons.core.cost.carbonCostPerTonLime,
       exportLogisticsPerTon: cons.core.cost.exportLogisticsPerTon,
+    },
+    volumes: {
+      servedKt: cons.core.baseBusiness.volumeKt,
+      exportKt: cons.core.capacity.exportServed,
+      priceIndexLime: cons.core.price.priceIndexByFamily.lime ?? [],
+      utilizationLime: cons.core.capacity.utilizationByFamily.lime ?? [],
     },
     classification: classification.cells.map((c: Cell) => ({
       id: c.id,

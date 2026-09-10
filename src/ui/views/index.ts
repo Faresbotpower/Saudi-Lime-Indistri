@@ -6,6 +6,7 @@ import { Financials } from './Financials'
 import { Operations } from './Operations'
 import { Roadmap } from './Roadmap'
 import { Tracker } from './Tracker'
+import { Functions } from './Functions'
 
 export const views: Record<ViewId, ComponentType> = {
   direction: Direction,
@@ -14,4 +15,5 @@ export const views: Record<ViewId, ComponentType> = {
   operations: Operations,
   roadmap: Roadmap,
   tracker: Tracker,
+  functions: Functions,
 }

@@ -10,6 +10,7 @@ export function TopBar() {
   const goHome = useLevers((s) => s.goHome)
   const editedInputs = useLevers((s) => Object.keys(s.overrides).length)
   const resetOverrides = useLevers((s) => s.resetOverrides)
+  const setPrinting = useLevers((s) => s.setPrinting)
   const isBase = scenario === 'base'
 
   return (
@@ -52,6 +53,17 @@ export function TopBar() {
           className="rounded-full border border-line-dark px-4 py-1.5 font-heading text-[13px] text-white transition-colors duration-150 hover:border-teal hover:text-teal disabled:cursor-default disabled:opacity-40 disabled:hover:border-line-dark disabled:hover:text-white"
         >
           {strings.app.reset}
+        </button>
+        <button
+          type="button"
+          data-tour="export"
+          onClick={() => {
+            setPrinting(true)
+            window.setTimeout(() => window.print(), 80)
+          }}
+          className="rounded-full border border-line-dark px-4 py-1.5 font-heading text-[13px] text-white transition-colors duration-150 hover:border-teal hover:text-teal"
+        >
+          {strings.report.export}
         </button>
         <img src={logoWhite} alt="Sia" className="ml-2 h-7 w-auto" />
       </div>

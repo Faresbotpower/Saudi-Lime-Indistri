@@ -158,3 +158,49 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
     animation-duration: 120ms !important;
   }
 }
+
+/* Printable report: hidden on screen, the only thing on paper. */
+.report {
+  display: none;
+}
+.report h2 {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  margin: 14px 0 6px;
+  color: var(--ink);
+  break-after: avoid;
+}
+.report table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 8px;
+  break-inside: auto;
+}
+.report tr {
+  break-inside: avoid;
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+  html,
+  body,
+  #root {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+  #app-shell,
+  [data-testid='cover'],
+  [data-testid='walkthrough-bar'],
+  [data-testid='spotlight'],
+  [role='dialog'] {
+    display: none !important;
+  }
+  .report {
+    display: block;
+    color: var(--navy);
+    font-size: 11px;
+  }
+}

@@ -11,7 +11,7 @@ describe('shell', () => {
 
   it('renders the six tabs, six levers and the permanent banner', () => {
     render(<App />)
-    expect(screen.getAllByRole('tab')).toHaveLength(6)
+    expect(screen.getAllByRole('tab')).toHaveLength(7)
     for (const id of ['L1', 'L2', 'L3', 'L4', 'L5', 'L6'])
       expect(screen.getByText(id)).toBeInTheDocument()
     expect(screen.getByText(strings.app.illustrative)).toBeInTheDocument()

@@ -50,6 +50,10 @@ type LeversState = {
   walkthrough: { active: boolean; step: number }
   /** Typed assumption values by dotted path, applied on top of the data files. */
   overrides: Overrides
+  /** Which Inputs disclosures are open, by lever id or base. */
+  inputsOpen: Record<string, boolean>
+  /** The printable report is mounted only while printing. */
+  printing: boolean
   setLever: <K extends LeverId>(id: K, value: LeverValues[K]) => void
   applyPreset: (id: ScenarioId) => void
   reset: () => void
@@ -70,6 +74,8 @@ type LeversState = {
   stopWalkthrough: () => void
   setOverride: (path: string, value: number | undefined) => void
   resetOverrides: (paths?: string[]) => void
+  setInputsOpen: (id: string, open: boolean) => void
+  setPrinting: (printing: boolean) => void
 }
 
 const clone = (v: LeverValues): LeverValues => ({ ...v, L1: { ...v.L1 } })
@@ -100,6 +106,8 @@ export const useLevers = create<LeversState>((set) => ({
   openInitiativeId: null,
   walkthrough: { active: false, step: 0 },
   overrides: {},
+  inputsOpen: {},
+  printing: false,
   setLever: (id, value) =>
     set((s) => {
       const levers = { ...s.levers, [id]: value } as LeverValues
@@ -131,6 +139,8 @@ export const useLevers = create<LeversState>((set) => ({
       showCover: true,
       walkthrough: { active: false, step: 0 },
       overrides: {},
+      inputsOpen: {},
+      printing: false,
       explainKey: null,
       openInitiativeId: null,
     })
@@ -154,6 +164,8 @@ export const useLevers = create<LeversState>((set) => ({
       else overrides[path] = value
       return { overrides }
     }),
+  setPrinting: (printing) => set({ printing }),
+  setInputsOpen: (id, open) => set((s) => ({ inputsOpen: { ...s.inputsOpen, [id]: open } })),
   resetOverrides: (paths) =>
     set((s) => {
       if (!paths) return { overrides: {} }

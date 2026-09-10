@@ -1,5 +1,4 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
 import { planData, type LeverId } from '../../data'
 import { useLevers } from '../../state/levers'
 import { readPath } from '../../state/overrides'
@@ -12,7 +11,9 @@ type Props = { id: LeverId | 'base' }
 
 /** Disclosure under a lever card: the exact lever value and every assumption it drives, typed. */
 export function LeverInputs({ id }: Props) {
-  const [open, setOpen] = useState(false)
+  const open = useLevers((s) => !!s.inputsOpen[id])
+  const setInputsOpen = useLevers((s) => s.setInputsOpen)
+  const setOpen = (v: boolean) => setInputsOpen(id, v)
   const levers = useLevers((s) => s.levers)
   const setLever = useLevers((s) => s.setLever)
   const overrides = useLevers((s) => s.overrides)
@@ -97,7 +98,7 @@ export function LeverInputs({ id }: Props) {
       <button
         type="button"
         aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => setOpen(!open)}
         className={`flex w-full items-center justify-between rounded-md px-1 py-1 text-left transition-colors duration-150 ${
           dark ? 'text-muted-dark hover:text-white' : 'text-muted hover:text-ink'
         }`}

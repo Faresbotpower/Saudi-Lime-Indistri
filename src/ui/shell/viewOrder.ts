@@ -7,4 +7,5 @@ export const viewOrder: ViewId[] = [
   'operations',
   'roadmap',
   'tracker',
+  'functions',
 ]
