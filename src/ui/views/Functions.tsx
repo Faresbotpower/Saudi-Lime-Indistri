@@ -62,11 +62,7 @@ export function Functions() {
                     <td className="py-1.5 pl-3 text-right">
                       <DeltaChip
                         delta={k.delta}
-                        format={(d) =>
-                          k.format === signed
-                            ? signed(d)
-                            : `${d > 0 ? '+' : '−'}${k.format(Math.abs(d))}`
-                        }
+                        format={(d) => `${d > 0 ? '+' : '−'}${k.format(Math.abs(d))}`}
                         goodWhenUp={k.goodWhenUp}
                       />
                     </td>
