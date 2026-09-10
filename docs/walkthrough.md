@@ -1,0 +1,9 @@
+# STRATA walkthrough narration
+
+Five minutes, in front of the VP Supply Chain and the CFO. Lead with the Financial plan, then the Growth portfolio, then the Strategic direction.
+
+1. **Open on Base, Financial plan.** "This is STRATA, a dynamic strategy cockpit for Saudi Lime Industries. Six levers on the left. Every number on the right is recomputed from them. This is the plan on the Base case: revenue grows from 612 to 908 million riyals, EBITDA from 141 to 298. Every consultancy will give you one of these."
+2. **Move Energy cost to 140.** "Now watch a bad gas year. Energy index to 140. EBITDA compresses, the margin drops eleven points, cumulative free cash flow falls from 640 to about 200 million. The dashed lines are the plan you approved. On the portfolio, the PCC plant drops out of the plan, because its rule says energy must stay at or below 130. Yours would have been out of date. This one re-decides."
+3. **Reset. Set Export ambition to Extended.** "Back to Base. Now the Board decides to go beyond the GCC. The Red Sea export corridor at Jeddah enters the plan, committed capital rises to 497 million, and the share of 2031 revenue from new products and markets goes from 11 to 18 percent. Open the card: it always said 'becomes viable if export ambition reaches Extended'. This was always going to be the decision. Now you know when."
+4. **Tracker: type a 2027 energy actual of 140.** "Twelve months from now, the plan meets reality. Type what actually happened. The engine re-runs with the actual in place, and the triggers fired panel lists the decisions now due: stop or re-scope the PCC plant. This is what you own after we leave."
+5. **Strategic direction, hover Capital envelope.** "Assumptions, initiatives, plan. Hover the capital envelope and watch the layers light up: three assumptions, thirteen initiatives, every plan line. Move one, the rest re-settles. That is what a dynamic strategy is."
