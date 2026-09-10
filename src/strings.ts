@@ -92,6 +92,38 @@ export const strings = {
       lead: 'Plan assumptions against actuals, and the decisions that become due when they diverge.',
     },
   },
+  financials: {
+    kpi: {
+      revenue2031: '2031 revenue',
+      margin2031: '2031 EBITDA margin',
+      cumCapex: 'Cumulative capex',
+      cumFcf: 'Cumulative free cash flow',
+    },
+    units: { sarm: 'SAR m', pct: '%', plan: '2027 to 2031' },
+    vsBase: 'vs Base',
+    mainChart: 'Revenue and EBITDA',
+    mainChartLead: '2026 actual, then the plan. Dashed lines are the Base case.',
+    secondChart: 'Capex and free cash flow',
+    secondChartLead:
+      'Capex stacked as base business and initiatives. Free cash flow after working capital.',
+    legend: {
+      revenue: 'Revenue',
+      ebitda: 'EBITDA',
+      baseRevenue: 'Base revenue',
+      baseEbitda: 'Base EBITDA',
+      capexBase: 'Base capex',
+      capexInitiatives: 'Initiative capex',
+      fcf: 'Free cash flow',
+    },
+    strip: 'Scenario compare',
+    stripLead: 'The four cases the plan must hold, and where the current levers sit.',
+    stripCols: {
+      scenario: 'Scenario',
+      revenue: 'Revenue 2031',
+      ebitda: 'EBITDA 2031',
+      fcf: 'Cumulative FCF',
+    },
+  },
   common: {
     illustrativeFootnote:
       'Illustrative. The engagement delivers a formula-driven Excel model (RFQ 3.1); this view mirrors its output.',

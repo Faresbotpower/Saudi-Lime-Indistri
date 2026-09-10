@@ -28,7 +28,7 @@ UI copy lives in `src/strings.ts`. Brand notes and site screenshots are in `docs
 
 ## Build status
 
-Steps 1 to 4 of the build order in `CLAUDE.md` are complete: shell, then the whole engine under `src/engine` (demand, capacity, price, cost, viability with trigger points, portfolio, consolidation, classification, roadmap, trace) behind `runPlan(levers, data)` in `src/engine/index.ts`, with 105 tests.
+Steps 1 to 5 of the build order in `CLAUDE.md` are complete: shell, the whole engine under `src/engine` behind `runPlan(levers, data)`, and View 3 (Financial plan) wired live with count-up KPIs, delta chips, the Base ghost lines, capex and FCF bars, and the scenario compare strip. 110 tests. This is the first demo-able state.
 
 Calibration note: list prices and unit costs in the data do not reproduce the 2026 actuals on their own. The engine computes a price factor and an all-in cost factor once under the Base preset so the base year matches `baseCase.revenue` and `baseCase.ebitda`, and writes both to the trace. If you change volumes, prices or costs, expect those factors to move; keep them near 1 by updating `baseCase` too.
 

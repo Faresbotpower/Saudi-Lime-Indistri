@@ -41,3 +41,11 @@ export const initiatives = initiativesJson
 export const leverDefs: LeverDef[] = assumptions.levers
 export const scenarioPresets: Record<ScenarioId, LeverValues> = assumptions.scenarios
 export const scenarioOrder: ScenarioId[] = ['base', 'growth', 'upside', 'downside']
+
+import type { PlanData } from './engine/types'
+
+/** The two data files as the engine expects them. The only place numbers live. */
+export const planData: PlanData = {
+  assumptions: assumptionsJson as unknown as PlanData['assumptions'],
+  initiatives: initiativesJson as unknown as PlanData['initiatives'],
+}
