@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, within } from '@testing-library/react'
+import { render, screen, fireEvent, within, waitFor } from '@testing-library/react'
 import { LeverRail } from '../shell/LeverRail'
 import { TopBar } from '../shell/TopBar'
 import { useLevers } from '../../state/levers'
@@ -16,6 +16,7 @@ describe('typed inputs under the levers', () => {
   beforeEach(() => {
     useLevers.getState().reset()
     useLevers.getState().resetOverrides()
+    useLevers.getState().setAllInputsOpen(false)
   })
 
   it('the exact lever value is always visible and writes the lever', () => {
@@ -76,13 +77,13 @@ describe('typed inputs under the levers', () => {
     expect(within(box).getByLabelText(/Nitaqat target/)).toHaveValue(50)
   })
 
-  it('open all inputs expands every card, close all folds them', () => {
+  it('open all inputs expands every card, close all folds them', async () => {
     render(<LeverRail />)
     fireEvent.click(screen.getByRole('button', { name: strings.inputs.openAll }))
     expect(screen.getByLabelText(/Natural gas/)).toBeInTheDocument()
     expect(screen.getByLabelText(/Nitaqat target/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: strings.inputs.closeAll }))
-    expect(screen.queryByLabelText(/Natural gas/)).toBeNull()
+    await waitFor(() => expect(screen.queryByLabelText(/Natural gas/)).toBeNull())
   })
 
   it('risk appetite has no numeric inputs and says so', () => {
