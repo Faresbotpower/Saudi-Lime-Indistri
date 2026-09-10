@@ -28,7 +28,7 @@ UI copy lives in `src/strings.ts`. Brand notes and site screenshots are in `docs
 
 ## Build status
 
-Steps 1 to 3 of the build order in `CLAUDE.md` are complete: shell, engine steps 1 to 4 (demand, capacity, price, cost), then steps 5 to 7 (viability with trigger points, portfolio selection, consolidation) under `src/engine` with 81 tests.
+Steps 1 to 4 of the build order in `CLAUDE.md` are complete: shell, then the whole engine under `src/engine` (demand, capacity, price, cost, viability with trigger points, portfolio, consolidation, classification, roadmap, trace) behind `runPlan(levers, data)` in `src/engine/index.ts`, with 105 tests.
 
 Calibration note: list prices and unit costs in the data do not reproduce the 2026 actuals on their own. The engine computes a price factor and an all-in cost factor once under the Base preset so the base year matches `baseCase.revenue` and `baseCase.ebitda`, and writes both to the trace. If you change volumes, prices or costs, expect those factors to move; keep them near 1 by updating `baseCase` too.
 
@@ -37,3 +37,5 @@ Portfolio rules worth knowing:
 - Export volumes are gated by initiatives: level 1 (GCC) needs `gcc_export_sales`, level 2 needs `jeddah_export_terminal` (`export.requiresInitiative`). Their P&L comes from the volume model, not their run rates, so nothing is counted twice. The same applies to initiatives with `capacityAddKt`.
 - A viable initiative with negative NPV at the plan discount rate is deferred with reason "returns" and is never funded. Remove the `belowHurdle` filter in `src/engine/portfolio.ts` to fund by envelope alone.
 - Terminal value is `terminalMultiple` times 2031 EBITDA for every initiative.
+- Export tons carry variable cost plus logistics; domestic tons carry the calibrated all-in cost. With `logisticsCostPerTon.extended` at 140 the East Africa and South Asia leg is break-even and classifies as restructure. Lower it if that market should read as grow.
+- Classification thresholds live in `classificationThresholds`; the family category used by rules (for example the bricks exit) is that of the family's largest cell by 2031 revenue.

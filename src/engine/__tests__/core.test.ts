@@ -69,6 +69,22 @@ describe('core (steps 1 to 4 composed)', () => {
     expect(noExport.baseBusiness.revenue[3]).toBeLessThan(b.baseBusiness.revenue[3])
   })
 
+  it('charges export tons at variable cost plus logistics, not the calibrated all-in cost', () => {
+    const r = runCore(base(), data, [], GCC)
+    const i = 3
+    let expected = 0
+    for (const fam of Object.keys(r.capacity.servedByFamily)) {
+      const exp = fam === 'lime' ? r.capacity.exportServed[i] : 0
+      const domestic = r.capacity.servedByFamily[fam][i] - exp
+      const carbon = fam === 'lime' ? r.cost.carbonCostPerTonLime : 0
+      expected +=
+        domestic * ((r.cost.costPerTonByFamily[fam][i] - carbon) * r.calibration.cost + carbon)
+      expected += exp * (r.cost.costPerTonByFamily[fam][i] + r.cost.exportLogisticsPerTon)
+    }
+    expect(r.baseBusiness.cost[i]).toBeCloseTo(expected / 1000, 6)
+    expect(r.capacity.exportServed[i]).toBeGreaterThan(0)
+  })
+
   it('the Jeddah terminal flag flows through to demand so extended export volumes are served', () => {
     const without = runCore(withL({ L5: 2 }), data, [], GCC)
     const withTerminal = runCore(withL({ L5: 2 }), data, [], {

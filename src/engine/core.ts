@@ -11,7 +11,8 @@ import { zeros } from './years'
  * Calibration: list prices and unit costs in the data do not reproduce the 2026 actuals on
  * their own, so two factors, computed once under the Base preset, scale price and all-in
  * cost to baseCase.revenue and baseCase.ebitda. Carbon cost and export logistics are direct
- * costs added after calibration. Both factors are written to the trace.
+ * costs added after calibration; export tons carry variable cost plus logistics rather than
+ * the calibrated all-in cost. Both factors are written to the trace.
  */
 export function runCore(
   levers: Levers,
@@ -44,8 +45,10 @@ export function runCore(
       rev += exp * price.exportPrice[i] * calibration.price
       const carbon = fam === 'lime' && i > 0 ? cost.carbonCostPerTonLime : 0
       const unit = (cost.costPerTonByFamily[fam][i] - carbon) * calibration.cost + carbon
-      c += served * unit
-      c += exp * cost.exportLogisticsPerTon
+      // Domestic tons carry the calibrated all-in cost (fixed costs live there). Export tons
+      // are incremental: variable cost from the data plus logistics.
+      c += domestic * unit
+      c += exp * (cost.costPerTonByFamily[fam][i] + cost.exportLogisticsPerTon)
       vol += served
     }
     revenue[i] = rev / 1000
