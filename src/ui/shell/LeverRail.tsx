@@ -2,6 +2,7 @@ import { leverDefs, scenarioOrder, type LeverDef, type LeverId, type LeverValues
 import { strings } from '../../strings'
 import { useLevers } from '../../state/levers'
 import { Slash } from '../components/Slash'
+import { useRafThrottle } from '../useRafThrottle'
 
 const fmt = new Intl.NumberFormat('en-US')
 
@@ -31,7 +32,7 @@ function Segmented({
             role="radio"
             aria-checked={active}
             onClick={() => onChange(o)}
-            className={`rounded-lg border px-2 py-1.5 text-center font-heading text-[12px] leading-tight transition-colors duration-150 ${
+            className={`rounded-lg border px-2 py-1.5 text-center font-heading text-[13px] leading-tight transition-colors duration-150 ${
               active
                 ? 'border-teal bg-teal/10 text-teal'
                 : 'border-line-dark text-muted-dark hover:border-muted-dark hover:text-white'
@@ -61,6 +62,7 @@ function Slider({
   ariaLabel: string
 }) {
   const fill = ((value - min) / (max - min)) * 100
+  const throttled = useRafThrottle<number>(onChange)
   return (
     <input
       type="range"
@@ -69,7 +71,7 @@ function Slider({
       step={step}
       value={value}
       aria-label={ariaLabel}
-      onChange={(e) => onChange(Number(e.target.value))}
+      onChange={(e) => throttled(Number(e.target.value))}
       style={{ ['--fill' as string]: `${fill}%` }}
     />
   )
@@ -120,7 +122,7 @@ function Lever({ def }: { def: LeverDef }) {
             <div className="mt-1">
               <div className="mb-1 flex items-baseline justify-between">
                 <span className="label text-muted-dark">{strings.levers.L1.fine}</span>
-                <span className="num text-[12px] text-muted-dark">
+                <span className="num text-[13px] text-muted-dark">
                   {def.sliderRange![0].toFixed(1)}x to {def.sliderRange![1].toFixed(1)}x
                 </span>
               </div>
@@ -139,7 +141,7 @@ function Lever({ def }: { def: LeverDef }) {
       case 'L3':
         return (
           <div className="flex items-center gap-3">
-            <span className="num w-8 text-[12px] text-muted-dark">{def.range![0]}</span>
+            <span className="num w-8 text-[13px] text-muted-dark">{def.range![0]}</span>
             <Slider
               min={def.range![0]}
               max={def.range![1]}
@@ -148,7 +150,7 @@ function Lever({ def }: { def: LeverDef }) {
               ariaLabel={def.name}
               onChange={(v) => setLever(def.id, v)}
             />
-            <span className="num w-10 text-right text-[12px] text-muted-dark">
+            <span className="num w-10 text-right text-[13px] text-muted-dark">
               {fmt.format(def.range![1])}
             </span>
           </div>
@@ -190,7 +192,7 @@ function Lever({ def }: { def: LeverDef }) {
         {leverValueLabel(def, levers)}
       </div>
       {control}
-      <p className="mt-3 text-[12px] leading-snug text-muted-dark">{def.description}</p>
+      <p className="mt-3 text-[13px] leading-snug text-muted-dark">{def.description}</p>
       <div className="mt-2 flex flex-wrap gap-1.5">
         {def.moves.map((k) => (
           <span key={k} className="rounded-chip bg-ink-3 px-2 py-0.5 text-[11px] text-muted-dark">
@@ -224,7 +226,7 @@ export function LeverRail() {
                 type="button"
                 aria-pressed={active}
                 onClick={() => applyPreset(id)}
-                className={`rounded-full border py-1.5 font-heading text-[12px] transition-colors duration-150 ${
+                className={`rounded-full border py-1.5 font-heading text-[13px] transition-colors duration-150 ${
                   active
                     ? 'border-teal bg-teal text-ink'
                     : 'border-line-dark text-muted-dark hover:border-muted-dark hover:text-white'
@@ -253,7 +255,7 @@ export function LeverRail() {
             <span className="block font-heading text-[14px] text-white">
               {strings.rail.explain}
             </span>
-            <span className="block text-[12px] text-muted-dark">{strings.rail.explainHint}</span>
+            <span className="block text-[13px] text-muted-dark">{strings.rail.explainHint}</span>
           </span>
           <button
             type="button"

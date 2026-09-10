@@ -17,8 +17,15 @@ export const axisProps = {
   tickLine: false as const,
 }
 
-export const animation = {
-  isAnimationActive: true,
-  animationDuration: 500,
-  animationEasing: 'ease-out' as const,
-}
+import { prefersReducedMotion } from '../../format'
+
+/** Recharts animation props. Lines redraw 250 ms after a lever change (the ripple order); off under reduced motion. */
+export const chartAnimation = (begin = 0) =>
+  prefersReducedMotion()
+    ? { isAnimationActive: false }
+    : {
+        isAnimationActive: true,
+        animationDuration: 500,
+        animationBegin: begin,
+        animationEasing: 'ease-out' as const,
+      }

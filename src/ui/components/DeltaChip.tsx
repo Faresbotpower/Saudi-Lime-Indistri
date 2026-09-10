@@ -24,7 +24,7 @@ export function DeltaChip({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className={`num inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-medium ${
+          className={`num inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[13px] font-medium ${
             good ? 'bg-teal/15 text-teal-dim' : 'bg-coral/12 text-coral'
           }`}
           title={label}

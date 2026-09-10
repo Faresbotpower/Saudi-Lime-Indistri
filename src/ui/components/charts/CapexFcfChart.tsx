@@ -12,7 +12,7 @@ import {
 import type { PlanResult } from '../../../engine'
 import { strings } from '../../../strings'
 import { sarm } from '../../format'
-import { animation, axisProps, chart } from './theme'
+import { chartAnimation, axisProps, chart } from './theme'
 import { ChartTooltip } from './ChartTooltip'
 
 export function CapexFcfChart({ plan }: { plan: PlanResult }) {
@@ -46,7 +46,7 @@ export function CapexFcfChart({ plan }: { plan: PlanResult }) {
             name={L.capexBase}
             stackId="capex"
             fill={chart.muted}
-            {...animation}
+            {...chartAnimation(0)}
           />
           <Bar
             dataKey="capexInitiatives"
@@ -54,9 +54,9 @@ export function CapexFcfChart({ plan }: { plan: PlanResult }) {
             stackId="capex"
             fill={chart.ink}
             radius={[3, 3, 0, 0]}
-            {...animation}
+            {...chartAnimation(0)}
           />
-          <Bar dataKey="fcf" name={L.fcf} radius={[3, 3, 0, 0]} {...animation}>
+          <Bar dataKey="fcf" name={L.fcf} radius={[3, 3, 0, 0]} {...chartAnimation(0)}>
             {data.map((d) => (
               <Cell key={d.year} fill={d.fcf < 0 ? chart.coral : chart.teal} />
             ))}

@@ -11,7 +11,7 @@ import {
 import type { PlanResult } from '../../../engine'
 import { strings } from '../../../strings'
 import { sarm } from '../../format'
-import { animation, axisProps, chart } from './theme'
+import { chartAnimation, axisProps, chart } from './theme'
 import { ChartTooltip } from './ChartTooltip'
 
 /** Tracked plan (solid) against the approved plan (dashed), revenue and EBITDA. */
@@ -57,7 +57,7 @@ export function TrackedChart({
             strokeDasharray="5 5"
             strokeWidth={1.5}
             dot={false}
-            {...animation}
+            {...chartAnimation(250)}
           />
           <Line
             dataKey="planEbitda"
@@ -66,7 +66,7 @@ export function TrackedChart({
             strokeDasharray="5 5"
             strokeWidth={1.5}
             dot={false}
-            {...animation}
+            {...chartAnimation(250)}
           />
           <Line
             dataKey="revenue"
@@ -74,7 +74,7 @@ export function TrackedChart({
             stroke={chart.navy}
             strokeWidth={2.5}
             dot={{ r: 3, fill: chart.navy, strokeWidth: 0 }}
-            {...animation}
+            {...chartAnimation(250)}
           />
           <Line
             dataKey="ebitda"
@@ -82,7 +82,7 @@ export function TrackedChart({
             stroke={chart.teal}
             strokeWidth={2.5}
             dot={{ r: 3, fill: chart.teal, strokeWidth: 0 }}
-            {...animation}
+            {...chartAnimation(250)}
           />
         </LineChart>
       </ResponsiveContainer>

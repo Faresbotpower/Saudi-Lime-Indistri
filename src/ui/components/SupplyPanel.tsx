@@ -41,7 +41,7 @@ export function SupplyPanel({ plan }: { plan: PlanResult }) {
           >
             <div>
               <div className="label text-muted">{t.label}</div>
-              <div className="mt-1 text-[12px] text-muted">
+              <div className="mt-1 text-[13px] text-muted">
                 {O.under} {strings.levers.short[t.lever]}{' '}
                 <span className="num text-navy">{leverValueLabel(t.lever, t.current)}</span>
               </div>
@@ -50,7 +50,7 @@ export function SupplyPanel({ plan }: { plan: PlanResult }) {
               <span data-testid={t.id}>
                 <CountUp value={t.value} format={(v) => `${Math.round(v)}`} />
               </span>
-              <span className="ml-1 text-[12px] text-muted">{O.sarPerTon}</span>
+              <span className="ml-1 text-[13px] text-muted">{O.sarPerTon}</span>
             </div>
           </div>
         ))}

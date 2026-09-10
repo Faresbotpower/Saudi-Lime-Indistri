@@ -25,7 +25,7 @@ export function Tabs() {
               active ? 'text-ink' : 'text-muted hover:text-navy'
             }`}
           >
-            <span className="num mr-2 text-[12px] text-muted">{i + 1}</span>
+            <span className="num mr-2 text-[13px] text-muted">{i + 1}</span>
             {strings.views[id].tab}
             {active && (
               <motion.span

@@ -173,7 +173,7 @@ export function StrataReveal({ plan }: { plan: PlanResult }) {
           <h2 className="text-[20px] text-white">{D.reveal}</h2>
           <p className="mt-0.5 text-[13px] text-muted-dark">{D.revealLead}</p>
         </div>
-        <p className="num shrink-0 pt-1 text-[12px] text-muted-dark" aria-live="polite">
+        <p className="num shrink-0 pt-1 text-[13px] text-muted-dark" aria-live="polite">
           {anyLit
             ? D.lit(path.assumptions.length, path.initiatives.length, path.lines.length)
             : D.idle}

@@ -3,13 +3,14 @@ import type { PlanResult } from '../../engine'
 import { presetPlans } from '../../state/plan'
 import { strings } from '../../strings'
 import { categoryChip } from './categoryColors'
+import { ExplainButton } from './ExplainButton'
 
 export function ClassificationTable({ plan }: { plan: PlanResult }) {
   const D = strings.direction
   const base = Object.fromEntries(presetPlans().base.classification.map((c) => [c.id, c.category]))
   return (
     <div className="overflow-hidden rounded-lg border border-line">
-      <table className="w-full text-[14px]">
+      <table className="w-full text-[16px]">
         <thead>
           <tr className="bg-sand-2 text-left">
             <th className="label px-3 py-2 font-medium text-muted">{D.cols.cell}</th>
@@ -29,7 +30,12 @@ export function ClassificationTable({ plan }: { plan: PlanResult }) {
                 data-testid="class-row"
                 className="border-t border-line align-top text-navy"
               >
-                <td className="px-3 py-2 font-heading text-[14px] text-ink">{c.label}</td>
+                <td className="px-3 py-2 font-heading text-[15px] text-ink">
+                  <span className="flex items-center gap-2">
+                    {c.label}
+                    <ExplainButton traceKey={`classification.${c.id}`} />
+                  </span>
+                </td>
                 <td className="px-3 py-2">
                   <span
                     className={`label inline-block rounded-full px-2 py-0.5 ${categoryChip[c.category]}`}

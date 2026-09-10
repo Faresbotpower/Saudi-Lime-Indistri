@@ -22,6 +22,8 @@ type LeversState = {
   litLevers: LeverId[]
   /** Tracker actuals for the elapsed year; empty until typed. */
   actuals: ActualInputs
+  /** Trace key open in the Explain sheet. */
+  explainKey: string | null
   setLever: <K extends LeverId>(id: K, value: LeverValues[K]) => void
   applyPreset: (id: ScenarioId) => void
   reset: () => void
@@ -31,6 +33,8 @@ type LeversState = {
   setLitLevers: (ids: LeverId[]) => void
   setActual: (key: keyof ActualInputs, value: number | undefined) => void
   clearActuals: () => void
+  openExplain: (key: string) => void
+  closeExplain: () => void
 }
 
 const clone = (v: LeverValues): LeverValues => ({ ...v, L1: { ...v.L1 } })
@@ -56,6 +60,7 @@ export const useLevers = create<LeversState>((set) => ({
   hoveredLever: null,
   litLevers: [],
   actuals: {},
+  explainKey: null,
   setLever: (id, value) =>
     set((s) => {
       const levers = { ...s.levers, [id]: value } as LeverValues
@@ -75,4 +80,6 @@ export const useLevers = create<LeversState>((set) => ({
       return { actuals }
     }),
   clearActuals: () => set({ actuals: {} }),
+  openExplain: (explainKey) => set({ explainKey }),
+  closeExplain: () => set({ explainKey: null }),
 }))

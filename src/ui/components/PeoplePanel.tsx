@@ -14,10 +14,11 @@ import type { PlanResult } from '../../engine'
 import { planData } from '../../data'
 import { strings } from '../../strings'
 import { sarm } from '../format'
-import { animation, axisProps, chart } from './charts/theme'
+import { chartAnimation, axisProps, chart } from './charts/theme'
 import { ChartTooltip } from './charts/ChartTooltip'
 import { Card } from './Card'
 import { CountUp } from './CountUp'
+import { ExplainButton } from './ExplainButton'
 
 export function PeoplePanel({ plan, index }: { plan: PlanResult; index: number }) {
   const O = strings.operations
@@ -38,7 +39,10 @@ export function PeoplePanel({ plan, index }: { plan: PlanResult; index: number }
     <Card title={O.people} lead={O.people_lead}>
       <div className="grid grid-cols-3 gap-6">
         <div>
-          <div className="label text-muted">{O.headcount}</div>
+          <div className="flex items-center gap-2">
+            <span className="label text-muted">{O.headcount}</span>
+            <ExplainButton traceKey="people.headcount" />
+          </div>
           <div className="num mt-1 font-heading text-[28px] text-ink">
             <span data-testid="headcount">
               <CountUp value={plan.people.headcount[index]} format={sarm} />
@@ -58,7 +62,12 @@ export function PeoplePanel({ plan, index }: { plan: PlanResult; index: number }
                 <XAxis dataKey="year" {...axisProps} tick={{ ...axisProps.tick, fontSize: 10 }} />
                 <YAxis hide domain={['dataMin - 100', 'dataMax + 50']} />
                 <Tooltip content={<ChartTooltip unit="" />} cursor={{ fill: chart.sand2 }} />
-                <Bar dataKey="headcount" name={O.headcount} radius={[3, 3, 0, 0]} {...animation}>
+                <Bar
+                  dataKey="headcount"
+                  name={O.headcount}
+                  radius={[3, 3, 0, 0]}
+                  {...chartAnimation(0)}
+                >
                   {data.map((d) => (
                     <Cell key={d.year} fill={d.year === year ? chart.teal : chart.muted} />
                   ))}
@@ -68,13 +77,16 @@ export function PeoplePanel({ plan, index }: { plan: PlanResult; index: number }
           </div>
         </div>
         <div>
-          <div className="label text-muted">{O.saudization}</div>
+          <div className="flex items-center gap-2">
+            <span className="label text-muted">{O.saudization}</span>
+            <ExplainButton traceKey="people.saudization" />
+          </div>
           <div className="num mt-1 font-heading text-[28px] text-ink">
             <span data-testid="saudization">
               <CountUp value={plan.people.saudization[index] * 100} format={(v) => v.toFixed(0)} />
             </span>
             <span className="text-[14px] text-muted">%</span>
-            <span className="ml-2 text-[12px] text-muted">
+            <span className="ml-2 text-[13px] text-muted">
               {O.nitaqat} {Math.round(target * 100)}%
             </span>
           </div>
@@ -96,19 +108,22 @@ export function PeoplePanel({ plan, index }: { plan: PlanResult; index: number }
                   stroke={chart.teal}
                   strokeWidth={2}
                   dot={{ r: 2.5, fill: chart.teal, strokeWidth: 0 }}
-                  {...animation}
+                  {...chartAnimation(0)}
                 />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
         <div>
-          <div className="label text-muted">{O.costPerTon}</div>
+          <div className="flex items-center gap-2">
+            <span className="label text-muted">{O.costPerTon}</span>
+            <ExplainButton traceKey="people.costPerTon" />
+          </div>
           <div className="num mt-1 font-heading text-[28px] text-ink">
             <span data-testid="cost-per-ton">
               <CountUp value={plan.people.costPerTon[index]} format={sarm} />
             </span>
-            <span className="ml-1 text-[12px] text-muted">{O.sarPerTon}</span>
+            <span className="ml-1 text-[13px] text-muted">{O.sarPerTon}</span>
           </div>
           <div className="mt-2 h-[120px]">
             <ResponsiveContainer
@@ -127,7 +142,7 @@ export function PeoplePanel({ plan, index }: { plan: PlanResult; index: number }
                   stroke={chart.navy}
                   strokeWidth={2}
                   dot={{ r: 2.5, fill: chart.navy, strokeWidth: 0 }}
-                  {...animation}
+                  {...chartAnimation(0)}
                 />
               </LineChart>
             </ResponsiveContainer>

@@ -10,7 +10,7 @@ import {
 import type { PlanResult } from '../../../engine'
 import { strings } from '../../../strings'
 import { sarm } from '../../format'
-import { animation, axisProps, chart } from './theme'
+import { chartAnimation, axisProps, chart } from './theme'
 import { ChartTooltip } from './ChartTooltip'
 
 export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase: boolean }) {
@@ -47,7 +47,7 @@ export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase:
               strokeDasharray="5 5"
               strokeWidth={1.5}
               dot={false}
-              {...animation}
+              {...chartAnimation(250)}
             />
           )}
           {!isBase && (
@@ -58,7 +58,7 @@ export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase:
               strokeDasharray="5 5"
               strokeWidth={1.5}
               dot={false}
-              {...animation}
+              {...chartAnimation(250)}
             />
           )}
           <Line
@@ -68,7 +68,7 @@ export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase:
             strokeWidth={2.5}
             dot={{ r: 3, fill: chart.navy, strokeWidth: 0 }}
             activeDot={{ r: 5 }}
-            {...animation}
+            {...chartAnimation(250)}
           />
           <Line
             dataKey="ebitda"
@@ -77,7 +77,7 @@ export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase:
             strokeWidth={2.5}
             dot={{ r: 3, fill: chart.teal, strokeWidth: 0 }}
             activeDot={{ r: 5 }}
-            {...animation}
+            {...chartAnimation(250)}
           />
         </LineChart>
       </ResponsiveContainer>

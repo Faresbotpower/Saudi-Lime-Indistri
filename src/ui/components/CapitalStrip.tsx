@@ -3,6 +3,7 @@ import type { PlanResult } from '../../engine'
 import { strings } from '../../strings'
 import { sarm } from '../format'
 import { CountUp } from './CountUp'
+import { ExplainButton } from './ExplainButton'
 
 export function CapitalStrip({ plan }: { plan: PlanResult }) {
   const S = strings.portfolio.strip
@@ -14,7 +15,10 @@ export function CapitalStrip({ plan }: { plan: PlanResult }) {
     <div data-testid="capital-strip" className="grid grid-cols-6 gap-6">
       <div className="col-span-3 rounded-card bg-white p-5 shadow-card">
         <div className="flex items-baseline justify-between">
-          <span className="label text-muted">{S.envelope}</span>
+          <span className="flex items-center gap-2">
+            <span className="label text-muted">{S.envelope}</span>
+            <ExplainButton traceKey="capital" />
+          </span>
           <span className="num text-[13px] text-muted">SAR {sarm(envelope)}m</span>
         </div>
         <div className="relative mt-3 h-3 overflow-hidden rounded-full bg-sand-2">
@@ -52,13 +56,16 @@ export function CapitalStrip({ plan }: { plan: PlanResult }) {
               >
                 {counts[k]}
               </div>
-              <div className="mt-1 text-[12px] text-muted">{strings.portfolio.columns[k]}</div>
+              <div className="mt-1 text-[13px] text-muted">{strings.portfolio.columns[k]}</div>
             </div>
           ))}
         </div>
       </div>
       <div className="rounded-card bg-white p-5 shadow-card">
-        <div className="label text-muted">{S.diversification}</div>
+        <div className="flex items-center justify-between gap-2">
+          <div className="label text-muted">{S.diversification}</div>
+          <ExplainButton traceKey="diversification" />
+        </div>
         <div className="mt-2 flex items-baseline gap-1">
           <span data-testid="diversification" className="num font-heading text-[28px] text-ink">
             <CountUp value={plan.diversificationShare2031 * 100} format={(v) => v.toFixed(0)} />

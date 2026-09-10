@@ -55,7 +55,7 @@ export function SideSheet({ open, title, subtitle, onClose, children }: Props) {
                 type="button"
                 onClick={onClose}
                 aria-label={strings.portfolio.sheet.close}
-                className="rounded-full border border-line px-3 py-1 font-heading text-[12px] text-navy transition-colors duration-150 hover:border-ink"
+                className="rounded-full border border-line px-3 py-1 font-heading text-[13px] text-navy transition-colors duration-150 hover:border-ink"
               >
                 {strings.portfolio.sheet.close}
               </button>

@@ -30,6 +30,8 @@ export function Financials() {
           unit={S.units.sarm}
           format={sarm}
           formatDelta={signed}
+          traceKey="financials.revenue"
+          index={0}
         />
         <KpiTile
           label={S.kpi.margin2031}
@@ -38,6 +40,8 @@ export function Financials() {
           unit={S.units.pct}
           format={pct1}
           formatDelta={signedPts}
+          traceKey="financials.ebitdaMargin"
+          index={1}
         />
         <KpiTile
           label={S.kpi.cumCapex}
@@ -48,6 +52,8 @@ export function Financials() {
           formatDelta={signed}
           goodWhenUp={false}
           note={S.units.plan}
+          traceKey="financials.capex"
+          index={2}
         />
         <KpiTile
           label={S.kpi.cumFcf}
@@ -57,6 +63,8 @@ export function Financials() {
           format={sarm}
           formatDelta={signed}
           note={S.units.plan}
+          traceKey="financials.cumulativeFcf"
+          index={3}
         />
       </div>
 
@@ -96,7 +104,7 @@ export function Financials() {
         </Card>
       </div>
 
-      <p className="mt-6 text-[12px] text-muted">{strings.common.illustrativeFootnote}</p>
+      <p className="mt-6 text-[13px] text-muted">{strings.common.illustrativeFootnote}</p>
     </ViewFrame>
   )
 }

@@ -28,7 +28,7 @@ export function Gauge({ value, size = 120 }: { value: number; size?: number }) {
           format={(v) => `${Math.round(v)}`}
           className="font-heading text-[24px] leading-none text-ink"
         />
-        <span className="text-[12px] text-muted">%</span>
+        <span className="text-[13px] text-muted">%</span>
       </div>
     </div>
   )

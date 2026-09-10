@@ -11,7 +11,7 @@ export function Roadmap() {
     <ViewFrame id="roadmap">
       <Card lead={R.lead}>
         <Gantt plan={plan} />
-        <div className="mt-4 flex flex-wrap gap-5 text-[12px] text-muted">
+        <div className="mt-4 flex flex-wrap gap-5 text-[13px] text-muted">
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-2.5 w-5 rounded bg-ink" /> {R.funded}
           </span>

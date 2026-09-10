@@ -23,7 +23,7 @@ export function TrackerTable() {
 
   return (
     <div className="overflow-hidden rounded-lg border border-line">
-      <table className="w-full text-[14px]">
+      <table className="w-full text-[16px]">
         <thead>
           <tr className="bg-sand-2 text-left">
             <th className="label px-3 py-2 font-medium text-muted">{T.cols.lever}</th>
@@ -82,7 +82,7 @@ export function TrackerTable() {
                       <span className="text-[11px] text-muted">{T.inputHint[field]}</span>
                     </span>
                   ) : (
-                    <span className="text-[12px] text-muted">{T.notTracked}</span>
+                    <span className="text-[13px] text-muted">{T.notTracked}</span>
                   )}
                 </td>
                 <td className="px-3 py-2.5">
@@ -109,12 +109,12 @@ export function TrackerTable() {
           })}
         </tbody>
       </table>
-      <div className="flex items-center justify-between border-t border-line bg-sand-2/50 px-3 py-2 text-[12px] text-muted">
+      <div className="flex items-center justify-between border-t border-line bg-sand-2/50 px-3 py-2 text-[13px] text-muted">
         <span>{T.ownership}</span>
         <button
           type="button"
           onClick={clearActuals}
-          className="rounded-full border border-line px-3 py-1 font-heading text-[12px] text-navy transition-colors duration-150 hover:border-ink"
+          className="rounded-full border border-line px-3 py-1 font-heading text-[13px] text-navy transition-colors duration-150 hover:border-ink"
         >
           {T.clear}
         </button>

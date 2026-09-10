@@ -5,6 +5,7 @@ import { sarm } from '../format'
 import { CountUp } from './CountUp'
 import { Gauge } from './Gauge'
 import { Sparkline } from './Sparkline'
+import { ExplainButton } from './ExplainButton'
 
 type Props = { site: SiteResult; plan: PlanResult; index: number }
 
@@ -22,8 +23,11 @@ export function SiteCard({ site, plan, index }: Props) {
     <div data-testid={`site-${site.id}`} className="rounded-card bg-white p-5 shadow-card">
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="text-[20px] text-ink">{site.name}</h3>
-          <div className="text-[12px] text-muted">{region}</div>
+          <h3 className="flex items-center gap-2 text-[20px] text-ink">
+            {site.name}
+            <ExplainButton traceKey={`sites.${site.id}`} />
+          </h3>
+          <div className="text-[13px] text-muted">{region}</div>
         </div>
         <Gauge value={util} />
       </div>
@@ -49,7 +53,7 @@ export function SiteCard({ site, plan, index }: Props) {
       <div className="mt-4">
         <div className="flex items-baseline justify-between">
           <span className="label text-muted">{O.capexPhasing}</span>
-          <span className="num text-[12px] text-navy">
+          <span className="num text-[13px] text-navy">
             SAR {sarm(site.capex[index])}m · {plan.years[index]}
           </span>
         </div>
@@ -60,7 +64,7 @@ export function SiteCard({ site, plan, index }: Props) {
       <div className="mt-4">
         <div className="label mb-1 text-muted">{O.touching}</div>
         {touching.length === 0 ? (
-          <p className="text-[12px] text-muted">{O.noneTouching}</p>
+          <p className="text-[13px] text-muted">{O.noneTouching}</p>
         ) : (
           <ul className="space-y-1 text-[13px] text-navy">
             {touching.map((i) => (

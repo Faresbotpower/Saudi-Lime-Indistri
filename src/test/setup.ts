@@ -23,3 +23,7 @@ if (!('ResizeObserver' in window)) {
   }
   Object.defineProperty(window, 'ResizeObserver', { writable: true, value: RO })
 }
+
+// happy-dom's Web Animations stub rejects with AbortError on teardown; Framer falls back to
+// its JS animator without it, which resolves instantly under reduced motion.
+Object.defineProperty(Element.prototype, 'animate', { value: undefined, configurable: true, writable: true })

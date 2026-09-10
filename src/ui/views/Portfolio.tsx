@@ -45,7 +45,7 @@ export function Portfolio() {
                 <h2 className="text-[20px] text-ink">{strings.portfolio.columns[col.status]}</h2>
                 <span className="num text-[13px] text-muted">{col.items.length}</span>
               </header>
-              <p className="mb-3 text-[12px] text-muted">
+              <p className="mb-3 text-[13px] text-muted">
                 {strings.portfolio.columnLead[col.status]}
               </p>
               <div className="grid gap-3">

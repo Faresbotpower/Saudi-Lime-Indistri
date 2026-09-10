@@ -45,7 +45,7 @@ export function YearScrubber({ years, index, onChange }: Props) {
           )
         })}
       </div>
-      <span className="text-[12px] text-muted">{strings.operations.scrubberHint}</span>
+      <span className="text-[13px] text-muted">{strings.operations.scrubberHint}</span>
     </div>
   )
 }

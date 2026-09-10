@@ -16,7 +16,7 @@ export function ScenarioStrip({ plan }: { plan: PlanResult }) {
   const last = plan.years.length - 1
   return (
     <div data-testid="scenario-strip" className="overflow-hidden rounded-lg border border-line">
-      <table className="w-full text-[14px]">
+      <table className="w-full text-[16px]">
         <thead>
           <tr className="bg-sand-2 text-left">
             <th className="label px-3 py-2 font-medium text-muted">{C.scenario}</th>

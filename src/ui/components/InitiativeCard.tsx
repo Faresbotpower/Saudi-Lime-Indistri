@@ -8,6 +8,7 @@ import { sarm, signed, prefersReducedMotion } from '../format'
 import { triggerSentence } from '../triggerText'
 import { TriggerBar } from './TriggerBar'
 import { useLevers } from '../../state/levers'
+import { ExplainButton } from './ExplainButton'
 import { planData } from '../../data'
 
 const nameOf = (id: string) => planData.initiatives.initiatives.find((i) => i.id === id)?.name ?? id
@@ -64,8 +65,11 @@ export function InitiativeCard({ init, plan, onOpen }: Props) {
           >
             {init.name}
           </button>
-          <span className={`label shrink-0 rounded-full px-2 py-0.5 ${badge}`}>
-            {strings.portfolio.layers[init.layer] ?? init.layer}
+          <span className="flex shrink-0 items-center gap-1.5">
+            <ExplainButton traceKey={`initiative.${init.id}`} />
+            <span className={`label shrink-0 rounded-full px-2 py-0.5 ${badge}`}>
+              {strings.portfolio.layers[init.layer] ?? init.layer}
+            </span>
           </span>
         </div>
         <dl className="num grid grid-cols-3 gap-2 text-[13px]">
@@ -82,7 +86,7 @@ export function InitiativeCard({ init, plan, onOpen }: Props) {
             <dd className="text-ink">{sarm(plan.ebitdaRunRate)}</dd>
           </div>
         </dl>
-        <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[12px] text-muted">
+        <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
           <span>{init.owner}</span>
           {plan.startYear && plan.status !== 'out' && (
             <span className="num">
@@ -96,7 +100,7 @@ export function InitiativeCard({ init, plan, onOpen }: Props) {
           ))}
         </div>
         <div className="mt-3" data-testid="trigger">
-          <p className="mb-1.5 text-[12px] text-navy">{triggerSentence(plan, levers.L3)}</p>
+          <p className="mb-1.5 text-[13px] text-navy">{triggerSentence(plan, levers.L3)}</p>
           {plan.trigger && !(plan.status === 'deferred' && plan.reason !== 'capital') && (
             <TriggerBar trigger={plan.trigger} current={current} status={plan.status} />
           )}

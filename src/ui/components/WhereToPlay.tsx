@@ -5,6 +5,7 @@ import { planData } from '../../data'
 import { strings } from '../../strings'
 import { sarm } from '../format'
 import { categoryColor } from './categoryColors'
+import { placeLabels } from '../labelPlacement'
 
 const W = 560
 const H = 400
@@ -21,6 +22,15 @@ export function WhereToPlay({ plan }: { plan: PlanResult }) {
   const r = (rev: number) => 8 + 26 * Math.sqrt(rev / maxRev)
   const cells = [...plan.classification].sort((a, b) => b.revenue2031 - a.revenue2031)
   const hovered = cells.find((c) => c.id === hover)
+  const placement = placeLabels(
+    cells.map((c) => ({
+      id: c.id,
+      x: x(c.position),
+      y: y(c.attractiveness),
+      r: r(c.revenue2031),
+      text: D.cellShort[c.id] ?? c.label,
+    })),
+  )
 
   return (
     <div className="relative">
@@ -133,7 +143,12 @@ export function WhereToPlay({ plan }: { plan: PlanResult }) {
               strokeWidth={1.5}
             />
             <motion.text
-              animate={{ x: x(c.position), y: y(c.attractiveness) + r(c.revenue2031) + 12 }}
+              animate={{
+                x: x(c.position) + placement[c.id].dx,
+                y: placement[c.id].above
+                  ? y(c.attractiveness) - r(c.revenue2031) - 5
+                  : y(c.attractiveness) + r(c.revenue2031) + 12,
+              }}
               initial={false}
               transition={{ type: 'spring', stiffness: 120, damping: 20 }}
               textAnchor="middle"
@@ -147,7 +162,7 @@ export function WhereToPlay({ plan }: { plan: PlanResult }) {
         ))}
       </svg>
       {hovered && (
-        <div className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 rounded-lg border border-line bg-white px-3 py-2 text-[12px] shadow-card">
+        <div className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 rounded-lg border border-line bg-white px-3 py-2 text-[13px] shadow-card">
           <div className="font-heading text-[13px] text-ink">{hovered.label}</div>
           <div className="flex items-center gap-2 text-muted">
             <span
