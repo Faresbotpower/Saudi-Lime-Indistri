@@ -91,7 +91,7 @@ export function LeverInputs({ id }: Props) {
     }
   })()
 
-  const dark = id !== 'base'
+  const dark = true
   return (
     <div className="mt-3 border-t border-line-dark/60 pt-2" data-testid={`inputs-${id}`}>
       <button
