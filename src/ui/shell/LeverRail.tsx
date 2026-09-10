@@ -3,6 +3,7 @@ import { strings } from '../../strings'
 import { useLevers } from '../../state/levers'
 import { Slash } from '../components/Slash'
 import { useRafThrottle } from '../useRafThrottle'
+import { LeverInputs } from '../components/LeverInputs'
 
 const fmt = new Intl.NumberFormat('en-US')
 
@@ -200,6 +201,7 @@ function Lever({ def }: { def: LeverDef }) {
           </span>
         ))}
       </div>
+      <LeverInputs id={def.id} />
     </section>
   )
 }
@@ -250,6 +252,16 @@ export function LeverRail() {
             <Lever key={def.id} def={def} />
           ))}
         </div>
+        <section
+          className="mt-3 rounded-card border border-line-dark bg-ink-2 p-4"
+          data-testid="base-inputs-card"
+        >
+          <h3 className="text-[14px] font-medium tracking-normal text-white">
+            {strings.inputs.base}
+          </h3>
+          <p className="mt-1 text-[12px] leading-snug text-muted-dark">{strings.inputs.baseLead}</p>
+          <LeverInputs id="base" />
+        </section>
       </div>
 
       <div className="border-t border-line-dark px-4 py-4">

@@ -30,6 +30,10 @@ UI copy lives in `src/strings.ts`. Brand notes and site screenshots are in `docs
 
 The app opens on a cover page: Enter goes to the cockpit, Play the walkthrough runs an eleven-chapter guided tour of what STRATA is and how each part works, on auto-pilot and silent (about four minutes at reading pace). A spotlight follows the part of the screen being described, a bar at the bottom carries the chapter title and text, and Next chapter and Stop are always available. The chapters, spotlight targets and timings are in `src/ui/walkthrough/script.ts`; the text is in `src/strings.ts` (also in `docs/walkthrough/explainer.md`). Clicking the STRATA wordmark returns to the cover.
 
+## Typed inputs
+
+Every lever card has an Inputs section. It holds the exact lever value (multiplier, energy index, envelope in SAR m, carbon price in SAR per tCO2) and the assumptions that lever drives, each as a typed number with its unit: sector volumes and growth, giga phasing, fuel prices (natural gas in SAR per MMBtu and diesel in SAR per litre set the energy index), energy share of cost, maintenance capex, discount rate, terminal multiple, working capital, export potential and economics, emissions per site. A base year card carries the 2026 actuals, list prices, unit costs, site capacity, utilization and people ratios. Typed values sit on top of the data files, feed the engine directly, are marked as edited, and reset per card or from the chip in the top bar.
+
 ## Demo in five minutes
 
 1. Open on Base, Financial plan. This is the plan.

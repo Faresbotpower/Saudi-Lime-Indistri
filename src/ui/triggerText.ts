@@ -16,6 +16,7 @@ export function leverValueLabel(id: LeverId, value: number): string {
       return `SAR ${fmt.format(value)}m`
     default: {
       const idx = def.values!.indexOf(value)
+      if (idx < 0 && id === 'L6') return `SAR ${fmt.format(value)}/t`
       const opt = def.options![idx] ?? String(value)
       const labels = strings.levers[id as 'L4' | 'L5' | 'L6'].options as Record<string, string>
       return labels[opt] ?? opt

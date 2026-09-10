@@ -65,7 +65,10 @@ export type Assumptions = {
     requiresInitiative: Record<string, string>
   }
   priceElasticity: { coefficient: number; clamp: [number, number] }
-  energy: { baseIndex: number }
+  energy: {
+    baseIndex: number
+    fuel?: { gasSarPerMmbtu: number; dieselSarPerLitre: number; gasShare: number }
+  }
   carbon: { sarPerTon: Record<string, number> }
   people: {
     baseHeadcount: number

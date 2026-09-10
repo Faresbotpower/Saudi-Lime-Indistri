@@ -8,6 +8,8 @@ export function TopBar() {
   const scenario = useLevers((s) => s.scenario)
   const reset = useLevers((s) => s.reset)
   const goHome = useLevers((s) => s.goHome)
+  const editedInputs = useLevers((s) => Object.keys(s.overrides).length)
+  const resetOverrides = useLevers((s) => s.resetOverrides)
   const isBase = scenario === 'base'
 
   return (
@@ -26,6 +28,18 @@ export function TopBar() {
       <span className="hidden text-[13px] text-muted-dark lg:block">{strings.app.client}</span>
 
       <div className="ml-auto flex items-center gap-4">
+        {editedInputs > 0 && (
+          <button
+            type="button"
+            onClick={() => resetOverrides()}
+            title={strings.inputs.resetAll}
+            data-testid="inputs-chip"
+            className="label flex items-center gap-2 rounded-full border border-teal/60 px-3 py-1 text-teal transition-colors duration-150 hover:bg-teal/10"
+          >
+            <span className="block h-1.5 w-1.5 rounded-full bg-teal" aria-hidden="true" />
+            {strings.inputs.editedChip(editedInputs)}
+          </button>
+        )}
         <Banner />
         <div className="flex items-center gap-2 border-l border-line-dark pl-4">
           <span className="label text-muted-dark">{strings.app.scenario}</span>

@@ -1,14 +1,14 @@
 import { motion } from 'framer-motion'
 import type { PlanResult } from '../../engine'
 import { scenarioOrder } from '../../data'
-import { presetPlans } from '../../state/plan'
+import { presetPlans, useData } from '../../state/plan'
 import { strings } from '../../strings'
 import { sarm } from '../format'
 import { Slash } from './Slash'
 
 /** The four presets side by side; a Custom row appears when the levers leave the presets. */
 export function ScenarioStrip({ plan }: { plan: PlanResult }) {
-  const presets = presetPlans()
+  const presets = presetPlans(useData())
   const rows = scenarioOrder.map((id) => ({ id, name: strings.scenarios[id], p: presets[id] }))
   if (plan.scenarioName === 'custom')
     rows.push({ id: 'custom' as never, name: strings.scenarios.custom, p: plan })

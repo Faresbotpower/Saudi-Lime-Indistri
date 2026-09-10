@@ -58,7 +58,7 @@
 
   "priceElasticity": { "coefficient": 0.35, "clamp": [0.90, 1.15] },
 
-  "energy": { "baseIndex": 100 },
+  "energy": { "baseIndex": 100, "fuel": { "_note": "Illustrative fuel prices behind the energy index. Index = 100 x (gasShare x gas/base + (1 - gasShare) x diesel/base).", "gasSarPerMmbtu": 6.0, "dieselSarPerLitre": 0.75, "gasShare": 0.75 } },
 
   "carbon": { "sarPerTon": { "none": 0, "voluntary": 40, "regulated": 120 } },
 

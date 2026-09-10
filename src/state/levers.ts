@@ -7,6 +7,7 @@ import {
   type ScenarioId,
 } from '../data'
 import type { ViewId } from '../strings'
+import type { Overrides } from './overrides'
 
 export type ActualInputs = { L1multiplier?: number; L2?: number; L6?: number }
 
@@ -45,8 +46,10 @@ type LeversState = {
   showCover: boolean
   /** Initiative sheet open in the Growth portfolio. */
   openInitiativeId: string | null
-  /** Auto-pilot walkthrough with voice-over. */
+  /** Auto-pilot walkthrough. */
   walkthrough: { active: boolean; step: number }
+  /** Typed assumption values by dotted path, applied on top of the data files. */
+  overrides: Overrides
   setLever: <K extends LeverId>(id: K, value: LeverValues[K]) => void
   applyPreset: (id: ScenarioId) => void
   reset: () => void
@@ -65,6 +68,8 @@ type LeversState = {
   startWalkthrough: () => void
   setWalkthroughStep: (step: number) => void
   stopWalkthrough: () => void
+  setOverride: (path: string, value: number | undefined) => void
+  resetOverrides: (paths?: string[]) => void
 }
 
 const clone = (v: LeverValues): LeverValues => ({ ...v, L1: { ...v.L1 } })
@@ -94,6 +99,7 @@ export const useLevers = create<LeversState>((set) => ({
   showCover: !readEntered(),
   openInitiativeId: null,
   walkthrough: { active: false, step: 0 },
+  overrides: {},
   setLever: (id, value) =>
     set((s) => {
       const levers = { ...s.levers, [id]: value } as LeverValues
@@ -124,6 +130,7 @@ export const useLevers = create<LeversState>((set) => ({
     set({
       showCover: true,
       walkthrough: { active: false, step: 0 },
+      overrides: {},
       explainKey: null,
       openInitiativeId: null,
     })
@@ -140,6 +147,20 @@ export const useLevers = create<LeversState>((set) => ({
     })
   },
   setWalkthroughStep: (step) => set({ walkthrough: { active: true, step } }),
+  setOverride: (path, value) =>
+    set((s) => {
+      const overrides = { ...s.overrides }
+      if (value === undefined || Number.isNaN(value)) delete overrides[path]
+      else overrides[path] = value
+      return { overrides }
+    }),
+  resetOverrides: (paths) =>
+    set((s) => {
+      if (!paths) return { overrides: {} }
+      const overrides = { ...s.overrides }
+      for (const p of paths) delete overrides[p]
+      return { overrides }
+    }),
   stopWalkthrough: () =>
     set({ walkthrough: { active: false, step: 0 }, hoveredLever: null, openInitiativeId: null }),
 }))

@@ -1,13 +1,15 @@
 import { motion } from 'framer-motion'
 import type { PlanResult } from '../../engine'
-import { presetPlans } from '../../state/plan'
+import { presetPlans, useData } from '../../state/plan'
 import { strings } from '../../strings'
 import { categoryChip } from './categoryColors'
 import { ExplainButton } from './ExplainButton'
 
 export function ClassificationTable({ plan }: { plan: PlanResult }) {
   const D = strings.direction
-  const base = Object.fromEntries(presetPlans().base.classification.map((c) => [c.id, c.category]))
+  const base = Object.fromEntries(
+    presetPlans(useData()).base.classification.map((c) => [c.id, c.category]),
+  )
   return (
     <div className="overflow-hidden rounded-lg border border-line">
       <table className="w-full text-[16px]">
