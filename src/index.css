@@ -1,0 +1,160 @@
+@import 'tailwindcss';
+
+/* STRATA design tokens. Colors follow the live Sia site (docs/brand/BRAND.md), the deck palette is the fallback. */
+:root {
+  --ink: #0a151e;
+  --ink-2: #132330;
+  --ink-3: #1b3040;
+  --navy: #173044;
+  --teal: #1de9b6;
+  --teal-dim: #0f9c7e;
+  --sand: #f7f7f5;
+  --sand-2: #efefec;
+  --line: #d6d6d6;
+  --line-dark: #22384a;
+  --muted: #6f7a85;
+  --muted-dark: #a3a3a3;
+  --amber: #f2b24c;
+  --coral: #e4634f;
+  --white: #ffffff;
+
+  --font-heading: 'Sora', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --radius-card: 14px;
+  --radius-chip: 8px;
+  --shadow-card: 0 8px 24px rgba(11, 39, 53, 0.08);
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --t-fast: 150ms;
+  --t-view: 200ms;
+}
+
+@theme {
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-navy: var(--navy);
+  --color-teal: var(--teal);
+  --color-teal-dim: var(--teal-dim);
+  --color-sand: var(--sand);
+  --color-sand-2: var(--sand-2);
+  --color-line: var(--line);
+  --color-line-dark: var(--line-dark);
+  --color-muted: var(--muted);
+  --color-muted-dark: var(--muted-dark);
+  --color-amber: var(--amber);
+  --color-coral: var(--coral);
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+  --radius-card: var(--radius-card);
+  --radius-chip: var(--radius-chip);
+  --shadow-card: var(--shadow-card);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--sand);
+  color: var(--navy);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+.label {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Range inputs: teal thumb on a thin track, both themes. */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+input[type='range']:focus-visible {
+  outline: none;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--teal) 0,
+    var(--teal) var(--fill, 0%),
+    var(--track, var(--line-dark)) var(--fill, 0%),
+    var(--track, var(--line-dark)) 100%
+  );
+}
+input[type='range']::-moz-range-track {
+  height: 2px;
+  border-radius: 2px;
+  background: var(--track, var(--line-dark));
+}
+input[type='range']::-moz-range-progress {
+  height: 2px;
+  background: var(--teal);
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: 2px solid var(--ink);
+  box-shadow: 0 0 0 1px var(--teal);
+  transition: transform var(--t-fast) var(--ease-out);
+}
+input[type='range']::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: 2px solid var(--ink);
+  box-shadow: 0 0 0 1px var(--teal);
+}
+input[type='range']:hover::-webkit-slider-thumb,
+input[type='range']:focus-visible::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 120ms !important;
+    animation-duration: 120ms !important;
+  }
+}

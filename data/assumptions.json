@@ -1,0 +1,104 @@
+{
+  "_note": "ILLUSTRATIVE DATA. Invented for the STRATA proof of concept. Not SLIC actuals. Units: volumes in kt (thousand tons), money in SAR million unless stated, prices in SAR per ton.",
+  "baseYear": 2026,
+  "planYears": [2027, 2028, 2029, 2030, 2031],
+  "discountRate": 0.10,
+  "terminalMultiple": 5,
+  "workingCapitalPctOfRevenueDelta": 0.12,
+  "baseCase": {
+    "revenue": 612,
+    "ebitda": 141,
+    "capex": 38,
+    "headcount": 1180,
+    "saudization": 0.41
+  },
+
+  "sites": [
+    { "id": "riyadh", "name": "Riyadh", "region": "Central", "capacityKt": { "lime": 520, "limestone": 900, "gcc": 60, "bricks": 120 }, "baseUtilization": 0.82, "emissionsPerTonLime": 0.78 },
+    { "id": "alkharj", "name": "Al Kharj", "region": "Central", "capacityKt": { "lime": 380, "limestone": 700, "dololime": 90 }, "baseUtilization": 0.76, "emissionsPerTonLime": 0.81 },
+    { "id": "jeddah", "name": "Jeddah", "region": "Western", "capacityKt": { "lime": 240, "limestone": 500, "gcc": 30 }, "baseUtilization": 0.64, "emissionsPerTonLime": 0.84 }
+  ],
+
+  "products": [
+    { "id": "lime", "name": "Quicklime and hydrated lime", "family": "lime", "basePrice": 420, "baseCostPerTon": 262, "energyShareOfCost": 0.48 },
+    { "id": "dololime", "name": "Dololime", "family": "lime", "basePrice": 510, "baseCostPerTon": 318, "energyShareOfCost": 0.50 },
+    { "id": "limestone", "name": "Limestone and aggregates", "family": "limestone", "basePrice": 58, "baseCostPerTon": 41, "energyShareOfCost": 0.22 },
+    { "id": "gcc", "name": "Ground calcium carbonate", "family": "carbonate", "basePrice": 690, "baseCostPerTon": 455, "energyShareOfCost": 0.30 },
+    { "id": "bricks", "name": "Bricks", "family": "bricks", "basePrice": 310, "baseCostPerTon": 288, "energyShareOfCost": 0.35 }
+  ],
+
+  "sectors": [
+    { "id": "steel", "name": "Steel and iron", "product": "lime", "baseVolumeKt": 410, "growth": 0.045, "gigaSensitivity": 0.3, "share": 0.52 },
+    { "id": "construction", "name": "Construction and building materials", "product": "limestone", "baseVolumeKt": 1650, "growth": 0.038, "gigaSensitivity": 0.8, "share": 0.31 },
+    { "id": "glass", "name": "Glass", "product": "lime", "baseVolumeKt": 95, "growth": 0.035, "gigaSensitivity": 0.2, "share": 0.44 },
+    { "id": "water", "name": "Water treatment", "product": "lime", "baseVolumeKt": 130, "growth": 0.055, "gigaSensitivity": 0.4, "share": 0.38 },
+    { "id": "chemicals", "name": "Chemicals and industrial", "product": "gcc", "baseVolumeKt": 70, "growth": 0.06, "gigaSensitivity": 0.1, "share": 0.27 },
+    { "id": "agriculture", "name": "Agriculture", "product": "lime", "baseVolumeKt": 60, "growth": 0.03, "gigaSensitivity": 0.0, "share": 0.22 },
+    { "id": "bricks_mkt", "name": "Bricks market", "product": "bricks", "baseVolumeKt": 100, "growth": -0.01, "gigaSensitivity": 0.3, "share": 0.09 }
+  ],
+
+  "gigaPhasing": {
+    "_note": "Multiplier on construction-linked demand by year. Delayed/OnPlan/Accelerated map to L1.",
+    "delayed":     [0.92, 0.94, 0.97, 1.00, 1.02],
+    "onPlan":      [1.00, 1.03, 1.06, 1.08, 1.09],
+    "accelerated": [1.05, 1.10, 1.15, 1.18, 1.20]
+  },
+
+  "export": {
+    "_note": "Additional lime-family demand by ambition level, kt per year, ramped.",
+    "priceDiscountVsDomestic": 0.12,
+    "logisticsCostPerTon": { "gcc": 65, "extended": 140 },
+    "potentialKt": {
+      "0": [0, 0, 0, 0, 0],
+      "1": [20, 45, 70, 90, 100],
+      "2": [20, 60, 120, 180, 230]
+    },
+    "requiresInitiative": { "2": "jeddah_export_terminal" }
+  },
+
+  "priceElasticity": { "coefficient": 0.35, "clamp": [0.90, 1.15] },
+
+  "energy": { "baseIndex": 100 },
+
+  "carbon": { "sarPerTon": { "none": 0, "voluntary": 40, "regulated": 120 } },
+
+  "people": {
+    "baseHeadcount": 1180,
+    "baseSaudization": 0.41,
+    "nitaqatTarget": 0.50,
+    "headcountPerKtLime": 0.9,
+    "headcountPerKtLimestone": 0.12,
+    "baseCostPerTonAllIn": 118
+  },
+
+  "classificationThresholds": {
+    "_note": "attractiveness and position scored 0 to 100. Category by quadrant and margin.",
+    "grow":        { "attractiveness": 60, "position": 55 },
+    "maintain":    { "attractiveness": 45, "position": 55 },
+    "improve":     { "attractiveness": 60, "position": 0 },
+    "restructure": { "marginBelow": 0.08 },
+    "harvest":     { "attractiveness": 0, "position": 55, "growthBelow": 0.01 },
+    "exit":        { "attractiveness": 35, "position": 40 }
+  },
+
+  "levers": [
+    { "id": "L1", "name": "Domestic demand outlook", "type": "segmented_plus_slider", "options": ["delayed", "onPlan", "accelerated"], "sliderRange": [0.7, 1.3], "default": { "option": "onPlan", "multiplier": 1.0 }, "moves": ["demand", "utilization", "priceIndex"], "description": "Giga-project phasing and end-use growth. Moves volume, utilization and price." },
+    { "id": "L2", "name": "Energy cost", "type": "slider", "range": [80, 160], "step": 5, "default": 100, "moves": ["costPerTon", "ebitda"], "description": "Gas and fuel index, base 100. Moves cost per ton on kiln products." },
+    { "id": "L3", "name": "Capital envelope", "type": "slider", "range": [200, 1500], "step": 50, "unit": "SAR m over 5 years", "default": 600, "moves": ["portfolio", "capex", "roadmap"], "description": "Total capital the Board will commit. Decides which viable initiatives are funded." },
+    { "id": "L4", "name": "Risk appetite", "type": "segmented", "options": ["organic", "selective", "aggressive"], "values": [1, 2, 3], "default": 2, "moves": ["portfolio"], "description": "Whether acquisitions and joint ventures are on the table." },
+    { "id": "L5", "name": "Export ambition", "type": "segmented", "options": ["domestic", "gcc", "extended"], "values": [0, 1, 2], "default": 1, "moves": ["demand", "sites", "portfolio", "classification"], "description": "None, GCC, or GCC plus East Africa and South Asia. Moves Jeddah." },
+    { "id": "L6", "name": "Carbon cost", "type": "segmented", "options": ["none", "voluntary", "regulated"], "values": [0, 40, 120], "unit": "SAR per tCO2", "default": 0, "moves": ["costPerTon", "portfolio"], "description": "Cost applied to process emissions on lime. Decides the decarbonization initiatives." }
+  ],
+
+  "scenarios": {
+    "base":     { "L1": { "option": "onPlan", "multiplier": 1.0 }, "L2": 100, "L3": 600,  "L4": 2, "L5": 1, "L6": 0 },
+    "growth":   { "L1": { "option": "onPlan", "multiplier": 1.1 }, "L2": 100, "L3": 900,  "L4": 2, "L5": 2, "L6": 40 },
+    "upside":   { "L1": { "option": "accelerated", "multiplier": 1.2 }, "L2": 90, "L3": 1200, "L4": 3, "L5": 2, "L6": 40 },
+    "downside": { "L1": { "option": "delayed", "multiplier": 0.8 }, "L2": 140, "L3": 350,  "L4": 1, "L5": 0, "L6": 120 }
+  },
+
+  "tracker": {
+    "editableYear": 2027,
+    "fields": ["L1.multiplier", "L2", "L6"]
+  }
+}

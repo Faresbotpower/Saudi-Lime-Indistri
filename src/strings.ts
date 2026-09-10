@@ -1,0 +1,101 @@
+// All UI copy lives here so an Arabic pass can be done in one file.
+// Rules from the brief: no em dashes, no "AI", "Sia" never "Sia Partners".
+
+export const strings = {
+  app: {
+    name: 'STRATA',
+    tagline: 'Dynamic strategy cockpit',
+    client: 'Saudi Lime Industries Company, 2027 to 2031',
+    illustrative: 'Illustrative data',
+    illustrativeLong: 'Illustrative data. Invented for this proof of concept, not SLIC actuals.',
+    scenario: 'Scenario',
+    reset: 'Reset to base',
+    builtBy: 'A Sia proof of concept',
+  },
+  rail: {
+    levers: 'Levers',
+    presets: 'Scenario presets',
+    explain: 'Explain this result',
+    explainHint: 'Show the rules and assumptions behind every number.',
+    moves: 'Moves',
+    custom: 'Custom',
+  },
+  scenarios: {
+    base: 'Base',
+    growth: 'Growth',
+    upside: 'Upside',
+    downside: 'Downside',
+    custom: 'Custom',
+  } as Record<string, string>,
+  levers: {
+    L1: {
+      options: { delayed: 'Delayed', onPlan: 'On plan', accelerated: 'Accelerated' },
+      fine: 'Giga-project phasing',
+      unit: 'x base growth',
+    },
+    L2: { unit: 'index, base 100' },
+    L3: { unit: 'SAR m over 5 years' },
+    L4: {
+      options: { organic: 'Organic', selective: 'Selective', aggressive: 'Aggressive' },
+      long: { organic: 'Organic only', selective: 'Selective inorganic', aggressive: 'Aggressive' },
+    },
+    L5: {
+      options: { domestic: 'Domestic', gcc: 'GCC', extended: 'Extended' },
+      long: { domestic: 'Domestic only', gcc: 'GCC', extended: 'GCC + East Africa and South Asia' },
+    },
+    L6: {
+      options: { none: 'None', voluntary: 'Voluntary', regulated: 'Regulated' },
+      unit: 'SAR per tCO2',
+    },
+  },
+  assumptionKeys: {
+    demand: 'Demand',
+    utilization: 'Utilization',
+    priceIndex: 'Price index',
+    costPerTon: 'Cost per ton',
+    ebitda: 'EBITDA',
+    portfolio: 'Portfolio',
+    capex: 'Capex',
+    roadmap: 'Roadmap',
+    sites: 'Sites',
+    classification: 'Classification',
+  } as Record<string, string>,
+  views: {
+    direction: {
+      tab: 'Strategic direction',
+      title: 'Strategic direction',
+      lead: 'Where to play, how each product market is classified, and which layers of the plan move when a lever moves.',
+    },
+    portfolio: {
+      tab: 'Growth portfolio',
+      title: 'Growth portfolio',
+      lead: 'Every initiative, funded or deferred or out, with the lever value that would change its status.',
+    },
+    financials: {
+      tab: 'Financial plan',
+      title: 'Financial plan',
+      lead: 'Revenue, EBITDA, capex and free cash flow for 2027 to 2031 against the base case.',
+    },
+    operations: {
+      tab: 'Operations and people',
+      title: 'Operations and people',
+      lead: 'Site capacity and utilization, capex phasing, headcount and Saudization under the current scenario.',
+    },
+    roadmap: {
+      tab: 'Roadmap',
+      title: 'Roadmap',
+      lead: 'Selected initiatives on a 2027 to 2031 timeline in the five plan layers, with dependencies.',
+    },
+    tracker: {
+      tab: 'Tracker',
+      title: 'Tracker',
+      lead: 'Plan assumptions against actuals, and the decisions that become due when they diverge.',
+    },
+  },
+  common: {
+    illustrativeFootnote:
+      'Illustrative. The engagement delivers a formula-driven Excel model (RFQ 3.1); this view mirrors its output.',
+  },
+} as const
+
+export type ViewId = keyof typeof strings.views
