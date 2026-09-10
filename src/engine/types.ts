@@ -175,6 +175,8 @@ export type CostResult = {
   costPerTonByFamily: Record<string, Series>
   energyCostPerTonByFamily: Record<string, number>
   carbonCostPerTonLime: number
+  /** Carbon cost per ton of lime by year (base year 0), honouring tracked actuals. */
+  carbonByYear: number[]
   exportLogisticsPerTon: number
   trace: Trace
 }

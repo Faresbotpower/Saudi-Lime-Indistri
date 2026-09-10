@@ -11,6 +11,17 @@ export type { Levers, PlanData, TraceEntry, Trace } from './types'
 export type { Category, Cell } from './classify'
 export type { Roadmap, RoadmapItem, RoadmapLayer } from './roadmap'
 export type { Trigger } from './viability'
+
+/** Actuals entered in the tracker for one elapsed year. */
+export type Actuals = { year: number; L1multiplier?: number; L2?: number; L6?: number }
+
+export type TriggerFired = {
+  id: string
+  from: 'in' | 'deferred' | 'out'
+  to: 'in' | 'deferred' | 'out'
+  reason?: string
+  trigger?: Trigger
+}
 export type { SiteResult } from './consolidate'
 
 export type Financials = {
@@ -75,6 +86,10 @@ export type PlanResult = {
   roadmap: Roadmap
   capital: { envelope: number; committed: number; headroom: number }
   diversificationShare2031: number
+  /** Present when the plan was run with tracker actuals. */
+  actuals?: Actuals
+  /** Initiatives whose status changes once the actuals are applied. */
+  triggersFired: TriggerFired[]
   trace: Trace
 }
 
@@ -101,25 +116,68 @@ export const traceFor = (r: { trace: Trace }, key: string): TraceEntry[] => r.tr
  *  5 viability, 6 portfolio, 7 consolidation (core again with the selected set),
  *  8 classification on the consolidated core, 9 roadmap, 10 trace.
  */
-export function runPlan(levers: Levers, data: PlanData): PlanResult {
-  const result = runOnce(levers, data)
-  const isBase = scenarioNameFor(levers, data) === 'base'
+export function runPlan(
+  levers: Levers,
+  data: PlanData,
+  opts: { actuals?: Actuals } = {},
+): PlanResult {
+  const scenarioName = scenarioNameFor(levers, data)
+  const isBase = scenarioName === 'base'
+  const plain = runOnce(levers, data)
   const baseCase = isBase
-    ? result.financials
+    ? plain.financials
     : runOnce(data.assumptions.scenarios.base, data).financials
-  return { ...result, baseCase }
+  const actuals = opts.actuals
+  const hasActuals =
+    !!actuals &&
+    (actuals.L1multiplier !== undefined || actuals.L2 !== undefined || actuals.L6 !== undefined)
+  if (!hasActuals) return { ...plain, baseCase, scenarioName, triggersFired: [] }
+
+  // Tracked run: the elapsed year takes the actual values; decisions are re-taken on them.
+  const decided: Levers = {
+    ...levers,
+    L1: { ...levers.L1, multiplier: actuals.L1multiplier ?? levers.L1.multiplier },
+    L2: actuals.L2 ?? levers.L2,
+    L6: actuals.L6 ?? levers.L6,
+  }
+  const overrides = {
+    [actuals.year]: { L1multiplier: actuals.L1multiplier, L2: actuals.L2, L6: actuals.L6 },
+  }
+  const tracked = runOnce(levers, data, decided, overrides)
+  const before = Object.fromEntries(plain.initiatives.map((i) => [i.id, i]))
+  const triggersFired: TriggerFired[] = tracked.initiatives
+    .filter((i) => before[i.id] && before[i.id].status !== i.status)
+    .map((i) => ({
+      id: i.id,
+      from: before[i.id].status,
+      to: i.status,
+      reason: i.reason,
+      trigger: i.trigger,
+    }))
+  return { ...tracked, baseCase, scenarioName, actuals, triggersFired }
 }
 
-function runOnce(levers: Levers, data: PlanData): Omit<PlanResult, 'baseCase'> {
+/**
+ * One pass. `decisionLevers` are the values the rules and the portfolio see (the actuals
+ * when tracking); `yearOverrides` move the elapsed year's demand and cost only.
+ */
+function runOnce(
+  levers: Levers,
+  data: PlanData,
+  decisionLevers: Levers = levers,
+  yearOverrides: Record<number, { L1multiplier?: number; L2?: number; L6?: number }> = {},
+): Omit<PlanResult, 'baseCase' | 'triggersFired'> {
   const a = data.assumptions
   const years = yearsOf(a)
   const n = years.length
 
-  const core1 = runCore(levers, data, [], { selected: [] })
-  const class1 = classify(levers, data, core1)
-  const viability = evaluateViability(levers, data, (l) => contextFor(l, data, class1.forRules))
-  const portfolio = selectPortfolio(levers, data, viability)
-  const cons = consolidate(levers, data, portfolio)
+  const core1 = runCore(decisionLevers, data, [], { selected: [] })
+  const class1 = classify(decisionLevers, data, core1)
+  const viability = evaluateViability(decisionLevers, data, (l) =>
+    contextFor(l, data, class1.forRules),
+  )
+  const portfolio = selectPortfolio(decisionLevers, data, viability)
+  const cons = consolidate(levers, data, portfolio, yearOverrides)
   const classification = classify(levers, data, cons.core)
   const roadmap = buildRoadmap(levers, data, portfolio)
 

@@ -8,6 +8,8 @@ import {
 } from '../data'
 import type { ViewId } from '../strings'
 
+export type ActualInputs = { L1multiplier?: number; L2?: number; L6?: number }
+
 export type ScenarioName = ScenarioId | 'custom'
 
 type LeversState = {
@@ -18,6 +20,8 @@ type LeversState = {
   hoveredLever: LeverId | null
   /** Levers lit by a hover elsewhere (the Strata reveal), so the rail can answer. */
   litLevers: LeverId[]
+  /** Tracker actuals for the elapsed year; empty until typed. */
+  actuals: ActualInputs
   setLever: <K extends LeverId>(id: K, value: LeverValues[K]) => void
   applyPreset: (id: ScenarioId) => void
   reset: () => void
@@ -25,6 +29,8 @@ type LeversState = {
   toggleExplain: () => void
   setHoveredLever: (id: LeverId | null) => void
   setLitLevers: (ids: LeverId[]) => void
+  setActual: (key: keyof ActualInputs, value: number | undefined) => void
+  clearActuals: () => void
 }
 
 const clone = (v: LeverValues): LeverValues => ({ ...v, L1: { ...v.L1 } })
@@ -49,15 +55,24 @@ export const useLevers = create<LeversState>((set) => ({
   explain: false,
   hoveredLever: null,
   litLevers: [],
+  actuals: {},
   setLever: (id, value) =>
     set((s) => {
       const levers = { ...s.levers, [id]: value } as LeverValues
       return { levers, scenario: scenarioFor(levers) }
     }),
   applyPreset: (id) => set({ levers: clone(scenarioPresets[id]), scenario: id }),
-  reset: () => set({ levers: clone(scenarioPresets.base), scenario: 'base' }),
+  reset: () => set({ levers: clone(scenarioPresets.base), scenario: 'base', actuals: {} }),
   setView: (view) => set({ view }),
   toggleExplain: () => set((s) => ({ explain: !s.explain })),
   setHoveredLever: (hoveredLever) => set({ hoveredLever }),
   setLitLevers: (litLevers) => set({ litLevers }),
+  setActual: (key, value) =>
+    set((s) => {
+      const actuals = { ...s.actuals }
+      if (value === undefined || Number.isNaN(value)) delete actuals[key]
+      else actuals[key] = value
+      return { actuals }
+    }),
+  clearActuals: () => set({ actuals: {} }),
 }))

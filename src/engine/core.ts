@@ -24,7 +24,7 @@ export function runCore(
   const demand = computeDemand(levers, a, opts)
   const capacity = computeCapacity(demand, a, additions)
   const price = computePrice(levers, capacity, a)
-  const cost = computeCost(levers, a)
+  const cost = computeCost(levers, a, opts.yearOverrides ?? {})
 
   const calibration = calibrate(data)
   const n = demand.years.length
@@ -43,7 +43,7 @@ export function runCore(
       const domestic = served - exp
       rev += domestic * price.domesticPriceByFamily[fam][i] * calibration.price
       rev += exp * price.exportPrice[i] * calibration.price
-      const carbon = fam === 'lime' && i > 0 ? cost.carbonCostPerTonLime : 0
+      const carbon = fam === 'lime' ? cost.carbonByYear[i] : 0
       const unit = (cost.costPerTonByFamily[fam][i] - carbon) * calibration.cost + carbon
       // Domestic tons carry the calibrated all-in cost (fixed costs live there). Export tons
       // are incremental: variable cost from the data plus logistics.

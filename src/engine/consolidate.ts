@@ -56,6 +56,7 @@ export function consolidate(
   levers: Levers,
   data: PlanData,
   portfolio: PortfolioResult,
+  yearOverrides: Record<number, { L1multiplier?: number; L2?: number; L6?: number }> = {},
 ): Consolidated {
   const a = data.assumptions
   const years = yearsOf(a)
@@ -63,8 +64,11 @@ export function consolidate(
   const list = data.initiatives.initiatives
   const byId = Object.fromEntries(list.map((i) => [i.id, i]))
 
-  const core = runCore(levers, data, portfolio.additions, { selected: portfolio.selectedIds })
-  const coreBase = runCore(levers, data, [], { selected: [] })
+  const core = runCore(levers, data, portfolio.additions, {
+    selected: portfolio.selectedIds,
+    yearOverrides,
+  })
+  const coreBase = runCore(levers, data, [], { selected: [], yearOverrides })
 
   const runRateIds = portfolio.selectedIds.filter((id) => !isVolumeInitiative(byId[id], data))
   const volumeIds = portfolio.selectedIds.filter((id) => isVolumeInitiative(byId[id], data))

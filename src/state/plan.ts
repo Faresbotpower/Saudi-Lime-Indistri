@@ -9,6 +9,17 @@ export function usePlan(): PlanResult {
   return useMemo(() => runPlan(levers, planData), [levers])
 }
 
+/** The plan with the tracker actuals applied to the elapsed year. Same as usePlan when nothing is typed. */
+export function useTrackedPlan(): PlanResult {
+  const levers = useLevers((s) => s.levers)
+  const actuals = useLevers((s) => s.actuals)
+  const year = planData.assumptions.tracker.editableYear
+  return useMemo(
+    () => runPlan(levers, planData, { actuals: { year, ...actuals } }),
+    [levers, actuals, year],
+  )
+}
+
 let presetCache: Record<ScenarioId, PlanResult> | null = null
 
 /** The four preset plans, computed once. */

@@ -1,8 +1,14 @@
 import type { Assumptions, DemandResult, Levers, Trace, TraceEntry } from './types'
 import { yearsOf, sumSeries, zeros } from './years'
 
+/** Per-year lever actuals for the tracker: only the listed years move. */
+export type YearOverride = { L1multiplier?: number; L2?: number; L6?: number }
+
 /** Ids of selected initiatives; export levels that require an initiative need it here. */
-export type DemandOptions = { selected: ReadonlySet<string> | readonly string[] }
+export type DemandOptions = {
+  selected: ReadonlySet<string> | readonly string[]
+  yearOverrides?: Record<number, YearOverride>
+}
 
 /**
  * Pipeline step 1. Demand by sector and year:
@@ -20,10 +26,13 @@ export function computeDemand(levers: Levers, a: Assumptions, opts: DemandOption
   const bySector: Record<string, number[]> = {}
   for (const s of a.sectors) {
     const series = zeros(n)
+    // Growth compounds year by year so a tracked actual for one year carries into the next.
+    let compounded = s.baseVolumeKt
     for (let i = 0; i < n; i++) {
-      const t = years[i] - a.baseYear
+      const mult = opts.yearOverrides?.[years[i]]?.L1multiplier ?? levers.L1.multiplier
+      if (i > 0) compounded *= 1 + s.growth * mult
       const giga = i === 0 ? 1 : 1 + (phasing[i - 1] - 1) * s.gigaSensitivity
-      series[i] = s.baseVolumeKt * Math.pow(1 + s.growth * levers.L1.multiplier, t) * giga
+      series[i] = compounded * giga
     }
     bySector[s.id] = series
     const entries: TraceEntry[] = [

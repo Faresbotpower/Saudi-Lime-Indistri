@@ -294,6 +294,44 @@ export const strings = {
     empty: 'No initiative in this layer at these lever values.',
     quarters: ['Q1', 'Q2', 'Q3', 'Q4'],
   },
+  tracker: {
+    lead: (year: number) => `Type what actually happened in ${year}. The plan re-decides itself.`,
+    cols: {
+      lever: 'Lever',
+      plan: 'Plan assumption',
+      actual: (year: number) => `Actual ${year}`,
+      status: 'Status',
+    },
+    notTracked: 'Not tracked in this proof of concept',
+    awaiting: 'Awaiting actual',
+    onPlan: 'On plan',
+    above: 'Above plan',
+    below: 'Below plan',
+    clear: 'Clear actuals',
+    fired: 'Triggers fired',
+    firedLead:
+      'Initiatives whose status changes once the actuals are in, and the decision now due.',
+    none: 'No trigger fired. The plan holds at these actuals.',
+    decision: 'Decision due',
+    decisions: {
+      out: 'Stop or re-scope. The strategic condition no longer holds.',
+      deferred: 'Hold. Viable, but the envelope or the returns no longer cover it.',
+      in: 'Approve. The condition is now met and capital is available.',
+    } as Record<string, string>,
+    chart: 'Plan against tracked plan',
+    chartLead: 'Solid lines carry the actuals; dashed lines are the plan as approved.',
+    legend: {
+      revenue: 'Revenue, tracked',
+      ebitda: 'EBITDA, tracked',
+      planRevenue: 'Revenue, plan',
+      planEbitda: 'EBITDA, plan',
+    },
+    inputHint: { L1multiplier: '0.7 to 1.3', L2: '80 to 160', L6: '0, 40 or 120' } as Record<
+      string,
+      string
+    >,
+    ownership: 'This is what SLIC owns after handover: the same rules, run on real numbers.',
+  },
   common: {
     illustrativeFootnote:
       'Illustrative. The engagement delivers a formula-driven Excel model (RFQ 3.1); this view mirrors its output.',

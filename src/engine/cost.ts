@@ -1,4 +1,5 @@
 import type { Assumptions, CostResult, Levers, Trace } from './types'
+import type { YearOverride } from './demand'
 import { familyBlend } from './price'
 
 /**
@@ -7,8 +8,12 @@ import { familyBlend } from './price'
  *   other cost from assumptions. Export logistics reported per ton for the L5 level.
  * The base year entry is the actual cost structure and does not move with levers.
  */
-export function computeCost(levers: Levers, a: Assumptions): CostResult {
-  const n = a.planYears.length + 1
+export function computeCost(
+  levers: Levers,
+  a: Assumptions,
+  yearOverrides: Record<number, YearOverride> = {},
+): CostResult {
+  const years = [a.baseYear, ...a.planYears]
   const baseCost = familyBlend(a, (p) => p.baseCostPerTon)
   const baseEnergy = familyBlend(a, (p) => p.baseCostPerTon * p.energyShareOfCost)
   const energyFactor = levers.L2 / a.energy.baseIndex
@@ -28,6 +33,9 @@ export function computeCost(levers: Levers, a: Assumptions): CostResult {
         ) / limeCap
       : 0
   const carbonCostPerTonLime = levers.L6 * emissionsPerTon
+  const carbonByYear = years.map((y, i) =>
+    i === 0 ? 0 : (yearOverrides[y]?.L6 ?? levers.L6) * emissionsPerTon,
+  )
 
   const trace: Trace = {}
   const costPerTonByFamily: Record<string, number[]> = {}
@@ -35,13 +43,16 @@ export function computeCost(levers: Levers, a: Assumptions): CostResult {
   for (const fam of Object.keys(baseCost)) {
     const energy = baseEnergy[fam] * energyFactor
     const other = baseCost[fam] - baseEnergy[fam]
-    const carbon = fam === 'lime' ? carbonCostPerTonLime : 0
     energyCostPerTonByFamily[fam] = energy
     // The base year is actual: levers move cost from the first plan year onward.
-    costPerTonByFamily[fam] = [
-      baseCost[fam],
-      ...new Array<number>(n - 1).fill(other + energy + carbon),
-    ]
+    // A tracked actual replaces the lever for its year only.
+    costPerTonByFamily[fam] = years.map((y, i) => {
+      if (i === 0) return baseCost[fam]
+      const o = yearOverrides[y]
+      const e = baseEnergy[fam] * ((o?.L2 ?? levers.L2) / a.energy.baseIndex)
+      const c = fam === 'lime' ? (o?.L6 ?? levers.L6) * emissionsPerTon : 0
+      return other + e + c
+    })
     trace[`cost.${fam}`] = [
       { rule: 'cost.base', assumptionKey: `products.${fam}.baseCostPerTon`, value: baseCost[fam] },
       {
@@ -78,6 +89,7 @@ export function computeCost(levers: Levers, a: Assumptions): CostResult {
     costPerTonByFamily,
     energyCostPerTonByFamily,
     carbonCostPerTonLime,
+    carbonByYear,
     exportLogisticsPerTon,
     trace,
   }
