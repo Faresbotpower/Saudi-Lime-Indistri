@@ -58,11 +58,28 @@ export const chapters: Chapter[] = [
   ),
   chapter(
     3,
-    30,
+    32,
     [
       { at: 1, run: (api) => api.setInputsOpen('L2', true) },
       { at: 2, run: (_a, _b, focus) => focus('[data-testid="inputs-L2"]') },
-      { at: 26, run: (api) => api.setInputsOpen('L2', false) },
+      {
+        at: 10,
+        run: (api) => {
+          // Type natural gas at 9 SAR per MMBtu: the index becomes 138 and every view recomputes.
+          api.setOverride('energy.fuel.gasSarPerMmbtu', 9)
+          api.setLever('L2', 138)
+        },
+      },
+      { at: 14, run: (_a, _b, focus) => focus(tour('kpis')) },
+      { at: 20, run: (_a, _b, focus) => focus('[data-testid="inputs-L2"]') },
+      {
+        at: 27,
+        run: (api) => {
+          api.resetOverrides()
+          api.setLever('L2', 100)
+          api.setInputsOpen('L2', false)
+        },
+      },
     ],
     tour('rail'),
   ),
@@ -89,18 +106,26 @@ export const chapters: Chapter[] = [
   ),
   chapter(
     6,
-    24.3,
+    30,
     [
       { at: 0, run: (api) => api.setView('portfolio') },
-      { at: 12, run: (_a, _b, focus) => focus(tour('capital')) },
+      // Energy to 140: the PCC plant fails its rule (energy at or below 130) and slides from Deferred to Out.
+      { at: 8, run: (_api, animate) => animate('L2', 100, 140, 5, 1600) },
+      { at: 15, run: (_a, _b, focus) => focus(tour('capital')) },
       {
-        at: 15.5,
+        at: 19,
         run: (api, _b, focus) => {
           focus(null)
           api.openInitiative('pcc_plant')
         },
       },
-      { at: 23, run: (api) => api.closeInitiative() },
+      {
+        at: 28,
+        run: (api) => {
+          api.closeInitiative()
+          api.setLever('L2', 100)
+        },
+      },
     ],
     tour('columns'),
   ),
@@ -139,12 +164,21 @@ export const chapters: Chapter[] = [
   ),
   chapter(
     11,
-    24,
+    28,
     [
-      { at: 0, run: (api) => api.setView('functions') },
-      { at: 8, run: (_a, _b, focus) => focus('[data-testid="function-finance"]') },
-      { at: 14, run: (_a, _b, focus) => focus('[data-testid="function-executive"]') },
-      { at: 20, run: (api) => api.clearActuals() },
+      {
+        at: 0,
+        run: (api) => {
+          api.clearActuals()
+          api.setView('functions')
+        },
+      },
+      // Energy to 140 again: every function card shows where the shock lands against Base.
+      { at: 5, run: (_api, animate) => animate('L2', 100, 140, 5, 1200) },
+      { at: 9, run: (_a, _b, focus) => focus('[data-testid="function-finance"]') },
+      { at: 15, run: (_a, _b, focus) => focus('[data-testid="function-supply"]') },
+      { at: 20, run: (_a, _b, focus) => focus('[data-testid="function-executive"]') },
+      { at: 26, run: (api) => api.setLever('L2', 100) },
     ],
     tour('functions'),
   ),
