@@ -73,10 +73,12 @@ const kpi = (
   goodWhenUp,
 })
 const sum = (xs: number[]) => xs.slice(1).reduce((s, x) => s + x, 0)
-const sarT = (v: number) => `${Math.round(v)}`
-const pctOf = (v: number) => pct1(v)
-const kt = (v: number) => sarm(v)
-const idx = (v: number) => v.toFixed(2)
+const money = (v: number) => `${sarm(v)} SAR m`
+const sarT = (v: number) => `${Math.round(v)} SAR/t`
+const pctOf = (v: number) => `${pct1(v)}%`
+const kt = (v: number) => `${sarm(v)} kt`
+const idx = (v: number) => `${v.toFixed(2)}x`
+const people = (v: number) => `${sarm(v)} people`
 
 /** What the current scenario means for each function, against the Base plan. Decisions come from the tracked plan. */
 export function functionImpacts(
@@ -94,7 +96,7 @@ export function functionImpacts(
 
   const kpisFor: Record<FunctionId, Kpi[]> = {
     commercial: [
-      kpi('revenue2031', plan.financials.revenue[last], base.financials.revenue[last], sarm),
+      kpi('revenue2031', plan.financials.revenue[last], base.financials.revenue[last], money),
       kpi('exportKt2031', plan.volumes.exportKt[last], base.volumes.exportKt[last], kt),
       kpi(
         'priceIndex2031',
@@ -138,19 +140,24 @@ export function functionImpacts(
       kpi('exportKt2031', plan.volumes.exportKt[last], base.volumes.exportKt[last], kt),
     ],
     finance: [
-      kpi('ebitda2031', plan.financials.ebitda[last], base.financials.ebitda[last], sarm),
+      kpi('ebitda2031', plan.financials.ebitda[last], base.financials.ebitda[last], money),
       kpi(
         'margin2031',
         plan.financials.ebitdaMargin[last],
         base.financials.ebitdaMargin[last],
         pctOf,
       ),
-      kpi('cumCapex', sum(plan.financials.capex), sum(base.financials.capex), sarm, false),
-      kpi('cumFcf', plan.financials.cumulativeFcf[last], base.financials.cumulativeFcf[last], sarm),
-      kpi('headroom', plan.capital.headroom, base.capital.headroom, sarm),
+      kpi('cumCapex', sum(plan.financials.capex), sum(base.financials.capex), money, false),
+      kpi(
+        'cumFcf',
+        plan.financials.cumulativeFcf[last],
+        base.financials.cumulativeFcf[last],
+        money,
+      ),
+      kpi('headroom', plan.capital.headroom, base.capital.headroom, money),
     ],
     people: [
-      kpi('headcount2031', plan.people.headcount[last], base.people.headcount[last], sarm),
+      kpi('headcount2031', plan.people.headcount[last], base.people.headcount[last], people),
       kpi('saudization2031', plan.people.saudization[last], base.people.saudization[last], pctOf),
     ],
     sustainability: [

@@ -5,7 +5,6 @@ import { Slash } from '../components/Slash'
 import { usePlan, useTrackedPlan, useData, presetPlans } from '../../state/plan'
 import { strings } from '../../strings'
 import { functionImpacts } from '../functions'
-import { signed } from '../format'
 
 const dot: Record<string, string> = { in: 'bg-teal', deferred: 'bg-amber', out: 'bg-coral' }
 
