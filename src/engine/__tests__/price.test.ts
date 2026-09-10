@@ -4,7 +4,9 @@ import { computePrice } from '../price'
 import { base, withL, assumptions, YEARS } from './fixtures'
 
 const run = (levers = base(), terminal = false) => {
-  const d = computeDemand(levers, assumptions, { exportTerminalSelected: terminal })
+  const d = computeDemand(levers, assumptions, {
+    selected: terminal ? ['gcc_export_sales', 'jeddah_export_terminal'] : ['gcc_export_sales'],
+  })
   const c = computeCapacity(d, assumptions, [])
   return computePrice(levers, c, assumptions)
 }
@@ -17,7 +19,7 @@ describe('price', () => {
   })
 
   it('moves the index with utilization: 1 + coefficient * (utilization - base utilization)', () => {
-    const d = computeDemand(base(), assumptions, { exportTerminalSelected: false })
+    const d = computeDemand(base(), assumptions, { selected: ['gcc_export_sales'] })
     const c = computeCapacity(d, assumptions, [])
     const p = computePrice(base(), c, assumptions)
     const u = c.utilizationByFamily.lime

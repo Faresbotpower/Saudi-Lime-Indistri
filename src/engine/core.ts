@@ -17,7 +17,7 @@ export function runCore(
   levers: Levers,
   data: PlanData,
   additions: CapacityAddition[],
-  opts: DemandOptions = { exportTerminalSelected: false },
+  opts: DemandOptions = { selected: [] },
 ): CoreResult {
   const a = data.assumptions
   const demand = computeDemand(levers, a, opts)
@@ -107,7 +107,7 @@ export function runCore(
 export function calibrate(data: PlanData): { price: number; cost: number } {
   const a = data.assumptions
   const baseLevers = a.scenarios.base
-  const demand = computeDemand(baseLevers, a, { exportTerminalSelected: false })
+  const demand = computeDemand(baseLevers, a, { selected: [] })
   const capacity = computeCapacity(demand, a, [])
   const price = computePrice(baseLevers, capacity, a)
   const cost = computeCost(baseLevers, a)

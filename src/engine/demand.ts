@@ -1,7 +1,8 @@
 import type { Assumptions, DemandResult, Levers, Trace, TraceEntry } from './types'
 import { yearsOf, sumSeries, zeros } from './years'
 
-export type DemandOptions = { exportTerminalSelected: boolean }
+/** Ids of selected initiatives; export levels that require an initiative need it here. */
+export type DemandOptions = { selected: ReadonlySet<string> | readonly string[] }
 
 /**
  * Pipeline step 1. Demand by sector and year:
@@ -59,10 +60,17 @@ export function computeDemand(levers: Levers, a: Assumptions, opts: DemandOption
     domesticByFamily[fam] = sumSeries([domesticByFamily[fam] ?? zeros(n), bySector[s.id]], n)
   }
 
-  // Export: the extended level needs the Jeddah terminal; without it, serve the GCC level.
-  let exportLevel = levers.L5
+  // Export: the highest level at or below L5 whose required initiative (if any) is selected.
+  const selected = new Set(opts.selected)
+  let exportLevel = 0
+  for (let level = levers.L5; level >= 0; level--) {
+    const req = a.export.requiresInitiative[String(level)]
+    if (!req || selected.has(req)) {
+      exportLevel = level
+      break
+    }
+  }
   const required = a.export.requiresInitiative[String(levers.L5)]
-  if (required && !opts.exportTerminalSelected) exportLevel = Math.max(0, levers.L5 - 1)
   const potential = a.export.potentialKt[String(exportLevel)] ?? zeros(n - 1)
   const exportKt = [0, ...potential.slice(0, n - 1)]
   trace['demand.export'] = [

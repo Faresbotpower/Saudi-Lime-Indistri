@@ -4,7 +4,9 @@ import { base, withL, assumptions, YEARS } from './fixtures'
 import type { CapacityAddition } from '../types'
 
 const demandFor = (levers = base(), terminal = false) =>
-  computeDemand(levers, assumptions, { exportTerminalSelected: terminal })
+  computeDemand(levers, assumptions, {
+    selected: terminal ? ['gcc_export_sales', 'jeddah_export_terminal'] : ['gcc_export_sales'],
+  })
 
 describe('capacity and utilization', () => {
   it('sums site capacity by family, folding dololime into lime', () => {

@@ -53,7 +53,7 @@
       "1": [20, 45, 70, 90, 100],
       "2": [20, 60, 120, 180, 230]
     },
-    "requiresInitiative": { "2": "jeddah_export_terminal" }
+    "requiresInitiative": { "1": "gcc_export_sales", "2": "jeddah_export_terminal" }
   },
 
   "priceElasticity": { "coefficient": 0.35, "clamp": [0.90, 1.15] },
