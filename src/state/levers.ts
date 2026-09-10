@@ -103,12 +103,12 @@ export const useLevers = create<LeversState>((set) => ({
   litLevers: [],
   actuals: {},
   explainKey: null,
-  showCover: !readEntered(),
+  showCover: !readEntered() && !(typeof window !== 'undefined' && /[?&]print=1/.test(window.location.search)),
   openInitiativeId: null,
   walkthrough: { active: false, step: 0 },
   overrides: {},
   inputsOpen: {},
-  printing: false,
+  printing: typeof window !== 'undefined' && /[?&]print=1/.test(window.location.search),
   setLever: (id, value) =>
     set((s) => {
       const levers = { ...s.levers, [id]: value } as LeverValues
@@ -141,7 +141,7 @@ export const useLevers = create<LeversState>((set) => ({
       walkthrough: { active: false, step: 0 },
       overrides: {},
       inputsOpen: {},
-      printing: false,
+      printing: typeof window !== 'undefined' && /[?&]print=1/.test(window.location.search),
       explainKey: null,
       openInitiativeId: null,
     })

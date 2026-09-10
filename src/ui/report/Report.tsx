@@ -39,27 +39,29 @@ export function Report() {
         </div>
         <h1 className="mt-2 text-[18px] text-ink">{R.title}</h1>
         <p className="text-[11px] text-muted">{R.subtitle}</p>
-        <div className="mt-2 grid grid-cols-3 gap-4 text-[11px]">
-          <div>
+        <div className="mt-2 flex flex-wrap items-baseline gap-x-6 text-[11px]">
+          <span className="whitespace-nowrap">
             <span className="label mr-2">{R.scenario}</span>
             <span className="font-heading text-ink">{strings.scenarios[plan.scenarioName]}</span>
-            <span className="label ml-4 mr-2">{R.generated}</span>
+          </span>
+          <span className="whitespace-nowrap">
+            <span className="label mr-2">{R.generated}</span>
             <span className="num">{today}</span>
-          </div>
-          <div className="col-span-2">
-            <span className="label mr-2">{R.levers}</span>
-            {leverDefs.map((d) => (
-              <span key={d.id} className="mr-3">
-                {d.name}:{' '}
-                <span className="num text-ink">
-                  {leverValueLabel(
-                    d.id,
-                    d.id === 'L1' ? levers.L1.multiplier : (levers[d.id] as number),
-                  )}
-                </span>
+          </span>
+        </div>
+        <div className="mt-1 flex flex-wrap items-baseline gap-x-4 gap-y-0.5 text-[11px]">
+          <span className="label mr-1">{R.levers}</span>
+          {leverDefs.map((d) => (
+            <span key={d.id} className="whitespace-nowrap">
+              {d.name}:{' '}
+              <span className="num text-ink">
+                {leverValueLabel(
+                  d.id,
+                  d.id === 'L1' ? levers.L1.multiplier : (levers[d.id] as number),
+                )}
               </span>
-            ))}
-          </div>
+            </span>
+          ))}
         </div>
         <div className="mt-1 text-[11px]">
           <span className="label mr-2">{R.inputs}</span>
@@ -323,38 +325,33 @@ export function Report() {
               <th className={th}>{strings.functions.initiatives}</th>
             </tr>
           </thead>
-          <tbody>
-            {cards.map((c) => (
-              <tr key={c.id}>
-                <td className={td}>
-                  <div className="font-heading text-ink">{c.name}</div>
-                  <div className="text-[10px] text-muted">{c.rfq}</div>
-                </td>
-                <td className={td}>
-                  {c.kpis.map((k) => (
-                    <div key={k.id}>{k.label}</div>
-                  ))}
-                </td>
-                <td className={`${td} ${num}`}>
-                  {c.kpis.map((k) => (
-                    <div key={k.id}>{k.format(k.value)}</div>
-                  ))}
-                </td>
-                <td className={`${td} ${num}`}>
-                  {c.kpis.map((k) => (
-                    <div key={k.id}>{k.format(k.base)}</div>
-                  ))}
-                </td>
-                <td className={td}>
-                  {c.initiatives.map((i) => (
-                    <div key={i.id}>
-                      {i.name} · {strings.portfolio.columns[i.status]}
-                    </div>
-                  ))}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          {cards.map((c) => (
+            <tbody key={c.id} className="function-block">
+              {c.kpis.map((k, i) => (
+                <tr key={`${c.id}-${k.id}`}>
+                  <td className={td}>
+                    {i === 0 && (
+                      <>
+                        <div className="font-heading text-ink">{c.name}</div>
+                        <div className="text-[10px] text-muted">{c.rfq}</div>
+                      </>
+                    )}
+                  </td>
+                  <td className={td}>{k.label}</td>
+                  <td className={`${td} ${num} whitespace-nowrap`}>{k.format(k.value)}</td>
+                  <td className={`${td} ${num} whitespace-nowrap`}>{k.format(k.base)}</td>
+                  <td className={td}>
+                    {i === 0 &&
+                      c.initiatives.map((x) => (
+                        <div key={x.id}>
+                          {x.name} · {strings.portfolio.columns[x.status]}
+                        </div>
+                      ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ))}
         </table>
       </section>
 

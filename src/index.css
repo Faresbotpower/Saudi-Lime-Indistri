@@ -176,7 +176,8 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   margin-bottom: 8px;
   break-inside: auto;
 }
-.report tr {
+.report tr,
+.report .function-block {
   break-inside: avoid;
 }
 @media print {
