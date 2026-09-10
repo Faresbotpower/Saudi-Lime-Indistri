@@ -217,7 +217,7 @@ export function LeverRail() {
       data-tour="rail"
       className="flex w-[320px] shrink-0 flex-col border-r border-line-dark bg-ink text-white"
     >
-      <div className="flex-1 overflow-y-auto px-4 pb-6 pt-5">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 pb-6 pt-5">
         <div className="mb-3 flex items-center gap-2">
           <Slash size={12} />
           <span className="label text-muted-dark">{strings.rail.presets}</span>

@@ -34,9 +34,9 @@ export function NumberField({
     if (Number(text) !== value) setText(String(value))
   }
   return (
-    <label htmlFor={id} className="grid grid-cols-[1fr_96px_auto] items-center gap-2 py-1">
+    <label htmlFor={id} className="block min-w-0 py-1.5">
       <span
-        className={`flex items-center gap-1.5 text-[13px] ${dark ? 'text-muted-dark' : 'text-navy'}`}
+        className={`flex items-center gap-1.5 text-[13px] leading-snug ${dark ? 'text-muted-dark' : 'text-navy'}`}
       >
         {edited && (
           <span
@@ -44,37 +44,39 @@ export function NumberField({
             aria-label="edited"
           />
         )}
-        <span className="truncate" title={label}>
+        <span className="min-w-0 truncate" title={label}>
           {label}
         </span>
       </span>
-      <input
-        id={id}
-        type="number"
-        inputMode="decimal"
-        step={step}
-        min={min}
-        max={max}
-        value={text}
-        onChange={(e) => {
-          setText(e.target.value)
-          if (e.target.value === '') onChange(undefined)
-          else {
-            const n = Number(e.target.value)
-            if (!Number.isNaN(n)) onChange(n)
-          }
-        }}
-        className={`num w-full rounded-md border px-2 py-1 text-right text-[13px] outline-none transition-colors duration-150 ${
-          dark
-            ? `border-line-dark bg-ink text-white focus:border-teal ${edited ? 'border-teal/60' : ''}`
-            : `border-line bg-white text-ink focus:border-teal-dim ${edited ? 'border-teal-dim/60' : ''}`
-        }`}
-      />
-      <span
-        className={`w-[92px] truncate text-[11px] ${dark ? 'text-muted-dark' : 'text-muted'}`}
-        title={unit}
-      >
-        {unit}
+      <span className="mt-1 flex items-center gap-2">
+        <input
+          id={id}
+          type="number"
+          inputMode="decimal"
+          step={step}
+          min={min}
+          max={max}
+          value={text}
+          onChange={(e) => {
+            setText(e.target.value)
+            if (e.target.value === '') onChange(undefined)
+            else {
+              const n = Number(e.target.value)
+              if (!Number.isNaN(n)) onChange(n)
+            }
+          }}
+          className={`num w-[120px] rounded-md border px-2 py-1 text-right text-[14px] outline-none transition-colors duration-150 ${
+            dark
+              ? `border-line-dark bg-ink text-white focus:border-teal ${edited ? 'border-teal/60' : ''}`
+              : `border-line bg-white text-ink focus:border-teal-dim ${edited ? 'border-teal-dim/60' : ''}`
+          }`}
+        />
+        <span
+          className={`min-w-0 truncate text-[12px] ${dark ? 'text-muted-dark' : 'text-muted'}`}
+          title={unit}
+        >
+          {unit}
+        </span>
       </span>
     </label>
   )
