@@ -3,29 +3,27 @@ import { useState } from 'react'
 import { TopBar } from './ui/shell/TopBar'
 import { LeverRail } from './ui/shell/LeverRail'
 import { Tabs } from './ui/shell/Tabs'
-import { Intro } from './ui/shell/Intro'
-import { shouldPlayIntro } from './ui/shell/introState'
+import { Cover } from './ui/shell/Cover'
 import { ExplainSheet } from './ui/components/ExplainSheet'
+import { WalkthroughPlayer } from './ui/walkthrough/WalkthroughPlayer'
 import { views } from './ui/views'
 import { useLevers } from './state/levers'
 
 export default function App() {
   const view = useLevers((s) => s.view)
+  const showCover = useLevers((s) => s.showCover)
   const reduced = useReducedMotion()
-  const [intro, setIntro] = useState(() => shouldPlayIntro())
-  const [assembled, setAssembled] = useState(() => !shouldPlayIntro())
+  const [assembled, setAssembled] = useState(() => !useLevers.getState().showCover)
   const View = views[view]
   const ease = [0.2, 0.8, 0.2, 1] as const
 
   return (
     <MotionConfig reducedMotion="user">
-      <AnimatePresence>
-        {intro && <Intro key="intro" onDone={() => setIntro(false)} />}
-      </AnimatePresence>
+      <AnimatePresence>{showCover && <Cover key="cover" />}</AnimatePresence>
       <div className="flex h-full min-w-[1024px] flex-col overflow-hidden">
         <motion.div
           initial={assembled ? false : { opacity: 0, y: -8 }}
-          animate={intro ? undefined : { opacity: 1, y: 0 }}
+          animate={showCover ? undefined : { opacity: 1, y: 0 }}
           transition={{ duration: reduced ? 0.12 : 0.4, ease }}
         >
           <TopBar />
@@ -34,7 +32,7 @@ export default function App() {
           <motion.div
             className="flex min-h-0"
             initial={assembled ? false : { x: -80, opacity: 0 }}
-            animate={intro ? undefined : { x: 0, opacity: 1 }}
+            animate={showCover ? undefined : { x: 0, opacity: 1 }}
             transition={{ duration: reduced ? 0.12 : 0.5, ease }}
             onAnimationComplete={() => setAssembled(true)}
           >
@@ -51,7 +49,7 @@ export default function App() {
                   exit={{ opacity: 0, y: reduced ? 0 : -12 }}
                   transition={{ duration: reduced ? 0.12 : 0.2, ease }}
                 >
-                  {!intro && <View />}
+                  {!showCover && <View />}
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -59,6 +57,7 @@ export default function App() {
         </div>
       </div>
       <ExplainSheet />
+      <WalkthroughPlayer />
     </MotionConfig>
   )
 }

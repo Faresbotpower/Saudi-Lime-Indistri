@@ -4,7 +4,10 @@ import { strings } from './strings'
 import { useLevers } from './state/levers'
 
 describe('shell', () => {
-  beforeEach(() => useLevers.getState().reset())
+  beforeEach(() => {
+    useLevers.getState().reset()
+    useLevers.getState().enter()
+  })
 
   it('renders the six tabs, six levers and the permanent banner', () => {
     render(<App />)
@@ -38,7 +41,10 @@ describe('shell', () => {
 })
 
 describe('view switching', () => {
-  beforeEach(() => useLevers.getState().reset())
+  beforeEach(() => {
+    useLevers.getState().reset()
+    useLevers.getState().enter()
+  })
 
   it('switches the main view when a tab is clicked', async () => {
     const { findByTestId } = render(<App />)

@@ -10,6 +10,23 @@ import type { ViewId } from '../strings'
 
 export type ActualInputs = { L1multiplier?: number; L2?: number; L6?: number }
 
+const ENTERED_KEY = 'strata-entered'
+const readEntered = (): boolean => {
+  try {
+    return window.sessionStorage.getItem(ENTERED_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+const writeEntered = (v: boolean) => {
+  try {
+    if (v) window.sessionStorage.setItem(ENTERED_KEY, '1')
+    else window.sessionStorage.removeItem(ENTERED_KEY)
+  } catch {
+    /* private mode */
+  }
+}
+
 export type ScenarioName = ScenarioId | 'custom'
 
 type LeversState = {
@@ -24,6 +41,12 @@ type LeversState = {
   actuals: ActualInputs
   /** Trace key open in the Explain sheet. */
   explainKey: string | null
+  /** Cover page shown until the user enters; comes back from the wordmark. */
+  showCover: boolean
+  /** Initiative sheet open in the Growth portfolio. */
+  openInitiativeId: string | null
+  /** Auto-pilot walkthrough with voice-over. */
+  walkthrough: { active: boolean; step: number }
   setLever: <K extends LeverId>(id: K, value: LeverValues[K]) => void
   applyPreset: (id: ScenarioId) => void
   reset: () => void
@@ -35,6 +58,13 @@ type LeversState = {
   clearActuals: () => void
   openExplain: (key: string) => void
   closeExplain: () => void
+  enter: () => void
+  goHome: () => void
+  openInitiative: (id: string) => void
+  closeInitiative: () => void
+  startWalkthrough: () => void
+  setWalkthroughStep: (step: number) => void
+  stopWalkthrough: () => void
 }
 
 const clone = (v: LeverValues): LeverValues => ({ ...v, L1: { ...v.L1 } })
@@ -61,6 +91,9 @@ export const useLevers = create<LeversState>((set) => ({
   litLevers: [],
   actuals: {},
   explainKey: null,
+  showCover: !readEntered(),
+  openInitiativeId: null,
+  walkthrough: { active: false, step: 0 },
   setLever: (id, value) =>
     set((s) => {
       const levers = { ...s.levers, [id]: value } as LeverValues
@@ -82,4 +115,31 @@ export const useLevers = create<LeversState>((set) => ({
   clearActuals: () => set({ actuals: {} }),
   openExplain: (explainKey) => set({ explainKey }),
   closeExplain: () => set({ explainKey: null }),
+  enter: () => {
+    writeEntered(true)
+    set({ showCover: false })
+  },
+  goHome: () => {
+    writeEntered(false)
+    set({
+      showCover: true,
+      walkthrough: { active: false, step: 0 },
+      explainKey: null,
+      openInitiativeId: null,
+    })
+  },
+  openInitiative: (openInitiativeId) => set({ openInitiativeId }),
+  closeInitiative: () => set({ openInitiativeId: null }),
+  startWalkthrough: () => {
+    writeEntered(true)
+    set({
+      showCover: false,
+      walkthrough: { active: true, step: 0 },
+      explainKey: null,
+      openInitiativeId: null,
+    })
+  },
+  setWalkthroughStep: (step) => set({ walkthrough: { active: true, step } }),
+  stopWalkthrough: () =>
+    set({ walkthrough: { active: false, step: 0 }, hoveredLever: null, openInitiativeId: null }),
 }))

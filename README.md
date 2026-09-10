@@ -26,6 +26,10 @@ Every number lives in two files, and nothing else needs to change:
 
 UI copy lives in `src/strings.ts`. Brand notes and site screenshots are in `docs/brand/`.
 
+## Cover page and walkthrough
+
+The app opens on a cover page: Enter goes to the cockpit, Play the walkthrough runs the five-step demo story on auto-pilot with a recorded voice-over (about two minutes, subtitles in a bar at the bottom, Stop at any time). Audio files live in `public/walkthrough/`; the script and timings are in `src/ui/walkthrough/script.ts`; the narration text is in `src/strings.ts`. Clicking the STRATA wordmark returns to the cover.
+
 ## Demo in five minutes
 
 1. Open on Base, Financial plan. This is the plan.

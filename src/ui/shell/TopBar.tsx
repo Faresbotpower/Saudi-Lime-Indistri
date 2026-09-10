@@ -7,16 +7,22 @@ import logoWhite from '../../../assets/sia_logo_white.png'
 export function TopBar() {
   const scenario = useLevers((s) => s.scenario)
   const reset = useLevers((s) => s.reset)
+  const goHome = useLevers((s) => s.goHome)
   const isBase = scenario === 'base'
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-6 border-b border-line-dark bg-ink px-6 text-white">
-      <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={goHome}
+        title={strings.cover.home}
+        className="flex items-center gap-2 rounded-md transition-opacity duration-150 hover:opacity-80"
+      >
         <Slash size={22} />
         <span className="font-heading text-[20px] font-medium tracking-[0.12em]">
           {strings.app.name}
         </span>
-      </div>
+      </button>
       <span className="hidden text-[13px] text-muted-dark lg:block">{strings.app.client}</span>
 
       <div className="ml-auto flex items-center gap-4">

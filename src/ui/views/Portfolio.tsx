@@ -1,10 +1,10 @@
 import { LayoutGroup } from 'framer-motion'
-import { useState } from 'react'
 import { ViewFrame } from '../components/ViewFrame'
 import { CapitalStrip } from '../components/CapitalStrip'
 import { InitiativeCard } from '../components/InitiativeCard'
 import { InitiativeSheet } from '../components/InitiativeSheet'
 import { usePlan } from '../../state/plan'
+import { useLevers } from '../../state/levers'
 import { planData } from '../../data'
 import { strings } from '../../strings'
 
@@ -12,7 +12,9 @@ const STATUSES = ['in', 'deferred', 'out'] as const
 
 export function Portfolio() {
   const plan = usePlan()
-  const [openId, setOpenId] = useState<string | null>(null)
+  const openId = useLevers((s) => s.openInitiativeId)
+  const setOpenId = useLevers((s) => s.openInitiative)
+  const closeInitiative = useLevers((s) => s.closeInitiative)
   const byId = Object.fromEntries(planData.initiatives.initiatives.map((i) => [i.id, i]))
   const planById = Object.fromEntries(plan.initiatives.map((i) => [i.id, i]))
 
@@ -60,7 +62,7 @@ export function Portfolio() {
       <InitiativeSheet
         init={openId ? byId[openId] : null}
         plan={openId ? planById[openId] : null}
-        onClose={() => setOpenId(null)}
+        onClose={closeInitiative}
       />
     </ViewFrame>
   )
