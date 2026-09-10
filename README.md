@@ -28,4 +28,6 @@ UI copy lives in `src/strings.ts`. Brand notes and site screenshots are in `docs
 
 ## Build status
 
-Step 1 of the build order in `CLAUDE.md` is complete: scaffold, palette, fonts, shell with six tabs and the lever rail.
+Steps 1 and 2 of the build order in `CLAUDE.md` are complete: shell, then engine steps 1 to 4 (demand, capacity, price, cost) under `src/engine` with 43 tests.
+
+Calibration note: list prices and unit costs in the data do not reproduce the 2026 actuals on their own. The engine computes a price factor and an all-in cost factor once under the Base preset so the base year matches `baseCase.revenue` and `baseCase.ebitda`, and writes both to the trace. If you change volumes, prices or costs, expect those factors to move; keep them near 1 by updating `baseCase` too.
