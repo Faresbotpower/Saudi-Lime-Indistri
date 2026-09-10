@@ -1,1 +1,0 @@
-This is STRATA, a dynamic strategy cockpit for Saudi Lime Industries. Six levers on the left. Every number on the right is recomputed from them. This is the plan on the Base case: revenue grows from 612 to 908 million riyals, EBITDA from 141 to 298. Every consultancy will give you one of these.

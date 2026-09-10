@@ -1,1 +1,0 @@
-STRATA is a dynamic strategy cockpit, built by Sia for Saudi Lime Industries and its 2027 to 2031 strategic business plan. Most strategy plans are documents, fixed on the day they are printed. STRATA is a system. The plan is computed live from six levers, and every number on screen can be traced back to the lever and the rule that produced it. All data here is illustrative.

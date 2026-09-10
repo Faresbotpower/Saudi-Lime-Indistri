@@ -8,9 +8,8 @@ import { chapters, type AnimateLever } from './script'
 type Rect = { x: number; y: number; w: number; h: number }
 
 /**
- * Runs the explainer: plays each chapter's narration, fires its actions at their offsets,
- * spotlights the part of the screen being described, and advances when the audio ends
- * (or after the chapter's length if audio cannot play).
+ * Runs the explainer: shows each chapter's caption, fires its actions at their offsets,
+ * spotlights the part of the screen being described, and advances at reading pace.
  */
 export function WalkthroughPlayer() {
   const active = useLevers((s) => s.walkthrough.active)
@@ -81,29 +80,10 @@ export function WalkthroughPlayer() {
       if (step + 1 < chapters.length) setStep(step + 1)
       else stop()
     }
-    let fallback: number | null = null
-    let audio: HTMLAudioElement | null = null
-    if (typeof Audio === 'function') {
-      audio = new Audio(current.audio)
-      audio.addEventListener('ended', next)
-      audio.addEventListener('error', () => {
-        fallback = window.setTimeout(next, current.seconds * 1000)
-      })
-      const p = audio.play()
-      if (p && typeof p.catch === 'function')
-        p.catch(() => {
-          fallback = window.setTimeout(next, current.seconds * 1000)
-        })
-    } else {
-      fallback = window.setTimeout(next, current.seconds * 1000)
-    }
+    const ends = window.setTimeout(next, current.seconds * 1000)
     return () => {
       clear()
-      if (fallback !== null) window.clearTimeout(fallback)
-      if (audio) {
-        audio.pause()
-        audio.removeEventListener('ended', next)
-      }
+      window.clearTimeout(ends)
     }
   }, [active, step, setStep, stop])
 

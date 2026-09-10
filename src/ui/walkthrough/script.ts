@@ -12,7 +12,6 @@ export type AnimateLever = (
 export type Focus = (selector: string | null) => void
 export type Action = { at: number; run: (api: Api, animate: AnimateLever, focus: Focus) => void }
 export type Chapter = {
-  audio: string
   title: string
   caption: string
   seconds: number
@@ -23,7 +22,6 @@ export type Chapter = {
 const T = strings.walkthrough
 const tour = (id: string) => `[data-tour="${id}"]`
 const chapter = (n: number, seconds: number, actions: Action[], focus?: string): Chapter => ({
-  audio: `/walkthrough/chapter${n}.m4a`,
   title: T.titles[n - 1],
   caption: T.captions[n - 1],
   seconds,
@@ -31,7 +29,7 @@ const chapter = (n: number, seconds: number, actions: Action[], focus?: string):
   actions,
 })
 
-/** The explainer: what STRATA is and how each part works, timed to the narration. */
+/** The explainer: what STRATA is and how each part works. Each chapter runs for a reading pace in seconds. */
 export const chapters: Chapter[] = [
   chapter(1, 23.3, [
     {

@@ -92,15 +92,8 @@ export function Cover() {
           onClick={start}
           className="flex items-center gap-2 rounded-full border border-line-dark px-6 py-3 font-heading text-[15px] text-white transition-colors duration-150 hover:border-teal hover:text-teal"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <path d="M3 6v4h3l4 3V3L6 6H3z" />
-            <path
-              d="M12 5.5a3.5 3.5 0 0 1 0 5"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              fill="none"
-              strokeLinecap="round"
-            />
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M4 2.5v11l9-5.5-9-5.5z" />
           </svg>
           {strings.cover.walkthrough}
         </button>

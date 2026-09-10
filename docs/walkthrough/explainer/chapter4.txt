@@ -1,1 +1,0 @@
-The Financial plan view is the first thing a CFO wants to see. Four headline numbers for 2031, revenue and EBITDA against the Base case as dashed lines, capex and free cash flow by year, and the four presets side by side. When a lever moves, the numbers count to their new values, and delta chips show the change against Base: teal when favourable, coral when not.

@@ -336,8 +336,7 @@ export const strings = {
     tagline: 'A plan that re-decides itself',
     enter: 'Enter',
     walkthrough: 'Play the walkthrough',
-    walkthroughHint:
-      'Eleven chapters, about four minutes, with voice. What it is and how it works.',
+    walkthroughHint: 'Eleven chapters, about four minutes. What it is and how it works.',
     poweredBy: 'Powered by',
     home: 'Back to the cover',
   },

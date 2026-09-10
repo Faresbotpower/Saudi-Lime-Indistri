@@ -1,1 +1,0 @@
-On the left are the six levers the Board controls: domestic demand outlook, energy cost, capital envelope, risk appetite, export ambition and carbon cost. Each card shows the current value, what it moves, and the assumptions it touches. Four presets, Base, Growth, Upside and Downside, set all six at once. Move any lever and the whole plan recomputes in a few milliseconds.
