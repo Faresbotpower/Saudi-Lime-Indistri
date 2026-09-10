@@ -18,10 +18,10 @@ export function Tracker() {
     <ViewFrame id="tracker">
       <p className="-mt-3 mb-4 text-[14px] text-navy">{T.lead(year)}</p>
       <div className="grid grid-cols-5 gap-6">
-        <div className="col-span-3">
+        <div className="col-span-3" data-tour="tracker">
           <TrackerTable />
         </div>
-        <div className="col-span-2">
+        <div className="col-span-2" data-tour="triggers">
           <TriggersFired plan={tracked} />
         </div>
       </div>

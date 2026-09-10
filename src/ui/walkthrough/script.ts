@@ -2,8 +2,6 @@ import type { useLevers } from '../../state/levers'
 import { strings } from '../../strings'
 
 export type Api = ReturnType<typeof useLevers.getState>
-
-export type Action = { at: number; run: (api: Api, animate: AnimateLever) => void }
 export type AnimateLever = (
   id: 'L2' | 'L3',
   from: number,
@@ -11,83 +9,162 @@ export type AnimateLever = (
   step: number,
   ms: number,
 ) => void
-
-export type Step = {
+export type Focus = (selector: string | null) => void
+export type Action = { at: number; run: (api: Api, animate: AnimateLever, focus: Focus) => void }
+export type Chapter = {
   audio: string
   title: string
   caption: string
   seconds: number
+  focus?: string
   actions: Action[]
 }
 
 const T = strings.walkthrough
+const tour = (id: string) => `[data-tour="${id}"]`
+const chapter = (n: number, seconds: number, actions: Action[], focus?: string): Chapter => ({
+  audio: `/walkthrough/chapter${n}.m4a`,
+  title: T.titles[n - 1],
+  caption: T.captions[n - 1],
+  seconds,
+  focus,
+  actions,
+})
 
-/** The five-step demo story, timed to the narration audio. */
-export const steps: Step[] = [
-  {
-    audio: '/walkthrough/step1.m4a',
-    title: T.titles[0],
-    caption: T.captions[0],
-    seconds: 21,
-    actions: [
+/** The explainer: what STRATA is and how each part works, timed to the narration. */
+export const chapters: Chapter[] = [
+  chapter(1, 23.3, [
+    {
+      at: 0,
+      run: (api) => {
+        api.reset()
+        api.clearActuals()
+        api.closeInitiative()
+        api.closeExplain()
+        if (api.explain) api.toggleExplain()
+        api.setView('financials')
+      },
+    },
+  ]),
+  chapter(
+    2,
+    24.1,
+    [
+      { at: 7, run: (api) => api.applyPreset('growth') },
+      { at: 11.5, run: (api) => api.applyPreset('base') },
+      { at: 16, run: (_api, animate) => animate('L2', 100, 120, 5, 800) },
+      { at: 21, run: (api) => api.setLever('L2', 100) },
+    ],
+    tour('rail'),
+  ),
+  chapter(
+    3,
+    28.7,
+    [
+      { at: 12, run: (_a, _b, focus) => focus(tour('tabs')) },
+      { at: 24, run: (_a, _b, focus) => focus(null) },
+    ],
+    tour('main-chart'),
+  ),
+  chapter(
+    4,
+    23.1,
+    [
+      { at: 0, run: (api) => api.setView('financials') },
+      { at: 8, run: (_a, _b, focus) => focus(tour('main-chart')) },
+      { at: 12, run: (_api, animate) => animate('L2', 100, 125, 5, 900) },
+      { at: 14, run: (_a, _b, focus) => focus(tour('kpis')) },
+      { at: 21.5, run: (api) => api.setLever('L2', 100) },
+    ],
+    tour('kpis'),
+  ),
+  chapter(
+    5,
+    24.3,
+    [
+      { at: 0, run: (api) => api.setView('portfolio') },
+      { at: 12, run: (_a, _b, focus) => focus(tour('capital')) },
       {
-        at: 0,
-        run: (api) => {
-          api.reset()
-          api.closeInitiative()
-          api.setView('financials')
+        at: 15.5,
+        run: (api, _b, focus) => {
+          focus(null)
+          api.openInitiative('pcc_plant')
         },
       },
-    ],
-  },
-  {
-    audio: '/walkthrough/step2.m4a',
-    title: T.titles[1],
-    caption: T.captions[1],
-    seconds: 25.6,
-    actions: [
-      { at: 1.5, run: (_api, animate) => animate('L2', 100, 140, 5, 1600) },
-      { at: 13, run: (api) => api.setView('portfolio') },
-    ],
-  },
-  {
-    audio: '/walkthrough/step3.m4a',
-    title: T.titles[2],
-    caption: T.captions[2],
-    seconds: 24.7,
-    actions: [
-      { at: 0.5, run: (api) => api.reset() },
-      { at: 3.5, run: (api) => api.setLever('L5', 2) },
-      { at: 13, run: (api) => api.openInitiative('jeddah_export_terminal') },
       { at: 23, run: (api) => api.closeInitiative() },
     ],
-  },
-  {
-    audio: '/walkthrough/step4.m4a',
-    title: T.titles[3],
-    caption: T.captions[3],
-    seconds: 14.6,
-    actions: [
-      { at: 0, run: (api) => api.setView('tracker') },
-      { at: 3.5, run: (api) => api.setActual('L2', 140) },
+    tour('columns'),
+  ),
+  chapter(
+    6,
+    23.3,
+    [
+      { at: 0, run: (api) => api.setView('direction') },
+      { at: 5, run: (api) => api.setHoveredLever('L3') },
+      { at: 14, run: (api) => api.setHoveredLever(null) },
+      { at: 14.5, run: (_a, _b, focus) => focus(tour('matrix')) },
+      { at: 19.5, run: (_a, _b, focus) => focus(tour('class-table')) },
     ],
-  },
-  {
-    audio: '/walkthrough/step5.m4a',
-    title: T.titles[4],
-    caption: T.captions[4],
-    seconds: 13.6,
-    actions: [
+    tour('strata'),
+  ),
+  chapter(
+    7,
+    18.7,
+    [
+      { at: 0, run: (api) => api.setView('operations') },
+      { at: 2.5, run: (_a, _b, focus) => focus(tour('sites')) },
+      { at: 12, run: (_a, _b, focus) => focus(tour('people')) },
+    ],
+    tour('scrubber'),
+  ),
+  chapter(8, 18.2, [{ at: 0, run: (api) => api.setView('roadmap') }], tour('gantt')),
+  chapter(
+    9,
+    14,
+    [
+      { at: 0, run: (api) => api.setView('tracker') },
+      { at: 4, run: (api) => api.setActual('L2', 140) },
+      { at: 7.5, run: (_a, _b, focus) => focus(tour('triggers')) },
+      { at: 13.5, run: (api) => api.clearActuals() },
+    ],
+    tour('tracker'),
+  ),
+  chapter(
+    10,
+    15.6,
+    [
+      { at: 0, run: (api) => api.setView('financials') },
       {
-        at: 0,
+        at: 3.5,
         run: (api) => {
-          api.clearActuals()
-          api.reset()
-          api.setView('direction')
+          if (!api.explain) api.toggleExplain()
         },
       },
-      { at: 2.5, run: (api) => api.setHoveredLever('L3') },
-      { at: 12.5, run: (api) => api.setHoveredLever(null) },
+      { at: 6, run: (_a, _b, focus) => focus(tour('kpis')) },
+      {
+        at: 8.5,
+        run: (api, _b, focus) => {
+          focus(null)
+          api.openExplain('financials.ebitdaMargin')
+        },
+      },
+      {
+        at: 14.5,
+        run: (api) => {
+          api.closeExplain()
+          if (api.explain) api.toggleExplain()
+        },
+      },
     ],
-  },
+    tour('explain'),
+  ),
+  chapter(11, 12.4, [
+    {
+      at: 0,
+      run: (api) => {
+        api.reset()
+        api.setView('financials')
+      },
+    },
+  ]),
 ]

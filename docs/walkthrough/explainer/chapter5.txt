@@ -1,0 +1,1 @@
+The Growth portfolio holds sixteen initiatives in three columns: in plan, deferred, and out. Every card shows capex, NPV, EBITDA, the owner, and a trigger point: the lever value that would change its status. A capital bar shows what the envelope funds. Click a card for the full initiative sheet: objective, rationale, impact, timeline, risks and KPIs.

@@ -28,7 +28,7 @@ UI copy lives in `src/strings.ts`. Brand notes and site screenshots are in `docs
 
 ## Cover page and walkthrough
 
-The app opens on a cover page: Enter goes to the cockpit, Play the walkthrough runs the five-step demo story on auto-pilot with a recorded voice-over (about two minutes, subtitles in a bar at the bottom, Stop at any time). Audio files live in `public/walkthrough/`; the script and timings are in `src/ui/walkthrough/script.ts`; the narration text is in `src/strings.ts`. Clicking the STRATA wordmark returns to the cover.
+The app opens on a cover page: Enter goes to the cockpit, Play the walkthrough runs an eleven-chapter explainer of what STRATA is and how each part works, on auto-pilot with a recorded voice-over (about four minutes). A spotlight follows the part of the screen being described, a bar at the bottom carries the chapter title and subtitle, and Next chapter and Stop are always available. Audio files live in `public/walkthrough/`; the script, spotlight targets and timings are in `src/ui/walkthrough/script.ts`; the narration text is in `docs/walkthrough/explainer.md` and `src/strings.ts`. To re-record with a better voice, install a premium voice in System Settings, Accessibility, Spoken Content, then run `npm run narrate -- "Ava (Premium)"`. Clicking the STRATA wordmark returns to the cover.
 
 ## Demo in five minutes
 

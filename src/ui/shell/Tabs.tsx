@@ -10,6 +10,7 @@ export function Tabs() {
   return (
     <nav
       aria-label="Views"
+      data-tour="tabs"
       className="flex shrink-0 items-end gap-1 border-b border-line px-6 pt-3"
     >
       {viewOrder.map((id, i) => {

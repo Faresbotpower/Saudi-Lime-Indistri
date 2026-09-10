@@ -12,7 +12,7 @@ export function CapitalStrip({ plan }: { plan: PlanResult }) {
   const counts = { in: 0, deferred: 0, out: 0 }
   for (const i of plan.initiatives) counts[i.status] += 1
   return (
-    <div data-testid="capital-strip" className="grid grid-cols-6 gap-6">
+    <div data-testid="capital-strip" data-tour="capital" className="grid grid-cols-6 gap-6">
       <div className="col-span-3 rounded-card bg-white p-5 shadow-card">
         <div className="flex items-baseline justify-between">
           <span className="flex items-center gap-2">

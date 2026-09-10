@@ -40,7 +40,7 @@ export function Portfolio() {
     <ViewFrame id="portfolio">
       <CapitalStrip plan={plan} />
       <LayoutGroup>
-        <div className="mt-6 grid grid-cols-3 gap-6">
+        <div data-tour="columns" className="mt-6 grid grid-cols-3 gap-6">
           {columns.map((col) => (
             <section key={col.status} data-testid={`column-${col.status}`} className="min-w-0">
               <header className="mb-3 flex items-baseline gap-2">

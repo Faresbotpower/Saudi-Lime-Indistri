@@ -9,7 +9,7 @@ export function Roadmap() {
   const R = strings.roadmap
   return (
     <ViewFrame id="roadmap">
-      <Card lead={R.lead}>
+      <Card lead={R.lead} tour="gantt">
         <Gantt plan={plan} />
         <div className="mt-4 flex flex-wrap gap-5 text-[13px] text-muted">
           <span className="flex items-center gap-1.5">

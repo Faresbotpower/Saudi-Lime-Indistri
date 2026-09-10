@@ -1,0 +1,1 @@
+The Roadmap lays the funded initiatives on a quarterly timeline in the five layers of the plan, from quick wins to diversification. Ghost bars show viable initiatives waiting on capital and how much more envelope they need. Dependencies are drawn between bars, milestones mark ramp completion, and the critical path is in teal.

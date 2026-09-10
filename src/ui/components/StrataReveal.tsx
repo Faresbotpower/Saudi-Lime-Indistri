@@ -166,6 +166,7 @@ export function StrataReveal({ plan }: { plan: PlanResult }) {
   return (
     <section
       data-testid="strata-reveal"
+      data-tour="strata"
       className="relative overflow-hidden rounded-card bg-ink text-white"
     >
       <div className="flex items-start justify-between gap-6 px-6 pt-5">

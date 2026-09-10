@@ -211,13 +211,16 @@ export function LeverRail() {
   const toggleExplain = useLevers((s) => s.toggleExplain)
 
   return (
-    <aside className="flex w-[320px] shrink-0 flex-col border-r border-line-dark bg-ink text-white">
+    <aside
+      data-tour="rail"
+      className="flex w-[320px] shrink-0 flex-col border-r border-line-dark bg-ink text-white"
+    >
       <div className="flex-1 overflow-y-auto px-4 pb-6 pt-5">
         <div className="mb-3 flex items-center gap-2">
           <Slash size={12} />
           <span className="label text-muted-dark">{strings.rail.presets}</span>
         </div>
-        <div className="mb-6 grid grid-cols-4 gap-1">
+        <div data-tour="presets" className="mb-6 grid grid-cols-4 gap-1">
           {scenarioOrder.map((id) => {
             const active = id === scenario
             return (
@@ -250,7 +253,10 @@ export function LeverRail() {
       </div>
 
       <div className="border-t border-line-dark px-4 py-4">
-        <label className="flex cursor-pointer items-center justify-between gap-3">
+        <label
+          data-tour="explain"
+          className="flex cursor-pointer items-center justify-between gap-3"
+        >
           <span>
             <span className="block font-heading text-[14px] text-white">
               {strings.rail.explain}
