@@ -2,6 +2,15 @@
 // Rules from the brief: no em dashes, no "AI", "Sia" never "Sia Partners".
 
 export const strings = {
+  design: {
+    edition: 'SAUDI LIME INDUSTRIES / STRATEGY 2027–2031',
+    coverLineOne: 'A plan that',
+    coverLineTwo: 're-decides itself.',
+    horizon: 'The planning horizon',
+    foundation: 'Built from the ground up',
+    layers: 'Assumptions. Initiatives. Plan.',
+    strataNote: 'When the ground moves, the plan moves with it.',
+  },
   app: {
     name: 'STRATA',
     tagline: 'Dynamic strategy cockpit',

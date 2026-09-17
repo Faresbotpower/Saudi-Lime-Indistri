@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { act, render, screen, fireEvent } from '@testing-library/react'
 import { Cover } from './Cover'
 import { useLevers } from '../../state/levers'
 import { strings } from '../../strings'
@@ -35,5 +35,25 @@ describe('Cover', () => {
     fireEvent.click(screen.getByRole('button', { name: strings.cover.walkthrough }))
     expect(useLevers.getState().showCover).toBe(false)
     expect(useLevers.getState().walkthrough).toEqual({ active: true, step: 0 })
+  })
+
+  it('finishes the exit transition before starting walkthrough timing', () => {
+    vi.useFakeTimers()
+    const original = window.matchMedia
+    window.matchMedia = (query) => ({ ...original(query), matches: false })
+    try {
+      render(<Cover />)
+      fireEvent.click(screen.getByRole('button', { name: strings.cover.walkthrough }))
+      expect(screen.getByTestId('cover')).toHaveClass('cover--leaving')
+      expect(useLevers.getState().showCover).toBe(true)
+      expect(useLevers.getState().walkthrough.active).toBe(false)
+      act(() => vi.advanceTimersByTime(800))
+      expect(useLevers.getState().showCover).toBe(false)
+      expect(useLevers.getState().walkthrough).toEqual({ active: true, step: 0 })
+    } finally {
+      window.matchMedia = original
+      vi.useRealTimers()
+      useLevers.getState().stopWalkthrough()
+    }
   })
 })

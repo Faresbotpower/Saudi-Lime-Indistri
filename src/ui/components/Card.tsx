@@ -10,14 +10,10 @@ type Props = {
   tour?: string
 }
 
-/** Light card: 14px radius, one soft shadow, no border. */
+/** Open analytical section; hierarchy comes from spacing and typography. */
 export function Card({ title, lead, children, className, testId, tour }: Props) {
   return (
-    <section
-      data-testid={testId}
-      data-tour={tour}
-      className={`rounded-card bg-white p-5 shadow-card ${className ?? ''}`}
-    >
+    <section data-testid={testId} data-tour={tour} className={`data-panel ${className ?? ''}`}>
       {(title || lead) && (
         <div className="mb-4">
           {title && <h2 className="text-[20px] text-ink">{title}</h2>}

@@ -1,0 +1,138 @@
+/* Analytical surfaces share a quiet grid, tabular figures and a clear comparison hierarchy. */
+.analytics-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #9bac9e #f1f4ee;
+}
+.analytics-table-scroll:focus-visible {
+  outline: 2px solid #318c71;
+  outline-offset: 3px;
+}
+.analytics-table-scroll table {
+  border-collapse: collapse;
+}
+.view-body .analytics-table-scroll table {
+  font-size: 15px;
+}
+.view-body .analytics-table-scroll th {
+  color: #5b6d64;
+  font-size: 11px;
+  line-height: 1.6;
+  padding: 12px 16px;
+  white-space: nowrap;
+}
+.view-body .analytics-table-scroll td {
+  padding: 15px 16px;
+}
+.analytics-table-scroll td .label {
+  font-size: 10px;
+}
+.scenariostrip table {
+  min-width: 580px;
+}
+.classificationtable table {
+  min-width: 690px;
+}
+.trackertable table {
+  min-width: 720px;
+}
+.view-body .classificationtable td:nth-child(3) {
+  font-size: 14px;
+  line-height: 1.6;
+  min-width: 240px;
+}
+.view-body .classificationtable td:first-child {
+  min-width: 180px;
+}
+.view-body .classificationtable tr[data-changed='true'] {
+  background: #eff5ed;
+}
+.view-body .scenariostrip tr[data-current='true'] {
+  background: #e2eddf;
+}
+.scenariostrip tr[data-current='true'] td:first-child {
+  box-shadow: inset 3px 0 #318c71;
+}
+.scenariostrip tr[data-current='true'] > td {
+  font-weight: 600;
+}
+.scenario-base-delta {
+  display: block;
+  margin-top: 4px;
+  color: #637469;
+  font-size: 11px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+.trackertable input {
+  min-height: 38px;
+  font-size: 16px;
+}
+.trackertable > div:last-child {
+  min-width: 720px;
+  gap: 20px;
+}
+.kpi-tile[data-change='favorable'] {
+  border-color: #91b49d;
+}
+.kpi-tile[data-change='unfavorable'] {
+  border-color: #d7aaa0;
+}
+.kpi-tile[data-change='unfavorable']::before {
+  background: #c27260;
+}
+.kpi-tile .kpi-baseline {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #637469;
+}
+.kpi-tile .kpi-baseline span {
+  color: #455d50;
+}
+.kpi-tile .kpi-comparison {
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.kpi-tile .kpi-comparison [data-testid='delta-chip'] {
+  white-space: nowrap;
+}
+.analytics-legend {
+  row-gap: 10px;
+  color: #637469;
+  font-size: 13px;
+}
+.analytics-chart {
+  min-width: 0;
+}
+.analytics-chart .recharts-surface:focus-visible {
+  outline: 2px solid #318c71;
+  outline-offset: -2px;
+}
+.analytics-tooltip {
+  padding: 14px 16px;
+  border-radius: 10px;
+  border-color: #cfdbd0;
+  background: rgba(255, 255, 252, 0.98);
+  box-shadow: 0 12px 32px #0b273512;
+}
+.analytics-tooltip > div:first-child {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.analytics-tooltip > div + div {
+  min-height: 26px;
+  font-size: 13px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .analytics-table-scroll *,
+  .analytics-chart *,
+  .kpi-tile * {
+    animation-duration: 120ms !important;
+    transition-duration: 120ms !important;
+  }
+}

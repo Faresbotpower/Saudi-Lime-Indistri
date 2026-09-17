@@ -1,0 +1,471 @@
+/* Chapters share a type system, while their working surfaces follow the task. */
+.chapter-masthead {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 36px 34px 40px;
+  color: #173c36;
+  border-bottom: 1px solid var(--line);
+  background: var(--sand);
+}
+.chapter-masthead::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('/images/limestone-strata.png') 70% 48% / cover no-repeat;
+  opacity: 0.1;
+  mask-image: linear-gradient(to bottom, #000 35%, transparent);
+}
+.chapter-masthead--direction::before,
+.chapter-masthead--operations::before {
+  opacity: 0.22;
+  mask-image: linear-gradient(to right, #0003, #000);
+}
+.chapter-context {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 24px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #60756a;
+}
+.chapter-period {
+  font-variant-numeric: tabular-nums;
+}
+.chapter-scenario {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 12px;
+}
+.chapter-scenario i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #427c65;
+}
+.chapter-heading h1 {
+  max-width: 780px;
+  font-size: clamp(34px, 3.5vw, 52px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.chapter-heading p {
+  max-width: 640px;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #60756a;
+}
+.chapter-masthead--financials {
+  padding-bottom: 34px;
+  background: transparent;
+}
+.chapter-masthead--financials .chapter-context {
+  margin-bottom: 18px;
+}
+.chapter-masthead--financials .chapter-heading h1 {
+  font-size: clamp(30px, 2.8vw, 40px);
+}
+.view-financials .financial-kpis {
+  gap: 0;
+  padding-bottom: 20px;
+}
+.view-financials .financial-kpis > * {
+  border-radius: 0;
+  box-shadow: none;
+  border-width: 0 1px 0 0;
+  background: transparent;
+}
+.view-financials .financial-kpis > :last-child {
+  border-right: 0;
+}
+.view-financials .financial-forecast {
+  border-top: 1px solid #a6aea0;
+}
+.financial-support > *,
+.operations-support > *,
+.direction-analysis > *,
+.tracker-comparison > * {
+  min-width: 0;
+}
+
+.chapter-masthead--operations {
+  position: relative;
+  overflow: hidden;
+  background: #153a34;
+  color: #f1f5ea;
+}
+.chapter-masthead--operations .chapter-context,
+.chapter-masthead--operations .chapter-heading p {
+  color: #cad8cd;
+}
+.chapter-masthead--operations .chapter-scenario {
+  margin-left: 0;
+}
+.chapter-masthead--operations .chapter-scenario i {
+  background: #b5d69c;
+}
+.view-operations .operations-year {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.operations-year > div {
+  flex-wrap: wrap;
+}
+.operations-year [role='radiogroup'] {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.operations-year [role='radio'] {
+  flex-shrink: 0;
+}
+.view-operations .operations-sites {
+  gap: 0;
+  border: 0;
+  padding-block: 12px 24px;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+}
+.operations-sites > * {
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.operations-sites > * + * {
+  border-left: 1px solid #dbe2da;
+}
+
+.chapter-masthead--roadmap .chapter-heading {
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;
+}
+.chapter-masthead--roadmap .chapter-heading h1 {
+  flex: 1;
+}
+.chapter-masthead--roadmap .chapter-heading p {
+  flex: 1;
+  margin: 0;
+  max-width: 470px;
+}
+.view-roadmap .roadmap-timeline {
+  border-radius: 0;
+  border-width: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+.roadmap-scroll {
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.chapter-masthead--direction {
+  background: #173c36;
+  color: #f3f6ee;
+}
+.chapter-masthead--direction .chapter-context,
+.chapter-masthead--direction .chapter-heading p {
+  color: #c4d6c9;
+}
+.chapter-masthead--direction .chapter-scenario i {
+  background: #b5d69c;
+}
+.view-direction .direction-analysis {
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.3fr);
+}
+.view-direction .direction-analysis > * {
+  grid-column: auto;
+}
+.view-direction .view-body {
+  padding-top: 0;
+}
+.view-direction [data-tour='strata'] {
+  margin-inline: calc(-1 * var(--page-gutter));
+  border: 0;
+  border-radius: 0;
+  background: #173c36;
+}
+.view-direction [data-tour='strata'] > div:first-child {
+  padding: 30px var(--page-gutter) 18px;
+}
+.view-direction [data-tour='strata'] [data-testid^='band-'] {
+  padding-inline: var(--page-gutter);
+}
+.view-direction .direction-analysis,
+.view-financials .financial-support,
+.view-operations .operations-support {
+  margin-top: 40px;
+  column-gap: 36px;
+}
+
+.chapter-masthead--portfolio {
+  border-bottom: 0;
+  padding-bottom: 18px;
+  background: transparent;
+}
+.chapter-masthead--portfolio .chapter-heading {
+  max-width: 700px;
+}
+.view-portfolio .view-body {
+  padding-top: 8px;
+}
+.view-portfolio .portfolio-board {
+  gap: 20px;
+  align-items: start;
+}
+.portfolio-lane {
+  padding-top: 16px;
+  border-top: 3px solid #789484;
+}
+.portfolio-lane--in {
+  border-color: #285a48;
+}
+.portfolio-lane--deferred {
+  border-color: #b58e48;
+}
+.portfolio-lane--out {
+  border-color: #c9d0c9;
+}
+.portfolio-lane > header {
+  justify-content: space-between;
+}
+.portfolio-lane > header > span {
+  padding: 3px 9px;
+  border-radius: 2px;
+  background: #e7ece4;
+  color: #385e4a;
+}
+
+.chapter-masthead--functions {
+  background: var(--sand);
+}
+.functional-briefs {
+  counter-reset: brief;
+}
+.functional-brief {
+  counter-increment: brief;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 24px 36px;
+  padding: 30px 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.functional-brief-heading {
+  grid-column: 1 / -1;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.functional-brief-heading h2::before {
+  content: counter(brief, decimal-leading-zero);
+  margin-right: 8px;
+  font-size: 12px;
+  color: #728477;
+  font-variant-numeric: tabular-nums;
+}
+.functional-brief-heading h2 {
+  font-size: clamp(24px, 2.3vw, 32px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+.functional-brief-metrics > .label,
+.functional-brief-actions {
+  margin-top: 0;
+}
+.functional-brief-actions {
+  padding-left: 24px;
+  border-left: 1px solid #dbe2da;
+}
+
+.chapter-masthead--tracker {
+  background: var(--sand);
+  border-top: 1px solid #a6aea0;
+}
+.tracker-note {
+  max-width: 750px;
+  line-height: 1.65;
+  padding-left: 14px;
+  border-left: 2px solid #789484;
+}
+.view-tracker .tracker-comparison {
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  align-items: start;
+}
+.view-tracker .tracker-comparison > * {
+  grid-column: auto;
+}
+.view-tracker .tracker-outlook {
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  border-width: 1px 0 0;
+  padding-inline: 0;
+}
+
+@media (max-width: 1200px) {
+  .view-direction .direction-analysis {
+    grid-template-columns: 1fr;
+  }
+  .view-tracker .tracker-comparison {
+    grid-template-columns: 1fr;
+  }
+  .view-financials .financial-support {
+    grid-template-columns: 1fr;
+  }
+  .view-financials .financial-support > * {
+    grid-column: auto;
+  }
+  .functional-brief {
+    grid-template-columns: 1fr;
+  }
+  .functional-brief-actions {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+@media (max-width: 700px) {
+  .view-direction [data-tour='strata'] > div:first-child,
+  .view-direction [data-tour='strata'] [data-testid^='band-'] {
+    padding-inline: var(--page-gutter);
+  }
+  .chapter-masthead {
+    padding: 22px 18px;
+  }
+  .chapter-context {
+    margin-bottom: 22px;
+    gap: 10px 14px;
+  }
+  .chapter-context > :first-child {
+    width: 100%;
+  }
+  .chapter-heading h1 {
+    font-size: 32px;
+  }
+  .chapter-heading p {
+    font-size: 14px;
+  }
+  .chapter-masthead--operations {
+    padding-right: 18px;
+  }
+  .chapter-masthead--operations::after {
+    display: none;
+  }
+  .chapter-masthead--operations .chapter-scenario {
+    margin-left: auto;
+  }
+  .chapter-masthead--roadmap .chapter-heading {
+    display: block;
+  }
+  .chapter-masthead--roadmap .chapter-heading p {
+    margin-top: 14px;
+  }
+  .view-financials .financial-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+  }
+  .view-financials .financial-kpis > * {
+    border: 0;
+    padding: 16px 8px;
+  }
+  .view-financials .financial-kpis > :nth-child(odd) {
+    border-right: 1px solid #dbe2da;
+  }
+  .view-operations .operations-sites,
+  .view-operations .operations-support,
+  .view-portfolio .portfolio-board {
+    grid-template-columns: 1fr;
+  }
+  .operations-support > * {
+    grid-column: auto;
+  }
+  .operations-sites > * + * {
+    border-left: 0;
+    border-top: 1px solid #dbe2da;
+  }
+  .operations-year [role='radio'] {
+    padding-inline: 10px;
+  }
+  .functional-brief-actions {
+    grid-template-columns: 1fr;
+  }
+  .functional-brief {
+    padding: 18px;
+  }
+  .functional-brief-heading {
+    flex-wrap: wrap;
+  }
+}
+
+/* Chapters occupy the full canvas; scenario tools live in the optional drawer. */
+.chapter-masthead {
+  min-height: 260px;
+  padding-top: 42px;
+  padding-bottom: 46px;
+}
+.chapter-heading h1,
+.chapter-masthead--financials .chapter-heading h1 {
+  font-size: clamp(38px, 4.8vw, 68px);
+  font-weight: 400;
+}
+.chapter-heading p {
+  font-size: 16px;
+  max-width: 690px;
+}
+.chapter-next {
+  margin: 0 34px 40px;
+  padding: 30px 0;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.chapter-next > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.chapter-next button {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  text-align: left;
+  font-size: clamp(22px, 2.5vw, 34px);
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.chapter-next button:hover {
+  color: var(--teal-dim);
+}
+@media (max-width: 700px) {
+  .chapter-masthead {
+    min-height: 240px;
+    padding: 28px 18px 34px;
+  }
+  .chapter-heading h1,
+  .chapter-masthead--financials .chapter-heading h1 {
+    font-size: 38px;
+  }
+  .chapter-next {
+    margin-inline: 16px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+}

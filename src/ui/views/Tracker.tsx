@@ -16,8 +16,8 @@ export function Tracker() {
   const year = planData.assumptions.tracker.editableYear
   return (
     <ViewFrame id="tracker">
-      <p className="-mt-3 mb-4 text-[14px] text-navy">{T.lead(year)}</p>
-      <div className="grid grid-cols-5 gap-6">
+      <p className="tracker-note mb-4 text-[14px] text-navy">{T.lead(year)}</p>
+      <div className="tracker-comparison grid grid-cols-5 gap-6">
         <div className="col-span-3" data-tour="tracker">
           <TrackerTable />
         </div>
@@ -25,7 +25,7 @@ export function Tracker() {
           <TriggersFired plan={tracked} />
         </div>
       </div>
-      <Card title={T.chart} lead={T.chartLead} className="mt-6">
+      <Card title={T.chart} lead={T.chartLead} className="tracker-outlook mt-6">
         <TrackedChart plan={plan} tracked={tracked} year={year} />
         <div className="mt-3">
           <ChartLegend

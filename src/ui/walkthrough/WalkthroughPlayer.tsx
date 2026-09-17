@@ -23,6 +23,16 @@ export function WalkthroughPlayer() {
   const chapterFocus = active ? (chapters[step]?.focus ?? null) : null
   const focusSel = override && override.step === step ? override.sel : chapterFocus
   const rect = measured && measured.sel === focusSel ? measured.rect : null
+  // The compact shell reveals the same spotlight targets in its lever drawer.
+  useEffect(() => {
+    const publishFocus = () =>
+      window.dispatchEvent(
+        new CustomEvent('strata:tour-focus', { detail: active ? focusSel : null }),
+      )
+    publishFocus()
+    window.addEventListener('strata:tour-focus-request', publishFocus)
+    return () => window.removeEventListener('strata:tour-focus-request', publishFocus)
+  }, [active, focusSel])
 
   // Spotlight: follow the focused element while a chapter runs.
   useEffect(() => {

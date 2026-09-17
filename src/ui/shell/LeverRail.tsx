@@ -4,6 +4,7 @@ import { useLevers } from '../../state/levers'
 import { Slash } from '../components/Slash'
 import { useRafThrottle } from '../useRafThrottle'
 import { LeverInputs } from '../components/LeverInputs'
+import './lever-rail.css'
 
 const fmt = new Intl.NumberFormat('en-US')
 
@@ -12,7 +13,9 @@ function Segmented({
   labels,
   value,
   onChange,
+  label,
 }: {
+  label: string
   options: string[]
   labels: Record<string, string>
   value: string
@@ -21,6 +24,7 @@ function Segmented({
   return (
     <div
       role="radiogroup"
+      aria-label={label}
       className="grid gap-1"
       style={{ gridTemplateColumns: `repeat(${options.length}, 1fr)` }}
     >
@@ -113,6 +117,7 @@ function Lever({ def }: { def: LeverDef }) {
         return (
           <div className="grid gap-2">
             <Segmented
+              label={def.name}
               options={def.options!}
               labels={strings.levers.L1.options}
               value={levers.L1.option}
@@ -164,6 +169,7 @@ function Lever({ def }: { def: LeverDef }) {
         >
         return (
           <Segmented
+            label={def.name}
             options={def.options!}
             labels={labels}
             value={def.options![idx]}
@@ -177,7 +183,7 @@ function Lever({ def }: { def: LeverDef }) {
   return (
     <section
       data-lit={lit ? 'true' : 'false'}
-      className={`group min-w-0 rounded-card border bg-ink-2 p-4 transition-colors duration-200 hover:border-[#2f4a5f] ${
+      className={`lever-card group min-w-0 rounded-card border bg-ink-2 p-4 transition-colors duration-200 hover:border-[#2f4a5f] ${
         lit ? 'border-teal shadow-[0_0_0_1px_var(--teal)]' : 'border-line-dark'
       }`}
       onMouseEnter={() => setHovered(def.id)}
@@ -193,15 +199,14 @@ function Lever({ def }: { def: LeverDef }) {
         {leverValueLabel(def, levers)}
       </div>
       {control}
-      <p className="mt-3 text-[13px] leading-snug text-muted-dark">{def.description}</p>
-      <div className="mt-2 flex flex-wrap gap-1.5">
-        {def.moves.map((k) => (
-          <span key={k} className="rounded-chip bg-ink-3 px-2 py-0.5 text-[11px] text-muted-dark">
-            {strings.assumptionKeys[k] ?? k}
-          </span>
-        ))}
-      </div>
-      <LeverInputs id={def.id} />
+      <LeverInputs id={def.id}>
+        <p className="lever-context-copy">{def.description}</p>
+        <div className="lever-moves">
+          {def.moves.map((k) => (
+            <span key={k}>{strings.assumptionKeys[k] ?? k}</span>
+          ))}
+        </div>
+      </LeverInputs>
     </section>
   )
 }
@@ -217,9 +222,10 @@ export function LeverRail() {
   return (
     <aside
       data-tour="rail"
-      className="flex w-[320px] shrink-0 flex-col border-r border-line-dark bg-ink text-white"
+      aria-label="Scenario controls"
+      className="lever-rail flex w-[320px] shrink-0 flex-col border-r border-line-dark bg-ink text-white"
     >
-      <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 pb-6 pt-5">
+      <div className="lever-rail-scroll flex-1 overflow-y-auto overflow-x-hidden px-4 pb-6 pt-5">
         <div className="mb-3 flex items-center gap-2">
           <Slash size={12} />
           <span className="label text-muted-dark">{strings.rail.presets}</span>
@@ -258,20 +264,21 @@ export function LeverRail() {
             {anyOpen ? strings.inputs.closeAll : strings.inputs.openAll}
           </button>
         </div>
-        <div className="grid min-w-0 gap-3 [grid-template-columns:minmax(0,1fr)]">
+        <div className="lever-control-list grid min-w-0 [grid-template-columns:minmax(0,1fr)]">
           {leverDefs.map((def) => (
             <Lever key={def.id} def={def} />
           ))}
         </div>
         <section
-          className="mt-3 rounded-card border border-line-dark bg-ink-2 p-4"
+          className="rail-base-inputs mt-3 border-t border-line-dark pt-4"
           data-testid="base-inputs-card"
         >
           <h3 className="text-[14px] font-medium tracking-normal text-white">
             {strings.inputs.base}
           </h3>
-          <p className="mt-1 text-[12px] leading-snug text-muted-dark">{strings.inputs.baseLead}</p>
-          <LeverInputs id="base" />
+          <LeverInputs id="base">
+            <p className="lever-context-copy">{strings.inputs.baseLead}</p>
+          </LeverInputs>
         </section>
       </div>
 

@@ -1,3 +1,5 @@
+import './analytics.css'
+import { strings } from '../../strings'
 import { motion } from 'framer-motion'
 import { CountUp } from './CountUp'
 import { DeltaChip } from './DeltaChip'
@@ -34,8 +36,16 @@ export function KpiTile({
   return (
     <motion.div
       data-testid="kpi-tile"
-      className="rounded-card bg-white p-5 shadow-card"
-      initial={{ opacity: 0, y: reduced ? 0 : 8 }}
+      data-priority={index === 0 ? 'primary' : 'supporting'}
+      data-change={
+        Math.abs(value - base) < 1e-6
+          ? 'unchanged'
+          : value > base === goodWhenUp
+            ? 'favorable'
+            : 'unfavorable'
+      }
+      className="kpi-tile"
+      initial={{ opacity: 1, y: reduced ? 0 : 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: reduced ? 0.12 : 0.35, delay: reduced ? 0 : index * 0.04 }}
     >
@@ -51,7 +61,13 @@ export function KpiTile({
         />
         <span className="text-[14px] text-muted">{unit}</span>
       </div>
-      <div className="mt-3 flex min-h-[22px] items-center gap-2">
+      <div className="kpi-baseline num">
+        {strings.scenarios.base}{' '}
+        <span>
+          {format(base)} {unit}
+        </span>
+      </div>
+      <div className="kpi-comparison mt-3 flex min-h-[22px] items-center gap-2">
         <DeltaChip delta={value - base} format={formatDelta} goodWhenUp={goodWhenUp} />
         {note && <span className="text-[13px] text-muted">{note}</span>}
       </div>

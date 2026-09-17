@@ -1,20 +1,21 @@
 export const chart = {
   ink: '#0a151e',
-  navy: '#173044',
-  teal: '#0f9c7e',
-  tealBright: '#1de9b6',
-  muted: '#a3a3a3',
-  line: '#e4e4e1',
+  navy: '#244f52',
+  teal: '#318c71',
+  tealBright: '#83ddc4',
+  muted: '#879c95',
+  line: '#e3e9e3',
   sand2: '#efefec',
   coral: '#e4634f',
   amber: '#f2b24c',
-  font: 'Inter, system-ui, sans-serif',
+  font: 'Manrope, system-ui, sans-serif',
 }
 
 export const axisProps = {
-  tick: { fontSize: 12, fill: '#6f7a85', fontFamily: chart.font },
+  tick: { fontSize: 13, fill: '#62716b', fontFamily: chart.font },
   axisLine: false as const,
   tickLine: false as const,
+  tickMargin: 10,
 }
 
 import { prefersReducedMotion } from '../../format'
@@ -25,7 +26,7 @@ export const chartAnimation = (begin = 0) =>
     ? { isAnimationActive: false }
     : {
         isAnimationActive: true,
-        animationDuration: 500,
+        animationDuration: 450,
         animationBegin: begin,
         animationEasing: 'ease-out' as const,
       }

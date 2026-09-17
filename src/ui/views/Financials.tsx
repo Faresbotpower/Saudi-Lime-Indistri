@@ -22,7 +22,7 @@ export function Financials() {
 
   return (
     <ViewFrame id="financials">
-      <div data-tour="kpis" className="grid grid-cols-4 gap-6">
+      <div data-tour="kpis" className="financial-kpis grid grid-cols-4 gap-6">
         <KpiTile
           label={S.kpi.revenue2031}
           value={f.revenue[last]}
@@ -68,7 +68,12 @@ export function Financials() {
         />
       </div>
 
-      <Card title={S.mainChart} lead={S.mainChartLead} className="mt-6" tour="main-chart">
+      <Card
+        title={S.mainChart}
+        lead={S.mainChartLead}
+        className="financial-forecast mt-6"
+        tour="main-chart"
+      >
         <RevenueEbitdaChart plan={plan} isBase={isBase} />
         <div className="mt-3">
           <ChartLegend
@@ -86,7 +91,7 @@ export function Financials() {
         </div>
       </Card>
 
-      <div className="mt-6 grid grid-cols-5 gap-6">
+      <div className="financial-support mt-6 grid grid-cols-5 gap-6">
         <Card title={S.secondChart} lead={S.secondChartLead} className="col-span-3">
           <CapexFcfChart plan={plan} />
           <div className="mt-3">

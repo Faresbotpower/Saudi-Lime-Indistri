@@ -56,8 +56,8 @@ export function InitiativeCard({ init, plan, onOpen }: Props) {
       transition={{ layout: { type: 'spring', stiffness: 350, damping: 36, delay: 0.1 } }}
       className="rounded-card bg-white p-4 shadow-card"
     >
-      <div data-testid={`card-${init.id}`}>
-        <div className="mb-2 flex items-start justify-between gap-2">
+      <div data-testid={`card-${init.id}`} className="initiative-layout">
+        <div className="initiative-title mb-2 flex items-start justify-between gap-2">
           <button
             type="button"
             onClick={() => onOpen(init.id)}
@@ -74,19 +74,25 @@ export function InitiativeCard({ init, plan, onOpen }: Props) {
         </div>
         <dl className="num grid grid-cols-3 gap-2 text-[13px]">
           <div>
-            <dt className="label text-muted">{C.capex}</dt>
+            <dt className="label text-muted">
+              {C.capex} <span className="initiative-unit">SAR m</span>
+            </dt>
             <dd className="text-ink">{sarm(plan.capex)}</dd>
           </div>
           <div>
-            <dt className="label text-muted">{C.npv}</dt>
+            <dt className="label text-muted">
+              {C.npv} <span className="initiative-unit">SAR m</span>
+            </dt>
             <dd className={plan.npv < 0 ? 'text-coral' : 'text-ink'}>{signed(plan.npv)}</dd>
           </div>
           <div>
-            <dt className="label text-muted">{C.ebitda}</dt>
+            <dt className="label text-muted">
+              {C.ebitda} <span className="initiative-unit">SAR m</span>
+            </dt>
             <dd className="text-ink">{sarm(plan.ebitdaRunRate)}</dd>
           </div>
         </dl>
-        <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
+        <div className="initiative-ownership mt-2 flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
           <span>{init.owner}</span>
           {plan.startYear && plan.status !== 'out' && (
             <span className="num">
@@ -99,7 +105,10 @@ export function InitiativeCard({ init, plan, onOpen }: Props) {
             </span>
           ))}
         </div>
-        <div className="mt-3" data-testid="trigger">
+        <div className="initiative-reason mt-3" data-testid="trigger">
+          <span className="initiative-reason-label">
+            Why {strings.portfolio.columns[plan.status].toLowerCase()}
+          </span>
           <p className="mb-1.5 text-[13px] text-navy">{triggerSentence(plan, levers.L3)}</p>
           {plan.trigger && !(plan.status === 'deferred' && plan.reason !== 'capital') && (
             <TriggerBar trigger={plan.trigger} current={current} status={plan.status} />

@@ -13,26 +13,30 @@ export function CountUp({ value, format, duration = 400, className }: Props) {
   const raf = useRef<number | null>(null)
 
   useEffect(() => {
-    if (reduced) return
+    if (reduced) {
+      from.current = value
+      return
+    }
     const start = from.current
     if (start === value) return
     const t0 = performance.now()
     const tick = (now: number) => {
-      const t = Math.min(1, (now - t0) / duration)
-      setShown(start + (value - start) * easeOut(t))
+      const t = duration <= 0 ? 1 : Math.min(1, Math.max(0, (now - t0) / duration))
+      from.current = start + (value - start) * easeOut(t)
+      setShown(from.current)
       if (t < 1) raf.current = requestAnimationFrame(tick)
-      else from.current = value
+      else raf.current = null
     }
-    if (raf.current) cancelAnimationFrame(raf.current)
+    if (raf.current !== null) cancelAnimationFrame(raf.current)
     raf.current = requestAnimationFrame(tick)
     return () => {
-      if (raf.current) cancelAnimationFrame(raf.current)
-      from.current = value
+      if (raf.current !== null) cancelAnimationFrame(raf.current)
+      raf.current = null
     }
   }, [value, duration, reduced])
 
   return (
-    <span className={`num ${className ?? ''}`} data-testid="kpi-value">
+    <span key={value} className={`num number-pop ${className ?? ''}`} data-testid="kpi-value">
       {format(reduced ? value : shown)}
     </span>
   )

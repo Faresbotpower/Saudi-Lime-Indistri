@@ -12,7 +12,7 @@ export function Direction() {
   return (
     <ViewFrame id="direction">
       <StrataReveal plan={plan} />
-      <div className="mt-6 grid grid-cols-5 gap-6">
+      <div className="direction-analysis mt-6 grid grid-cols-5 gap-6">
         <Card title={D.matrix} lead={D.matrixLead} className="col-span-2" tour="matrix">
           <WhereToPlay plan={plan} />
         </Card>

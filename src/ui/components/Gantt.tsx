@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import type { PlanResult, RoadmapItem } from '../../engine'
 import { planData } from '../../data'
 import { strings } from '../../strings'
-import { sarm } from '../format'
+import { sarm, prefersReducedMotion } from '../format'
 
 const ROW = 44
 const HEAD = 46
@@ -19,6 +19,10 @@ type Row =
 /** Five-year Gantt by quarter, grouped in the RFQ layers, with ghosts, dependency lines and milestones. */
 export function Gantt({ plan }: { plan: PlanResult }) {
   const R = strings.roadmap
+  const reduced = prefersReducedMotion()
+  const settle = reduced
+    ? { duration: 0.12 }
+    : { type: 'spring' as const, stiffness: 260, damping: 30, delay: 0.35 }
   const critical = new Set(plan.roadmap.criticalPath)
   const rows: Row[] = []
   for (const layer of plan.roadmap.layers) {
@@ -34,8 +38,13 @@ export function Gantt({ plan }: { plan: PlanResult }) {
   const years = Array.from({ length: LAST - FIRST + 1 }, (_, i) => FIRST + i)
 
   return (
-    <div className="overflow-x-auto">
-      <div className="grid min-w-[960px] grid-cols-[320px_1fr]">
+    <div
+      className="gantt-scroll overflow-x-auto"
+      tabIndex={0}
+      role="region"
+      aria-label={strings.views.roadmap.title}
+    >
+      <div className="gantt-grid grid min-w-[960px] grid-cols-[320px_1fr]">
         {/* Header */}
         <div />
         <div className="relative h-8 border-b border-line">
@@ -56,7 +65,7 @@ export function Gantt({ plan }: { plan: PlanResult }) {
         </div>
 
         {/* Labels */}
-        <div className="relative" style={{ height: total }}>
+        <div className="gantt-labels relative" style={{ height: total }}>
           {rows.map((r, i) => (
             <div
               key={r.kind === 'item' ? r.item.id : r.layer}
@@ -133,9 +142,9 @@ export function Gantt({ plan }: { plan: PlanResult }) {
                   strokeWidth={1.5}
                   strokeDasharray="4 3"
                   vectorEffect="non-scaling-stroke"
-                  initial={{ pathLength: 0 }}
+                  initial={{ pathLength: reduced ? 1 : 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.4, delay: 0.45 }}
+                  transition={reduced ? { duration: 0.12 } : { duration: 0.35, delay: 0.4 }}
                 />
               )
             })}
@@ -166,7 +175,7 @@ export function Gantt({ plan }: { plan: PlanResult }) {
                     className={`absolute top-2.5 h-6 rounded-md ${isCritical ? 'bg-teal' : 'bg-ink'}`}
                     initial={false}
                     animate={{ left: `${left}%`, width: `${width}%` }}
-                    transition={{ type: 'spring', stiffness: 260, damping: 30, delay: 0.35 }}
+                    transition={settle}
                   >
                     <span
                       data-testid="bar"
@@ -182,7 +191,7 @@ export function Gantt({ plan }: { plan: PlanResult }) {
                     className="absolute top-2.5 h-6 rounded-md border border-dashed border-amber bg-amber/10"
                     initial={false}
                     animate={{ left: `${left}%`, width: `${width}%` }}
-                    transition={{ type: 'spring', stiffness: 260, damping: 30, delay: 0.35 }}
+                    transition={settle}
                   >
                     <span
                       data-testid="ghost"
@@ -199,7 +208,7 @@ export function Gantt({ plan }: { plan: PlanResult }) {
                     className={`absolute top-[15px] h-3.5 w-3.5 rotate-45 border-2 border-white ${isCritical ? 'bg-teal' : 'bg-ink'}`}
                     initial={false}
                     animate={{ left: `calc(${q(it.milestone, 4) * 100}% - 7px)` }}
-                    transition={{ type: 'spring', stiffness: 260, damping: 30, delay: 0.35 }}
+                    transition={settle}
                   />
                 )}
               </div>

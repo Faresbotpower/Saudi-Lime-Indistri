@@ -1,3 +1,4 @@
+import '../analytics.css'
 import {
   Bar,
   CartesianGrid,
@@ -24,7 +25,7 @@ export function CapexFcfChart({ plan }: { plan: PlanResult }) {
     fcf: plan.financials.fcf[i],
   }))
   return (
-    <div className="h-[280px] w-full" data-testid="chart-capex-fcf">
+    <div className="analytics-chart h-[280px] w-full" data-testid="chart-capex-fcf">
       <ResponsiveContainer
         width="100%"
         height="100%"
@@ -32,13 +33,13 @@ export function CapexFcfChart({ plan }: { plan: PlanResult }) {
       >
         <ComposedChart
           data={data}
-          margin={{ top: 12, right: 16, bottom: 0, left: 0 }}
+          margin={{ top: 12, right: 16, bottom: 8, left: 0 }}
           barGap={4}
           barCategoryGap="28%"
         >
-          <CartesianGrid stroke={chart.line} vertical={false} />
+          <CartesianGrid stroke={chart.line} vertical={false} strokeDasharray="3 5" />
           <XAxis dataKey="year" {...axisProps} />
-          <YAxis {...axisProps} width={44} tickFormatter={(v: number) => sarm(v)} />
+          <YAxis {...axisProps} width={56} tickFormatter={(v: number) => sarm(v)} />
           <ReferenceLine y={0} stroke={chart.muted} />
           <Tooltip content={<ChartTooltip />} cursor={{ fill: chart.sand2 }} />
           <Bar
@@ -46,7 +47,7 @@ export function CapexFcfChart({ plan }: { plan: PlanResult }) {
             name={L.capexBase}
             stackId="capex"
             fill={chart.muted}
-            {...chartAnimation(0)}
+            {...chartAnimation(250)}
           />
           <Bar
             dataKey="capexInitiatives"
@@ -54,9 +55,9 @@ export function CapexFcfChart({ plan }: { plan: PlanResult }) {
             stackId="capex"
             fill={chart.ink}
             radius={[3, 3, 0, 0]}
-            {...chartAnimation(0)}
+            {...chartAnimation(250)}
           />
-          <Bar dataKey="fcf" name={L.fcf} radius={[3, 3, 0, 0]} {...chartAnimation(0)}>
+          <Bar dataKey="fcf" name={L.fcf} radius={[3, 3, 0, 0]} {...chartAnimation(250)}>
             {data.map((d) => (
               <Cell key={d.year} fill={d.fcf < 0 ? chart.coral : chart.teal} />
             ))}

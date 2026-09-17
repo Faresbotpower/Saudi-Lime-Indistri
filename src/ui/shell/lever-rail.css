@@ -1,0 +1,107 @@
+/* Keep the six decisions in view; detail lives in each input disclosure. */
+.lever-rail .lever-rail-scroll {
+  padding: 22px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: #587772 transparent;
+}
+.lever-rail .lever-control-list {
+  gap: 0;
+}
+.lever-rail .lever-card {
+  padding: 18px 0;
+  border: 0;
+  border-top: 1px solid #35534f;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.lever-rail .lever-card:hover {
+  background: transparent;
+}
+.lever-rail .lever-card[data-lit='true'] {
+  border-top-color: #b4ddc4;
+}
+.lever-rail .lever-card h3 {
+  font-size: 14px;
+  line-height: 1.4;
+}
+.lever-rail .lever-card > .num {
+  color: #c2e6d2;
+  font-size: 21px;
+  line-height: 1.35;
+  margin: 5px 0 12px;
+  letter-spacing: -0.025em;
+}
+.lever-rail .lever-card [role='radio'] {
+  min-height: 39px;
+  padding: 7px 4px;
+  font-size: 12px;
+  line-height: 1.3;
+}
+.lever-rail .lever-inputs {
+  margin-top: 10px;
+}
+.lever-rail .lever-inputs > label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0 7px;
+}
+.lever-rail .lever-inputs > label > span:first-child {
+  min-width: 0;
+  font-size: 11px;
+}
+.lever-rail .lever-inputs > label > span:last-child {
+  flex-shrink: 0;
+  margin-top: 0;
+  gap: 5px;
+}
+.lever-rail .lever-inputs > label input {
+  width: 65px;
+  min-height: 32px;
+  background: #102a2b;
+  border-color: #496862;
+}
+.lever-rail .lever-inputs > label > span:last-child > span {
+  max-width: 56px;
+  font-size: 10px;
+}
+.lever-rail .lever-inputs > button {
+  border-color: transparent;
+  padding: 6px 0;
+  min-height: 32px;
+  color: #b4c6c0;
+}
+.lever-rail .lever-inputs > button[aria-expanded='true'] {
+  color: #e6f3e9;
+}
+.lever-rail .lever-inputs > button:hover {
+  color: #e6f3e9;
+}
+.lever-rail .lever-inputs > button > span:first-child {
+  font-size: 12px;
+}
+.lever-rail .lever-context-copy {
+  margin: 10px 0 8px;
+  color: #c0d0ca;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.lever-rail .lever-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  color: #a5c0b5;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.lever-rail .rail-base-inputs h3 {
+  font-size: 13px;
+  color: #d8e5dc;
+}
+.lever-rail button:focus-visible,
+.lever-rail input:focus-visible {
+  outline: 2px solid #c2e6d2;
+  outline-offset: 3px;
+}

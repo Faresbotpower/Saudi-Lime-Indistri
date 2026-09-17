@@ -1,8 +1,9 @@
+import './analytics.css'
 type Item = { label: string; color: string; dashed?: boolean }
 
 export function ChartLegend({ items }: { items: Item[] }) {
   return (
-    <ul className="flex flex-wrap gap-4 text-[13px] text-muted">
+    <ul className="analytics-legend flex flex-wrap gap-4 text-[13px] text-muted">
       {items.map((i) => (
         <li key={i.label} className="flex items-center gap-1.5">
           <span

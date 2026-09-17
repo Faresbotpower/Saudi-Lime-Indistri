@@ -1,0 +1,192 @@
+/* Attention follows scale, weight and semantic color, rather than more containers. */
+.chapter-reading-path {
+  display: flex;
+  align-items: baseline;
+  gap: 28px;
+  padding: 22px 34px;
+  border-bottom: 1px solid var(--line);
+  background: #e4e4d8;
+}
+.reading-path-label {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #54635a;
+}
+.chapter-reading-path ol {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+}
+.chapter-reading-path li {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font-size: 12px;
+  color: #54635a;
+}
+.chapter-reading-path li > span:first-child {
+  font-variant-numeric: tabular-nums;
+  font-size: 10px;
+  color: #456d5b;
+}
+.chapter-reading-path li:first-child {
+  font-weight: 800;
+  color: #155b46;
+}
+.view-frame .chapter-heading h1 {
+  font-weight: 600;
+}
+.view-frame .data-panel h2 {
+  font-weight: 750;
+  color: #163f35;
+}
+.view-frame .financial-kpis {
+  align-items: start;
+  gap: 22px;
+  padding-block: 4px 28px;
+}
+.view-frame .kpi-tile {
+  padding: 18px 0 8px;
+}
+.view-frame .kpi-tile::before {
+  left: 0;
+  width: 36px;
+  height: 3px;
+  background: #658372;
+}
+.view-frame .kpi-tile .label {
+  font-weight: 750;
+  color: #3e594d;
+}
+.view-frame .kpi-tile .font-heading.num {
+  display: inline-block;
+  font-size: clamp(42px, 4.4vw, 70px);
+  font-weight: 700;
+  letter-spacing: -0.065em;
+  color: #244d40;
+}
+.view-frame .kpi-tile[data-priority='primary'] .font-heading.num {
+  color: #126b4f;
+  font-size: clamp(50px, 5.2vw, 84px);
+}
+.view-frame .kpi-tile[data-priority='primary']::before {
+  width: 64px;
+  background: #168060;
+}
+.view-frame .kpi-tile[data-change='unfavorable'] .font-heading.num {
+  color: #9a452e;
+}
+.view-frame .kpi-tile[data-change='unfavorable']::before {
+  background: #9a452e;
+}
+.view-frame .kpi-tile .kpi-baseline {
+  font-size: 12px;
+  color: #657568;
+}
+.number-pop {
+  display: inline-block;
+  transform-origin: left bottom;
+  animation: number-arrival 650ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes number-arrival {
+  0% {
+    transform: translateY(7px) scale(0.9);
+  }
+  55% {
+    transform: translateY(-2px) scale(1.045);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+.view-frame [data-tour='capital'] [data-testid='committed'],
+.view-frame [data-tour='capital'] [data-testid='headroom'] {
+  display: block;
+  font-size: 28px;
+  font-weight: 750;
+  margin-top: 8px;
+}
+.view-frame [data-testid='diversification'] {
+  font-size: 46px;
+  font-weight: 750;
+  color: #126b4f;
+}
+.view-frame .portfolio-lane--in > header h2 {
+  color: #126b4f;
+}
+.view-frame .portfolio-lane--deferred > header h2 {
+  color: #805719;
+}
+.view-frame .portfolio-lane--out > header h2 {
+  color: #8b5040;
+}
+.view-frame [data-testid='initiative-card'] button {
+  font-weight: 750;
+  font-size: 17px;
+}
+.view-frame [data-tour='sites'] dl dd {
+  font-size: 32px;
+  font-weight: 750;
+  color: #126b4f;
+}
+.view-frame .functional-brief-heading h2 {
+  font-weight: 750;
+  color: #155b46;
+}
+.view-frame .functional-brief-metrics td:nth-child(2) {
+  font-size: 20px;
+  font-weight: 750;
+  color: #155b46;
+}
+.view-frame .functional-brief-actions .label {
+  color: #244d40;
+  font-weight: 800;
+}
+.view-frame [data-tour='triggers'] h2 {
+  color: #805719;
+}
+.view-frame .tracker-note {
+  color: #244d40;
+  font-weight: 650;
+  border-left: 3px solid #168060;
+}
+.view-frame .analytics-table-scroll th {
+  color: #244d40;
+  font-weight: 800;
+}
+.view-frame .classificationtable td:first-child,
+.view-frame .trackertable td:first-child {
+  font-weight: 750;
+}
+.view-frame .gantt-labels {
+  font-weight: 650;
+}
+@media (max-width: 700px) {
+  .chapter-reading-path {
+    padding: 18px 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chapter-reading-path ol {
+    gap: 9px;
+    flex-direction: column;
+  }
+  .view-frame .financial-kpis {
+    gap: 22px 16px;
+  }
+  .view-frame .kpi-tile .font-heading.num {
+    font-size: 42px;
+  }
+  .view-frame .kpi-tile[data-priority='primary'] .font-heading.num {
+    font-size: 50px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .number-pop {
+    animation: none;
+  }
+}

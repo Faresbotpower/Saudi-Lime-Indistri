@@ -1,3 +1,4 @@
+import '../analytics.css'
 import {
   CartesianGrid,
   Line,
@@ -23,18 +24,18 @@ export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase:
     baseEbitda: plan.baseCase.ebitda[i],
   }))
   return (
-    <div className="h-[320px] w-full" data-testid="chart-revenue-ebitda">
+    <div className="analytics-chart h-[320px] w-full" data-testid="chart-revenue-ebitda">
       <ResponsiveContainer
         width="100%"
         height="100%"
         initialDimension={{ width: 800, height: 320 }}
       >
-        <LineChart data={data} margin={{ top: 12, right: 16, bottom: 0, left: 0 }}>
-          <CartesianGrid stroke={chart.line} vertical={false} />
+        <LineChart data={data} margin={{ top: 12, right: 16, bottom: 8, left: 0 }}>
+          <CartesianGrid stroke={chart.line} vertical={false} strokeDasharray="3 5" />
           <XAxis dataKey="year" {...axisProps} padding={{ left: 12, right: 12 }} />
           <YAxis
             {...axisProps}
-            width={44}
+            width={56}
             tickFormatter={(v: number) => sarm(v)}
             domain={[0, 'auto']}
           />
@@ -65,7 +66,7 @@ export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase:
             dataKey="revenue"
             name={L.revenue}
             stroke={chart.navy}
-            strokeWidth={2.5}
+            strokeWidth={3}
             dot={{ r: 3, fill: chart.navy, strokeWidth: 0 }}
             activeDot={{ r: 5 }}
             {...chartAnimation(250)}
@@ -74,7 +75,7 @@ export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase:
             dataKey="ebitda"
             name={L.ebitda}
             stroke={chart.teal}
-            strokeWidth={2.5}
+            strokeWidth={3}
             dot={{ r: 3, fill: chart.teal, strokeWidth: 0 }}
             activeDot={{ r: 5 }}
             {...chartAnimation(250)}

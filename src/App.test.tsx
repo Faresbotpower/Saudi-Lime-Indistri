@@ -9,7 +9,7 @@ describe('shell', () => {
     useLevers.getState().enter()
   })
 
-  it('renders the six tabs, six levers and the permanent banner', () => {
+  it('renders the seven tabs, six levers and the permanent banner', () => {
     render(<App />)
     expect(screen.getAllByRole('tab')).toHaveLength(7)
     for (const id of ['L1', 'L2', 'L3', 'L4', 'L5', 'L6'])
@@ -26,6 +26,7 @@ describe('shell', () => {
 
   it('switches scenario name to Custom when a lever moves, and back on reset', () => {
     render(<App />)
+    fireEvent.click(screen.getByRole('button', { name: 'Show levers' }))
     fireEvent.change(screen.getByLabelText('Energy cost'), { target: { value: '140' } })
     const header = screen.getByRole('banner')
     expect(within(header).getByText(strings.scenarios.custom)).toBeInTheDocument()
@@ -35,6 +36,7 @@ describe('shell', () => {
 
   it('applies a preset', () => {
     render(<App />)
+    fireEvent.click(screen.getByRole('button', { name: 'Show levers' }))
     fireEvent.click(screen.getByRole('button', { name: strings.scenarios.downside }))
     expect(screen.getByText('SAR 350m')).toBeInTheDocument()
   })

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { planData, type LeverId } from '../../data'
 import { useLevers } from '../../state/levers'
@@ -7,10 +8,10 @@ import { strings } from '../../strings'
 import { indexFromFuel, inputsFor, type Field } from '../inputSpecs'
 import { NumberField } from './NumberField'
 
-type Props = { id: LeverId | 'base' }
+type Props = { id: LeverId | 'base'; children?: ReactNode }
 
 /** Disclosure under a lever card: the exact lever value and every assumption it drives, typed. */
-export function LeverInputs({ id }: Props) {
+export function LeverInputs({ id, children }: Props) {
   const open = useLevers((s) => !!s.inputsOpen[id])
   const setInputsOpen = useLevers((s) => s.setInputsOpen)
   const setOpen = (v: boolean) => setInputsOpen(id, v)
@@ -94,7 +95,7 @@ export function LeverInputs({ id }: Props) {
 
   const dark = true
   return (
-    <div className="mt-3 min-w-0 border-t border-line-dark/60 pt-3" data-testid={`inputs-${id}`}>
+    <div className="lever-inputs min-w-0" data-testid={`inputs-${id}`}>
       {exact && (
         <NumberField
           id={`exact-${id}`}
@@ -113,6 +114,7 @@ export function LeverInputs({ id }: Props) {
       <button
         type="button"
         aria-expanded={open}
+        aria-controls={`assumptions-${id}`}
         onClick={() => setOpen(!open)}
         className={`mt-1 flex w-full items-center justify-between rounded-md border px-2.5 py-1.5 text-left transition-colors duration-150 ${
           open
@@ -152,12 +154,14 @@ export function LeverInputs({ id }: Props) {
         {open && (
           <motion.div
             key="panel"
+            id={`assumptions-${id}`}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
+            {children}
             <p className="mt-2 text-[12px] text-muted-dark">{I.hint}</p>
             {groups.length === 0 && <p className="mt-2 text-[13px] text-muted-dark">{I.none}</p>}
             {groups.map((g) => (

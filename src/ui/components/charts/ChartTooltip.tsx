@@ -7,7 +7,7 @@ type Props = { active?: boolean; label?: string | number; payload?: Item[]; unit
 export function ChartTooltip({ active, label, payload, unit = 'SAR m' }: Props) {
   if (!active || !payload || payload.length === 0) return null
   return (
-    <div className="rounded-lg border border-line bg-white px-3 py-2 text-[13px] shadow-card">
+    <div className="analytics-tooltip rounded-lg border border-line bg-white px-3 py-2 text-[13px] shadow-card">
       <div className="mb-1 font-heading text-[13px] text-ink">{label}</div>
       {payload.map((p) => (
         <div key={String(p.dataKey)} className="flex items-center justify-between gap-4">

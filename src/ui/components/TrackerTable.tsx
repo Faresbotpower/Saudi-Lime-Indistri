@@ -1,3 +1,4 @@
+import './analytics.css'
 import type { ActualInputs } from '../../state/levers'
 import { leverDefs, planData, type LeverId } from '../../data'
 import { useLevers } from '../../state/levers'
@@ -22,14 +23,27 @@ export function TrackerTable() {
   const tracked = new Set(planData.assumptions.tracker.fields)
 
   return (
-    <div className="overflow-hidden rounded-lg border border-line">
+    <div
+      className="analytics-table-scroll trackertable rounded-lg border border-line"
+      tabIndex={0}
+      role="region"
+      aria-label={T.cols.lever}
+    >
       <table className="w-full text-[16px]">
         <thead>
           <tr className="bg-sand-2 text-left">
-            <th className="label px-3 py-2 font-medium text-muted">{T.cols.lever}</th>
-            <th className="label px-3 py-2 font-medium text-muted">{T.cols.plan}</th>
-            <th className="label px-3 py-2 font-medium text-muted">{T.cols.actual(year)}</th>
-            <th className="label px-3 py-2 font-medium text-muted">{T.cols.status}</th>
+            <th scope="col" className="label px-3 py-2 font-medium text-muted">
+              {T.cols.lever}
+            </th>
+            <th scope="col" className="label px-3 py-2 font-medium text-muted">
+              {T.cols.plan}
+            </th>
+            <th scope="col" className="label px-3 py-2 font-medium text-muted">
+              {T.cols.actual(year)}
+            </th>
+            <th scope="col" className="label px-3 py-2 font-medium text-muted">
+              {T.cols.status}
+            </th>
           </tr>
         </thead>
         <tbody>

@@ -9,8 +9,10 @@ export function Roadmap() {
   const R = strings.roadmap
   return (
     <ViewFrame id="roadmap">
-      <Card lead={R.lead} tour="gantt">
-        <Gantt plan={plan} />
+      <Card lead={R.lead} tour="gantt" className="roadmap-timeline">
+        <div className="roadmap-scroll">
+          <Gantt plan={plan} />
+        </div>
         <div className="mt-4 flex flex-wrap gap-5 text-[13px] text-muted">
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-2.5 w-5 rounded bg-ink" /> {R.funded}

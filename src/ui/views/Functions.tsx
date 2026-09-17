@@ -16,17 +16,17 @@ export function Functions() {
   const F = strings.functions
   return (
     <ViewFrame id="functions">
-      <div className="grid grid-cols-2 gap-6" data-tour="functions">
+      <div className="functional-briefs grid gap-6" data-tour="functions">
         {cards.map((c, k) => (
           <motion.section
             key={c.id}
             data-testid={`function-${c.id}`}
-            className="rounded-card bg-white p-5 shadow-card"
-            initial={{ opacity: 0, y: 8 }}
+            className="functional-brief"
+            initial={{ opacity: 1, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: k * 0.04 }}
           >
-            <div className="flex items-start justify-between gap-3">
+            <div className="functional-brief-heading flex items-start justify-between gap-3">
               <div>
                 <h2 className="flex items-center gap-2 text-[20px] text-ink">
                   <Slash size={16} />
@@ -50,28 +50,30 @@ export function Functions() {
               </div>
             </div>
 
-            <div className="label mt-4 mb-1 text-muted">{F.kpis}</div>
-            <table className="w-full text-[14px]">
-              <tbody>
-                {c.kpis.map((k) => (
-                  <tr key={k.id} className="border-t border-line">
-                    <td className="py-1.5 pr-2 text-navy">{k.label}</td>
-                    <td className="num py-1.5 text-right font-heading text-[16px] text-ink">
-                      {k.format(k.value)}
-                    </td>
-                    <td className="py-1.5 pl-3 text-right">
-                      <DeltaChip
-                        delta={k.delta}
-                        format={(d) => `${d > 0 ? '+' : '−'}${k.format(Math.abs(d))}`}
-                        goodWhenUp={k.goodWhenUp}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="functional-brief-metrics">
+              <div className="label mt-4 mb-1 text-muted">{F.kpis}</div>
+              <table className="w-full text-[14px]">
+                <tbody>
+                  {c.kpis.map((k) => (
+                    <tr key={k.id} className="border-t border-line">
+                      <td className="py-1.5 pr-2 text-navy">{k.label}</td>
+                      <td className="num py-1.5 text-right font-heading text-[16px] text-ink">
+                        {k.format(k.value)}
+                      </td>
+                      <td className="py-1.5 pl-3 text-right">
+                        <DeltaChip
+                          delta={k.delta}
+                          format={(d) => `${d > 0 ? '+' : '−'}${k.format(Math.abs(d))}`}
+                          goodWhenUp={k.goodWhenUp}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-4">
+            <div className="functional-brief-actions mt-4 grid grid-cols-2 gap-4">
               <div>
                 <div className="label mb-1 text-muted">{F.initiatives}</div>
                 {c.initiatives.length === 0 ? (

@@ -1,3 +1,4 @@
+import '../analytics.css'
 import {
   CartesianGrid,
   Line,
@@ -33,18 +34,18 @@ export function TrackedChart({
     planEbitda: plan.financials.ebitda[i],
   }))
   return (
-    <div className="h-[280px] w-full" data-testid="chart-tracked">
+    <div className="analytics-chart h-[280px] w-full" data-testid="chart-tracked">
       <ResponsiveContainer
         width="100%"
         height="100%"
         initialDimension={{ width: 800, height: 280 }}
       >
-        <LineChart data={data} margin={{ top: 12, right: 16, bottom: 0, left: 0 }}>
-          <CartesianGrid stroke={chart.line} vertical={false} />
+        <LineChart data={data} margin={{ top: 12, right: 16, bottom: 8, left: 0 }}>
+          <CartesianGrid stroke={chart.line} vertical={false} strokeDasharray="3 5" />
           <XAxis dataKey="year" {...axisProps} padding={{ left: 12, right: 12 }} />
           <YAxis
             {...axisProps}
-            width={44}
+            width={56}
             tickFormatter={(v: number) => sarm(v)}
             domain={[0, 'auto']}
           />
@@ -72,7 +73,7 @@ export function TrackedChart({
             dataKey="revenue"
             name={L.revenue}
             stroke={chart.navy}
-            strokeWidth={2.5}
+            strokeWidth={3}
             dot={{ r: 3, fill: chart.navy, strokeWidth: 0 }}
             {...chartAnimation(250)}
           />
@@ -80,7 +81,7 @@ export function TrackedChart({
             dataKey="ebitda"
             name={L.ebitda}
             stroke={chart.teal}
-            strokeWidth={2.5}
+            strokeWidth={3}
             dot={{ r: 3, fill: chart.teal, strokeWidth: 0 }}
             {...chartAnimation(250)}
           />
