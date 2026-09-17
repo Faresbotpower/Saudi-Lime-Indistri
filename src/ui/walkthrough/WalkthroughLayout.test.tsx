@@ -36,7 +36,7 @@ describe('walkthrough layout contract', () => {
       assertTarget(chapter.focus ?? null)
       chapter.actions.filter((a) => a.at !== 0).forEach(run)
     }
-    expect(useLevers.getState().view).toBe('financials')
+    expect(useLevers.getState().view).toBe('direction')
     expect(useLevers.getState().scenario).toBe('base')
     expect(useLevers.getState().openInitiativeId).toBeNull()
   })

@@ -1,3 +1,4 @@
+import { buildCascade, type ObjectiveResult, type PlanRollup, type ScorecardRow } from './cascade'
 import { classify, type Category, type Cell } from './classify'
 import { consolidate, type SiteResult } from './consolidate'
 import { runCore } from './core'
@@ -11,6 +12,14 @@ export type { Levers, PlanData, TraceEntry, Trace } from './types'
 export type { Category, Cell } from './classify'
 export type { Roadmap, RoadmapItem, RoadmapLayer } from './roadmap'
 export type { Trigger } from './viability'
+export type {
+  ObjectiveResult,
+  ObjectiveStatus,
+  PlanProject,
+  PlanRollup,
+  ScorecardRow,
+} from './cascade'
+export { PLAN_IDS } from './cascade'
 
 /** Actuals entered in the tracker for one elapsed year. */
 export type Actuals = { year: number; L1multiplier?: number; L2?: number; L6?: number }
@@ -93,6 +102,12 @@ export type PlanResult = {
   roadmap: Roadmap
   capital: { envelope: number; committed: number; headroom: number }
   diversificationShare2031: number
+  /** Objectives with the initiatives feeding them and a status flag. */
+  objectives: ObjectiveResult[]
+  /** The five functional plans with their projects, capex by year and requirements. */
+  plans: PlanRollup[]
+  /** The balanced scorecard, live where the engine computes the KPI. */
+  scorecard: ScorecardRow[]
   /** Present when the plan was run with tracker actuals. */
   actuals?: Actuals
   /** Initiatives whose status changes once the actuals are applied. */
@@ -121,7 +136,8 @@ export const traceFor = (r: { trace: Trace }, key: string): TraceEntry[] => r.tr
  * The whole pipeline, synchronously:
  *  1 to 4  core on base capacity, 8 classification for the rules,
  *  5 viability, 6 portfolio, 7 consolidation (core again with the selected set),
- *  8 classification on the consolidated core, 9 roadmap, 10 trace.
+ *  8 classification on the consolidated core, 9 roadmap, then the cascade to projects,
+ *  objectives, plans and the scorecard, 10 trace.
  */
 export function runPlan(
   levers: Levers,
@@ -219,10 +235,32 @@ function runOnce(
   const diversificationShare2031 =
     financials.revenue[n - 1] > 0 ? newRevenue / financials.revenue[n - 1] : 0
 
+  const volumes = {
+    servedKt: cons.core.baseBusiness.volumeKt,
+    exportKt: cons.core.capacity.exportServed,
+    priceIndexLime: cons.core.price.priceIndexByFamily.lime ?? [],
+    utilizationLime: cons.core.capacity.utilizationByFamily.lime ?? [],
+  }
+  const supplyChain = {
+    energyCostPerTonLime: cons.core.cost.energyCostPerTonByFamily.lime * cons.core.calibration.cost,
+    carbonCostPerTonLime: cons.core.cost.carbonCostPerTonLime,
+    exportLogisticsPerTon: cons.core.cost.exportLogisticsPerTon,
+  }
+  const cascade = buildCascade(levers, data, portfolio, {
+    years,
+    financials: financials as unknown as Record<string, number[]>,
+    volumes,
+    people: cons.people as unknown as Record<string, number[]>,
+    supplyChain,
+    capital: portfolio.capital as unknown as Record<string, number>,
+    diversificationShare2031,
+  })
+
   const trace: Trace = {
     ...cons.trace,
     ...classification.trace,
     ...roadmap.trace,
+    ...cascade.trace,
     'financials.ebitdaMargin': [
       {
         rule: 'consolidate.margin',
@@ -287,18 +325,8 @@ function runOnce(
     split: cons.split,
     sites: cons.sites,
     people: cons.people,
-    supplyChain: {
-      energyCostPerTonLime:
-        cons.core.cost.energyCostPerTonByFamily.lime * cons.core.calibration.cost,
-      carbonCostPerTonLime: cons.core.cost.carbonCostPerTonLime,
-      exportLogisticsPerTon: cons.core.cost.exportLogisticsPerTon,
-    },
-    volumes: {
-      servedKt: cons.core.baseBusiness.volumeKt,
-      exportKt: cons.core.capacity.exportServed,
-      priceIndexLime: cons.core.price.priceIndexByFamily.lime ?? [],
-      utilizationLime: cons.core.capacity.utilizationByFamily.lime ?? [],
-    },
+    supplyChain,
+    volumes,
     classification: classification.cells.map((c: Cell) => ({
       id: c.id,
       label: c.label,
@@ -314,6 +342,9 @@ function runOnce(
     roadmap,
     capital: portfolio.capital,
     diversificationShare2031,
+    objectives: cascade.objectives,
+    plans: cascade.plans,
+    scorecard: cascade.scorecard,
     trace,
   }
 }

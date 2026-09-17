@@ -10,6 +10,8 @@ import { SideSheet } from './SideSheet'
 type Props = { init: Initiative | null; plan: PlanInitiative | null; onClose: () => void }
 
 const nameOf = (id: string) => planData.initiatives.initiatives.find((i) => i.id === id)?.name ?? id
+const kpiName = (id: string) =>
+  planData.objectives.scorecard.kpis.find((k) => k.id === id)?.name ?? id
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -45,6 +47,44 @@ export function InitiativeSheet({ init, plan, onClose }: Props) {
     >
       {init && plan && (
         <>
+          <Field label={S.cascade}>
+            <ol data-testid="cascade-breadcrumb" className="cascade-breadcrumb">
+              {(() => {
+                const objective = planData.objectives.objectives.find(
+                  (o) => o.id === init.objectives[0],
+                )
+                const shift = objective
+                  ? planData.objectives.shifts.find((x) => x.id === objective.shift)
+                  : undefined
+                return (
+                  <>
+                    {shift && (
+                      <li>
+                        <span className="label text-muted">{strings.explain.levels.shift}</span>
+                        <span>{shift.name}</span>
+                      </li>
+                    )}
+                    {init.objectives.map((oid) => (
+                      <li key={oid}>
+                        <span className="label text-muted">{strings.explain.levels.objective}</span>
+                        <span>
+                          {planData.objectives.objectives.find((o) => o.id === oid)?.name ?? oid}
+                        </span>
+                      </li>
+                    ))}
+                    <li>
+                      <span className="label text-muted">{strings.explain.levels.initiative}</span>
+                      <span className="font-heading text-ink">{init.name}</span>
+                    </li>
+                  </>
+                )
+              })()}
+            </ol>
+            <div className="mt-2 text-[13px] text-muted">
+              {S.plan}:{' '}
+              <span className="text-navy">{strings.plans.names[init.plan] ?? init.plan}</span>
+            </div>
+          </Field>
           <Field label={S.status}>
             <span className="font-heading text-ink">{status}</span>
             <span className="text-muted"> · {triggerSentence(plan, L3)}</span>
@@ -103,12 +143,67 @@ export function InitiativeSheet({ init, plan, onClose }: Props) {
               ))}
             </ul>
           </Field>
+          <Field label={S.projects}>
+            <table className="w-full text-[13px]">
+              <thead>
+                <tr className="text-left">
+                  <th className="label font-medium text-muted">{S.projectCols.project}</th>
+                  <th className="label text-right font-medium text-muted">{S.projectCols.start}</th>
+                  <th className="label text-right font-medium text-muted">
+                    {S.projectCols.quarters}
+                  </th>
+                  <th className="label text-right font-medium text-muted">{S.projectCols.capex}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {init.projects.map((p) => {
+                  const shift = start - init.startYearEarliest
+                  return (
+                    <tr
+                      key={p.id}
+                      data-testid="sheet-project"
+                      className="border-t border-line align-top"
+                    >
+                      <td className="py-1.5 pr-2">
+                        <div className="text-navy">{p.name}</div>
+                        <div className="text-[11px] text-muted">
+                          {p.owner} · {S.deliverable}: {p.deliverable}
+                        </div>
+                      </td>
+                      <td className="num py-1.5 text-right text-navy">{p.startYear + shift}</td>
+                      <td className="num py-1.5 text-right text-navy">{p.durationQuarters}</td>
+                      <td className="num py-1.5 text-right text-navy">{sarm(p.capex)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </Field>
+          <Field label={S.requirements}>
+            <dl className="grid grid-cols-[80px_1fr] gap-x-3 gap-y-1">
+              <dt className="label text-muted">{S.people}</dt>
+              <dd>{init.requirements.people}</dd>
+              <dt className="label text-muted">{S.systems}</dt>
+              <dd>{init.requirements.systems}</dd>
+              <dt className="label text-muted">{S.decisions}</dt>
+              <dd>
+                <ul className="list-none space-y-1">
+                  {init.requirements.decisions.map((d) => (
+                    <li key={d} className="flex gap-2">
+                      <span className="text-teal-dim">/</span>
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </dl>
+          </Field>
           <Field label={S.kpis}>
             <ul className="list-none space-y-1">
               {init.kpis.map((k) => (
                 <li key={k} className="flex gap-2">
                   <span className="text-teal-dim">/</span>
-                  {k}
+                  {kpiName(k)}
                 </li>
               ))}
             </ul>

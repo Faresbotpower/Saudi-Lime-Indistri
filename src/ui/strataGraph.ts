@@ -16,6 +16,13 @@ export type Graph = {
   /** Plan lines a lever moves directly through the base business, before initiatives. */
   leverLines: Record<LeverId, PlanLine[]>
   initiatives: string[]
+  shifts: string[]
+  objectives: string[]
+  shiftObjectives: Record<string, string[]>
+  objectiveShift: Record<string, string>
+  objectiveInitiatives: Record<string, string[]>
+  initiativeObjectives: Record<string, string[]>
+  shiftLevers: Record<string, LeverId[]>
 }
 
 export type Hover =
@@ -23,12 +30,16 @@ export type Hover =
   | { kind: 'assumption'; id: string }
   | { kind: 'initiative'; id: string }
   | { kind: 'line'; id: PlanLine }
+  | { kind: 'shift'; id: string }
+  | { kind: 'objective'; id: string }
 
 export type LitPath = {
   levers: LeverId[]
   assumptions: string[]
   initiatives: string[]
   lines: PlanLine[]
+  shifts: string[]
+  objectives: string[]
 }
 
 const ASSUMPTION_LINES: Record<string, PlanLine[]> = {
@@ -95,6 +106,24 @@ export function buildGraph(data: PlanData, plan: PlanResult): Graph {
     levers.map((l) => [l, uniq(leverAssumptions[l].flatMap((a) => ASSUMPTION_LINES[a] ?? []))]),
   ) as Record<LeverId, PlanLine[]>
 
+  const shifts = data.objectives.shifts.map((s) => s.id)
+  const objectives = data.objectives.objectives.map((o) => o.id)
+  const shiftObjectives: Record<string, string[]> = {}
+  const objectiveShift: Record<string, string> = {}
+  for (const o of data.objectives.objectives) {
+    objectiveShift[o.id] = o.shift
+    ;(shiftObjectives[o.shift] ??= []).push(o.id)
+  }
+  for (const s of shifts) shiftObjectives[s] ??= []
+  const objectiveInitiatives: Record<string, string[]> = {}
+  const initiativeObjectives: Record<string, string[]> = {}
+  for (const o of objectives) objectiveInitiatives[o] = []
+  for (const init of list) {
+    initiativeObjectives[init.id] = init.objectives
+    for (const o of init.objectives) (objectiveInitiatives[o] ??= []).push(init.id)
+  }
+  const shiftLevers = Object.fromEntries(data.objectives.shifts.map((s) => [s.id, s.levers]))
+
   return {
     levers,
     assumptions,
@@ -105,25 +134,78 @@ export function buildGraph(data: PlanData, plan: PlanResult): Graph {
     initiativeLines,
     leverLines,
     initiatives: list.map((i) => i.id),
+    shifts,
+    objectives,
+    shiftObjectives,
+    objectiveShift,
+    objectiveInitiatives,
+    initiativeObjectives,
+    shiftLevers,
   }
 }
 
 /** Everything that lights up for a hover, in band order: levers, assumptions, initiatives, plan lines. */
 export function litPath(g: Graph, hover: Hover | null): LitPath {
-  if (!hover) return { levers: [], assumptions: [], initiatives: [], lines: [] }
+  const none: LitPath = {
+    levers: [],
+    assumptions: [],
+    initiatives: [],
+    lines: [],
+    shifts: [],
+    objectives: [],
+  }
+  if (!hover) return none
+  const withCascade = (p: Omit<LitPath, 'shifts' | 'objectives'>): LitPath => {
+    const objectives = uniq(p.initiatives.flatMap((i) => g.initiativeObjectives[i] ?? []))
+    const shifts = uniq(objectives.map((o) => g.objectiveShift[o]))
+    return {
+      ...p,
+      objectives: g.objectives.filter((o) => objectives.includes(o)),
+      shifts: g.shifts.filter((s) => shifts.includes(s)),
+    }
+  }
   switch (hover.kind) {
+    case 'shift': {
+      const objectives = g.shiftObjectives[hover.id] ?? []
+      const inits = uniq(objectives.flatMap((o) => g.objectiveInitiatives[o] ?? []))
+      const levers = g.shiftLevers[hover.id] ?? []
+      return {
+        levers: g.levers.filter((l) => levers.includes(l)),
+        assumptions: g.assumptions.filter((a) =>
+          levers.some((l) => g.leverAssumptions[l].includes(a)),
+        ),
+        initiatives: g.initiatives.filter((i) => inits.includes(i)),
+        lines: orderLines(uniq(inits.flatMap((i) => g.initiativeLines[i]))),
+        shifts: [hover.id],
+        objectives: g.objectives.filter((o) => objectives.includes(o)),
+      }
+    }
+    case 'objective': {
+      const inits = g.objectiveInitiatives[hover.id] ?? []
+      const levers = uniq(inits.flatMap((i) => g.initiativeLevers[i]))
+      return {
+        levers: g.levers.filter((l) => levers.includes(l)),
+        assumptions: g.assumptions.filter((a) =>
+          levers.some((l) => g.leverAssumptions[l].includes(a)),
+        ),
+        initiatives: g.initiatives.filter((i) => inits.includes(i)),
+        lines: orderLines(uniq(inits.flatMap((i) => g.initiativeLines[i]))),
+        shifts: [g.objectiveShift[hover.id]],
+        objectives: [hover.id],
+      }
+    }
     case 'lever': {
       const inits = g.leverInitiatives[hover.id] ?? []
       const lines = uniq([
         ...(g.leverLines[hover.id] ?? []),
         ...inits.flatMap((i) => g.initiativeLines[i]),
       ])
-      return {
+      return withCascade({
         levers: [hover.id],
         assumptions: g.leverAssumptions[hover.id] ?? [],
         initiatives: inits,
         lines: orderLines(lines),
-      }
+      })
     }
     case 'assumption': {
       const levers = g.assumptionLevers[hover.id] ?? []
@@ -132,17 +214,22 @@ export function litPath(g: Graph, hover: Hover | null): LitPath {
         ...(ASSUMPTION_LINES[hover.id] ?? []),
         ...inits.flatMap((i) => g.initiativeLines[i]),
       ])
-      return { levers, assumptions: [hover.id], initiatives: inits, lines: orderLines(lines) }
+      return withCascade({
+        levers,
+        assumptions: [hover.id],
+        initiatives: inits,
+        lines: orderLines(lines),
+      })
     }
     case 'initiative': {
       const levers = g.initiativeLevers[hover.id] ?? []
       const assumptions = uniq(levers.flatMap((l) => g.leverAssumptions[l]))
-      return {
+      return withCascade({
         levers,
         assumptions: g.assumptions.filter((a) => assumptions.includes(a)),
         initiatives: [hover.id],
         lines: g.initiativeLines[hover.id] ?? [],
-      }
+      })
     }
     case 'line': {
       const inits = g.initiatives.filter((i) => g.initiativeLines[i].includes(hover.id))
@@ -151,12 +238,12 @@ export function litPath(g: Graph, hover: Hover | null): LitPath {
         ...inits.flatMap((i) => g.initiativeLevers[i]),
       ])
       const assumptions = uniq(levers.flatMap((l) => g.leverAssumptions[l]))
-      return {
+      return withCascade({
         levers: g.levers.filter((l) => levers.includes(l)),
         assumptions: g.assumptions.filter((a) => assumptions.includes(a)),
         initiatives: inits,
         lines: [hover.id],
-      }
+      })
     }
   }
 }

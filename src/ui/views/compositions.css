@@ -469,3 +469,357 @@
     gap: 14px;
   }
 }
+
+/* From facts to objectives: the shift agenda above the strata. */
+.cascade-band {
+  padding: 24px 26px 22px;
+  border-radius: var(--radius-card, 12px);
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(11, 39, 53, 0.08);
+}
+.cascade-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+.cascade-shifts {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.cascade-shift {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  padding: 10px 12px 11px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--sand);
+  transition:
+    background 180ms,
+    border-color 180ms,
+    color 180ms,
+    opacity 180ms,
+    transform 180ms;
+}
+.cascade-shift:hover,
+.cascade-shift.is-open {
+  border-color: #0f9c7e;
+  background: #fff;
+}
+.cascade-shift.is-lit {
+  border-color: #0f9c7e;
+  background: rgba(29, 233, 182, 0.14);
+  transform: translateY(-1px);
+}
+.cascade-shift.is-dim {
+  opacity: 0.45;
+}
+.cascade-shift-index {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #60756a;
+}
+.cascade-shift-name {
+  font-family: var(--font-heading, inherit);
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.cascade-shift-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  font-size: 11px;
+  color: #60756a;
+}
+.cascade-objectives {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.cascade-driver {
+  display: grid;
+  grid-template-columns: 80px 1fr 80px 1fr;
+  gap: 4px 12px;
+  align-items: baseline;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--navy);
+}
+.cascade-objective-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+}
+.cascade-objective {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--sand);
+}
+.cascade-objective[data-lit='true'] {
+  border-color: #0f9c7e;
+}
+.cascade-board {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.cascade-board-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cascade-board-kpis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+}
+.cascade-board-kpis dd {
+  margin: 0;
+}
+.cascade-board-decisions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cascade-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+  color: var(--navy);
+}
+.cascade-breadcrumb li {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-right: 14px;
+  margin-right: 10px;
+  position: relative;
+  max-width: 100%;
+}
+.cascade-breadcrumb li:not(:last-child)::after {
+  content: '/';
+  position: absolute;
+  right: 0;
+  top: 12px;
+  color: #0f9c7e;
+}
+
+/* Scorecard */
+.scorecard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.scorecard-years {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+}
+.scorecard-years button {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--navy);
+  transition:
+    background 150ms,
+    color 150ms;
+}
+.scorecard-years button.is-active {
+  background: var(--ink);
+  color: #fff;
+}
+.scorecard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.scorecard-perspective {
+  padding: 20px 22px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(11, 39, 53, 0.08);
+}
+.scorecard-perspective h2 {
+  margin-bottom: 10px;
+}
+.scorecard-table th,
+.scorecard-table td {
+  padding-inline: 6px;
+}
+.scorecard-table th:first-child,
+.scorecard-table td:first-child {
+  width: 44%;
+  padding-left: 0;
+}
+.scorecard-table td:first-child > div:first-child {
+  flex-wrap: wrap;
+}
+.scorecard-table th:last-child,
+.scorecard-table td:last-child {
+  padding-right: 0;
+  white-space: nowrap;
+}
+.scorecard-table th {
+  padding-block: 4px;
+  white-space: nowrap;
+}
+.scorecard-table td[data-testid='kpi-live'] {
+  padding-left: 14px;
+  white-space: nowrap;
+}
+.scorecard-targets {
+  display: inline-flex;
+  gap: 8px;
+  font-size: 12px;
+  color: #60756a;
+}
+.scorecard-targets .is-active {
+  color: var(--ink);
+  font-weight: 700;
+}
+.okr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+.okr-objective {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--sand);
+}
+
+/* Plans and requirements: the plan card lays out its own rows across the brief grid. */
+.view-plans .functional-brief {
+  display: block;
+}
+.plan-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 28px;
+}
+.plan-columns > div + div {
+  padding-left: 24px;
+  border-left: 1px solid #dbe2da;
+}
+.plan-needs {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.plan-figures {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: end;
+}
+.plan-capex-years {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+}
+.plan-capex-years > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 40px;
+}
+.plan-needs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* Financial plan baseline chip */
+.financial-baseline {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.baseline-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font-family: var(--font-heading, inherit);
+  font-size: 13px;
+  color: var(--ink);
+  transition: border-color 150ms;
+}
+.baseline-chip:hover {
+  border-color: #0f9c7e;
+}
+.baseline-chip-mark {
+  color: #0f9c7e;
+  font-weight: 700;
+}
+
+/* Tracker modes and quarterly review */
+.tracker-modes {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+}
+.tracker-mode {
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-family: var(--font-heading, inherit);
+  font-size: 13px;
+  color: var(--navy);
+}
+.tracker-mode.is-active {
+  background: var(--ink);
+  color: #fff;
+}
+.quarterly-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 1100px) {
+  .cascade-shifts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cascade-board {
+    grid-template-columns: 1fr;
+  }
+  .scorecard-grid,
+  .plan-columns,
+  .plan-needs-grid,
+  .quarterly-grid {
+    grid-template-columns: 1fr;
+  }
+}

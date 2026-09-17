@@ -12,6 +12,8 @@ import { ExplainButton } from './ExplainButton'
 import { planData } from '../../data'
 
 const nameOf = (id: string) => planData.initiatives.initiatives.find((i) => i.id === id)?.name ?? id
+const objectiveName = (id: string) =>
+  planData.objectives.objectives.find((o) => o.id === id)?.name ?? id
 
 const pulseColor = {
   in: 'rgba(29, 233, 182, 0.55)',
@@ -92,6 +94,20 @@ export function InitiativeCard({ init, plan, onOpen }: Props) {
             <dd className="text-ink">{sarm(plan.ebitdaRunRate)}</dd>
           </div>
         </dl>
+        <div className="initiative-cascade mt-2 flex flex-wrap items-center gap-1.5 text-[12px] text-muted">
+          <span className="label">{C.serves}</span>
+          {init.objectives.map((o) => (
+            <span
+              key={o}
+              className="num rounded-chip bg-teal/10 px-1.5 py-0.5 text-[11px] text-teal-dim"
+              title={objectiveName(o)}
+            >
+              {o}
+            </span>
+          ))}
+          <span aria-hidden="true">·</span>
+          <span className="num">{C.projects(init.projects.length)}</span>
+        </div>
         <div className="initiative-ownership mt-2 flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
           <span>{init.owner}</span>
           {plan.startYear && plan.status !== 'out' && (

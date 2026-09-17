@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
-import type { PlanResult, RoadmapItem } from '../../engine'
+import type { PlanProject, PlanResult, RoadmapItem } from '../../engine'
 import { planData } from '../../data'
 import { strings } from '../../strings'
 import { sarm, prefersReducedMotion } from '../format'
 
 const ROW = 44
 const HEAD = 46
+const PROJ = 26
 const FIRST = 2027
 const LAST = 2031
 const QUARTERS = (LAST - FIRST + 1) * 4
@@ -15,6 +16,11 @@ const q = (year: number, quarter: number) => ((year - FIRST) * 4 + quarter) / QU
 type Row =
   | { kind: 'head'; label: string; layer: string }
   | { kind: 'item'; item: RoadmapItem; layer: string }
+  | { kind: 'project'; project: PlanProject; item: RoadmapItem; layer: string }
+
+const rowHeight = (r: Row) => (r.kind === 'head' ? HEAD : r.kind === 'item' ? ROW : PROJ)
+const rowKey = (r: Row) =>
+  r.kind === 'head' ? `head-${r.layer}` : r.kind === 'item' ? r.item.id : `project-${r.project.id}`
 
 /** Five-year Gantt by quarter, grouped in the RFQ layers, with ghosts, dependency lines and milestones. */
 export function Gantt({ plan }: { plan: PlanResult }) {
@@ -24,17 +30,20 @@ export function Gantt({ plan }: { plan: PlanResult }) {
     ? { duration: 0.12 }
     : { type: 'spring' as const, stiffness: 260, damping: 30, delay: 0.35 }
   const critical = new Set(plan.roadmap.criticalPath)
+  const projectsOf: Record<string, PlanProject[]> = {}
+  for (const p of plan.plans.flatMap((x) => x.projects)) (projectsOf[p.initiativeId] ??= []).push(p)
   const rows: Row[] = []
   for (const layer of plan.roadmap.layers) {
     rows.push({ kind: 'head', label: layer.label, layer: layer.layer })
-    for (const item of layer.items) rows.push({ kind: 'item', item, layer: layer.layer })
+    for (const item of layer.items) {
+      rows.push({ kind: 'item', item, layer: layer.layer })
+      for (const project of projectsOf[item.id] ?? [])
+        rows.push({ kind: 'project', project, item, layer: layer.layer })
+    }
   }
-  const rowTop = (i: number) =>
-    rows.slice(0, i).reduce((s, r) => s + (r.kind === 'head' ? HEAD : ROW), 0)
+  const rowTop = (i: number) => rows.slice(0, i).reduce((s, r) => s + rowHeight(r), 0)
   const total = rowTop(rows.length)
-  const indexOf = Object.fromEntries(
-    rows.map((r, i) => [r.kind === 'item' ? r.item.id : `head-${r.layer}`, i]),
-  )
+  const indexOf = Object.fromEntries(rows.map((r, i) => [rowKey(r), i]))
   const years = Array.from({ length: LAST - FIRST + 1 }, (_, i) => FIRST + i)
 
   return (
@@ -68,9 +77,9 @@ export function Gantt({ plan }: { plan: PlanResult }) {
         <div className="gantt-labels relative" style={{ height: total }}>
           {rows.map((r, i) => (
             <div
-              key={r.kind === 'item' ? r.item.id : r.layer}
+              key={rowKey(r)}
               className="absolute inset-x-0 flex items-center pr-4"
-              style={{ top: rowTop(i), height: r.kind === 'head' ? HEAD : ROW }}
+              style={{ top: rowTop(i), height: rowHeight(r) }}
             >
               {r.kind === 'head' ? (
                 <span
@@ -79,6 +88,14 @@ export function Gantt({ plan }: { plan: PlanResult }) {
                   className="label leading-tight text-muted"
                 >
                   {r.label}
+                </span>
+              ) : r.kind === 'project' ? (
+                <span
+                  className="gantt-project-label truncate pl-5 text-[12px] text-muted"
+                  title={`${r.project.name} · ${r.project.owner}`}
+                >
+                  <span className="mr-1.5 text-teal-dim">/</span>
+                  {r.project.name}
                 </span>
               ) : (
                 <span
@@ -152,6 +169,40 @@ export function Gantt({ plan }: { plan: PlanResult }) {
 
           {/* Bars */}
           {rows.map((r, i) => {
+            if (r.kind === 'project') {
+              const p = r.project
+              const endQ = Math.max(1, p.durationQuarters)
+              const left = q(p.startYear, 0) * 100
+              const width = (endQ / QUARTERS) * 100
+              const clippedWidth = Math.min(width, 100 - left)
+              return (
+                <div
+                  key={rowKey(r)}
+                  className="absolute inset-x-0"
+                  style={{ top: rowTop(i), height: PROJ }}
+                >
+                  <motion.div
+                    data-testid="project-bar"
+                    data-project-id={p.id}
+                    data-start={p.startYear}
+                    data-status={p.status}
+                    title={`${p.name} · ${p.startYear}, ${p.durationQuarters} quarters · SAR ${sarm(p.capex)}m`}
+                    className={`absolute top-[8px] h-2.5 rounded-sm ${
+                      p.status === 'in'
+                        ? 'bg-ink/45'
+                        : 'border border-dashed border-amber bg-amber/10'
+                    }`}
+                    initial={false}
+                    animate={{
+                      left: `${Math.min(left, 100)}%`,
+                      width: `${Math.max(0, clippedWidth)}%`,
+                    }}
+                    transition={settle}
+                  />
+                  <span data-testid={`project-bar-${p.id}`} data-start={p.startYear} hidden />
+                </div>
+              )
+            }
             if (r.kind !== 'item') return null
             const it = r.item
             const left = q(it.start, 0) * 100

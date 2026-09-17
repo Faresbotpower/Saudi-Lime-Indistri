@@ -36,6 +36,14 @@ type LeversState = {
   view: ViewId
   explain: boolean
   hoveredLever: LeverId | null
+  /** Shift hovered in the cascade band; lights the strata like a lever hover. */
+  hoveredShift: string | null
+  /** The 2026 baseline sheet on the Financial plan. */
+  baselineOpen: boolean
+  /** Shift expanded in the cascade band. */
+  openShift: string | null
+  /** Tracker mode: the plan-against-actual table or the quarterly review. */
+  trackerMode: 'table' | 'quarterly'
   /** Levers lit by a hover elsewhere (the Strata reveal), so the rail can answer. */
   litLevers: LeverId[]
   /** Tracker actuals for the elapsed year; empty until typed. */
@@ -60,6 +68,10 @@ type LeversState = {
   setView: (view: ViewId) => void
   toggleExplain: () => void
   setHoveredLever: (id: LeverId | null) => void
+  setHoveredShift: (id: string | null) => void
+  setBaselineOpen: (open: boolean) => void
+  setOpenShift: (id: string | null) => void
+  setTrackerMode: (mode: 'table' | 'quarterly') => void
   setLitLevers: (ids: LeverId[]) => void
   setActual: (key: keyof ActualInputs, value: number | undefined) => void
   clearActuals: () => void
@@ -97,13 +109,19 @@ export const scenarioFor = (levers: LeverValues): ScenarioName =>
 export const useLevers = create<LeversState>((set) => ({
   levers: clone(scenarioPresets.base),
   scenario: 'base',
-  view: 'financials',
+  view: 'direction',
   explain: false,
   hoveredLever: null,
+  hoveredShift: null,
+  baselineOpen: false,
+  openShift: null,
+  trackerMode: 'table',
   litLevers: [],
   actuals: {},
   explainKey: null,
-  showCover: !readEntered() && !(typeof window !== 'undefined' && /[?&]print=1/.test(window.location.search)),
+  showCover:
+    !readEntered() &&
+    !(typeof window !== 'undefined' && /[?&]print=1/.test(window.location.search)),
   openInitiativeId: null,
   walkthrough: { active: false, step: 0 },
   overrides: {},
@@ -119,6 +137,10 @@ export const useLevers = create<LeversState>((set) => ({
   setView: (view) => set({ view }),
   toggleExplain: () => set((s) => ({ explain: !s.explain })),
   setHoveredLever: (hoveredLever) => set({ hoveredLever }),
+  setHoveredShift: (hoveredShift) => set({ hoveredShift }),
+  setBaselineOpen: (baselineOpen) => set({ baselineOpen }),
+  setOpenShift: (openShift) => set({ openShift }),
+  setTrackerMode: (trackerMode) => set({ trackerMode }),
   setLitLevers: (litLevers) => set({ litLevers }),
   setActual: (key, value) =>
     set((s) => {
@@ -144,6 +166,8 @@ export const useLevers = create<LeversState>((set) => ({
       printing: typeof window !== 'undefined' && /[?&]print=1/.test(window.location.search),
       explainKey: null,
       openInitiativeId: null,
+      baselineOpen: false,
+      hoveredShift: null,
     })
   },
   openInitiative: (openInitiativeId) => set({ openInitiativeId }),
@@ -181,5 +205,11 @@ export const useLevers = create<LeversState>((set) => ({
       return { overrides }
     }),
   stopWalkthrough: () =>
-    set({ walkthrough: { active: false, step: 0 }, hoveredLever: null, openInitiativeId: null }),
+    set({
+      walkthrough: { active: false, step: 0 },
+      hoveredLever: null,
+      hoveredShift: null,
+      openInitiativeId: null,
+      baselineOpen: false,
+    }),
 }))

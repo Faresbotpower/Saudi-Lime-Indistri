@@ -2,7 +2,8 @@ import { planData, leverDefs } from '../../data'
 import { usePlan, useTrackedPlan, useData, presetPlans } from '../../state/plan'
 import { useLevers } from '../../state/levers'
 import { strings } from '../../strings'
-import { functionImpacts } from '../functions'
+import { planCards } from '../plans'
+import { fmtKpi } from '../kpiFormat'
 import { pct1, sarm, signed } from '../format'
 import { leverValueLabel, triggerSentence } from '../triggerText'
 import { categoryChip } from '../components/categoryColors'
@@ -27,8 +28,14 @@ export function Report() {
   const last = plan.years.length - 1
   const list = planData.initiatives.initiatives
   const byId = Object.fromEntries(list.map((i) => [i.id, i]))
-  const cards = functionImpacts(plan, base, tracked)
+  const cards = planCards(plan, base, tracked)
   const today = new Date().toISOString().slice(0, 10)
+  const shifts = planData.objectives.shifts
+  const objectiveById = Object.fromEntries(plan.objectives.map((o) => [o.id, o]))
+  const kpiName = (k: string) =>
+    planData.objectives.scorecard.kpis.find((x) => x.id === k)?.name ?? k
+  const projectsOf: Record<string, (typeof plan.plans)[number]['projects']> = {}
+  for (const p of plan.plans.flatMap((x) => x.projects)) (projectsOf[p.initiativeId] ??= []).push(p)
 
   return (
     <div id="report" data-testid="report" className="report">
@@ -39,6 +46,16 @@ export function Report() {
         </div>
         <h1 className="mt-2 text-[18px] text-ink">{R.title}</h1>
         <p className="text-[11px] text-muted">{R.subtitle}</p>
+        <ol className="report-steps" aria-label={R.approach}>
+          {strings.approach.steps.map((step, i) => (
+            <li key={step} data-phase={i < 4 ? 1 : 2}>
+              <span className="num">{i + 1}</span> {step}
+            </li>
+          ))}
+          <li data-phase="3">
+            <span>/</span> {strings.app.name}: {strings.approach.landing}
+          </li>
+        </ol>
         <div className="mt-2 flex flex-wrap items-baseline gap-x-6 text-[11px]">
           <span className="whitespace-nowrap">
             <span className="label mr-2">{R.scenario}</span>
@@ -75,6 +92,36 @@ export function Report() {
 
       <section>
         <h2>1. {R.sections[0]}</h2>
+        <h3>{R.shifts}</h3>
+        <table>
+          <thead>
+            <tr>
+              <th className={th}>{C.shift}</th>
+              <th className={th}>{strings.cascade.pathway}</th>
+              <th className={th}>{C.objective}</th>
+              <th className={th}>{C.owner}</th>
+              <th className={th}>{C.status}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {shifts.flatMap((s) =>
+              planData.objectives.objectives
+                .filter((o) => o.shift === s.id)
+                .map((o, i) => (
+                  <tr key={o.id}>
+                    <td className={td}>{i === 0 ? `${s.id} ${s.name}` : ''}</td>
+                    <td className={td}>{i === 0 ? planData.objectives.pathways[s.pathway] : ''}</td>
+                    <td className={td}>
+                      {o.id} {o.name}
+                    </td>
+                    <td className={td}>{o.owner}</td>
+                    <td className={td}>{strings.cascade.status[objectiveById[o.id].status]}</td>
+                  </tr>
+                )),
+            )}
+          </tbody>
+        </table>
+        <h3>{strings.direction.table}</h3>
         <table>
           <thead>
             <tr>
@@ -101,6 +148,39 @@ export function Report() {
 
       <section>
         <h2>2. {R.sections[1]}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th className={th}>{C.perspective}</th>
+              <th className={th}>{C.kpi}</th>
+              <th className={`${th} text-right`}>{C.baseline}</th>
+              <th className={`${th} text-right`}>{C.target}</th>
+              <th className={`${th} text-right`}>{C.live}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {plan.scorecard.map((k) => (
+              <tr key={k.id}>
+                <td className={td}>{strings.scorecard.perspectives[k.perspective]}</td>
+                <td className={td}>
+                  {k.id} {k.name} <span className="text-muted">{k.unit}</span>
+                  {k.lead ? ` · ${strings.scorecard.lead}` : ''}
+                </td>
+                <td className={`${td} ${num}`}>{fmtKpi(k.baseline2026, k.unit)}</td>
+                <td className={`${td} ${num}`}>
+                  {k.targets['2031'] !== undefined ? fmtKpi(k.targets['2031'], k.unit) : ''}
+                </td>
+                <td className={`${td} ${num}`}>
+                  {k.live ? fmtKpi(k.live[last], k.unit) : strings.scorecard.entered}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>3. {R.sections[2]}</h2>
         <p className="text-[11px] text-muted">
           {strings.portfolio.strip.envelope} SAR {sarm(plan.capital.envelope)}m ·{' '}
           {strings.portfolio.strip.committed} SAR {sarm(plan.capital.committed)}m ·{' '}
@@ -111,7 +191,7 @@ export function Report() {
           <thead>
             <tr>
               <th className={th}>{C.initiative}</th>
-              <th className={th}>{C.layer}</th>
+              <th className={th}>{C.objective}</th>
               <th className={th}>{C.owner}</th>
               <th className={th}>{C.status}</th>
               <th className={`${th} text-right`}>{strings.portfolio.card.capex}</th>
@@ -123,8 +203,14 @@ export function Report() {
           <tbody>
             {plan.initiatives.map((i) => (
               <tr key={i.id}>
-                <td className={td}>{byId[i.id].name}</td>
-                <td className={td}>{strings.portfolio.layers[byId[i.id].layer]}</td>
+                <td className={td}>
+                  {byId[i.id].name}
+                  <div className="text-[10px] text-muted">
+                    {strings.portfolio.layers[byId[i.id].layer]} · {C.projects}:{' '}
+                    {byId[i.id].projects.map((p) => p.name).join('; ')}
+                  </div>
+                </td>
+                <td className={td}>{byId[i.id].objectives.join(', ')}</td>
                 <td className={td}>{byId[i.id].owner}</td>
                 <td className={td}>{strings.portfolio.columns[i.status]}</td>
                 <td className={`${td} ${num}`}>{sarm(i.capex)}</td>
@@ -138,7 +224,57 @@ export function Report() {
       </section>
 
       <section>
-        <h2>3. {R.sections[2]}</h2>
+        <h2>4. {R.sections[3]}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th className={th}>{C.function}</th>
+              <th className={th}>{C.project}</th>
+              <th className={th}>{C.status}</th>
+              <th className={`${th} text-right`}>{C.start}</th>
+              <th className={`${th} text-right`}>{strings.portfolio.card.capex}</th>
+              <th className={th}>{C.needs}</th>
+            </tr>
+          </thead>
+          {cards.map((c) => (
+            <tbody key={c.id} className="function-block">
+              {c.rollup.projects.map((p, i) => (
+                <tr key={p.id}>
+                  <td className={td}>
+                    {i === 0 && (
+                      <>
+                        <div className="font-heading text-ink">{c.name}</div>
+                        <div className="text-[10px] text-muted">
+                          {C.deliverable} {c.deliverable} · {strings.plans.headcount}{' '}
+                          {signed(c.rollup.headcountDelta)}
+                        </div>
+                      </>
+                    )}
+                  </td>
+                  <td className={td}>
+                    {p.name}
+                    <div className="text-[10px] text-muted">{p.initiativeName}</div>
+                  </td>
+                  <td className={`${td} whitespace-nowrap`}>
+                    {strings.portfolio.columns[p.status]}
+                  </td>
+                  <td className={`${td} ${num}`}>{p.status === 'out' ? '' : p.startYear}</td>
+                  <td className={`${td} ${num}`}>{sarm(p.capex)}</td>
+                  <td className={td}>
+                    {i === 0 &&
+                      [...c.rollup.requirements.people, ...c.rollup.requirements.systems].map(
+                        (x) => <div key={x}>{x}</div>,
+                      )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ))}
+        </table>
+      </section>
+
+      <section>
+        <h2>5. {R.sections[4]}</h2>
         <table>
           <thead>
             <tr>
@@ -174,11 +310,23 @@ export function Report() {
             ))}
           </tbody>
         </table>
+        {planData.assumptions.history && (
+          <p className="text-[10px] text-muted">
+            {strings.financials.legend.history}:{' '}
+            {planData.assumptions.history.years
+              .map(
+                (y, i) =>
+                  `${y} ${sarm(planData.assumptions.history!.revenue[i])} / ${sarm(planData.assumptions.history!.ebitda[i])}`,
+              )
+              .join(' · ')}{' '}
+            (SAR m, revenue / EBITDA). {strings.financials.deliverable}.
+          </p>
+        )}
         <p className="text-[10px] text-muted">{strings.common.illustrativeFootnote}</p>
       </section>
 
       <section>
-        <h2>4. {R.sections[3]}</h2>
+        <h2>6. {R.sections[5]}</h2>
         <table>
           <thead>
             <tr>
@@ -242,7 +390,7 @@ export function Report() {
       </section>
 
       <section>
-        <h2>5. {R.sections[4]}</h2>
+        <h2>7. {R.sections[6]}</h2>
         <table>
           <thead>
             <tr>
@@ -255,10 +403,10 @@ export function Report() {
           </thead>
           <tbody>
             {plan.roadmap.layers.flatMap((l) =>
-              l.items.map((it) => (
+              l.items.flatMap((it) => [
                 <tr key={it.id}>
                   <td className={td}>{l.label}</td>
-                  <td className={td}>{it.name}</td>
+                  <td className={`${td} font-heading text-ink`}>{it.name}</td>
                   <td className={td}>
                     {it.status === 'in'
                       ? strings.roadmap.funded
@@ -266,15 +414,24 @@ export function Report() {
                   </td>
                   <td className={`${td} ${num}`}>{it.start}</td>
                   <td className={`${td} ${num}`}>{it.end}</td>
-                </tr>
-              )),
+                </tr>,
+                ...(projectsOf[it.id] ?? []).map((p) => (
+                  <tr key={p.id}>
+                    <td className={td} />
+                    <td className={`${td} pl-4`}>/ {p.name}</td>
+                    <td className={td}>{p.owner}</td>
+                    <td className={`${td} ${num}`}>{p.startYear}</td>
+                    <td className={`${td} ${num}`}>{p.endYear}</td>
+                  </tr>
+                )),
+              ]),
             )}
           </tbody>
         </table>
       </section>
 
       <section>
-        <h2>6. {R.sections[5]}</h2>
+        <h2>8. {R.sections[7]}</h2>
         <table>
           <thead>
             <tr>
@@ -311,48 +468,14 @@ export function Report() {
                 )
                 .join('; ')}
         </p>
-      </section>
-
-      <section>
-        <h2>7. {R.sections[6]}</h2>
-        <table>
-          <thead>
-            <tr>
-              <th className={th}>{C.function}</th>
-              <th className={th}>{C.kpi}</th>
-              <th className={`${th} text-right`}>{C.value}</th>
-              <th className={`${th} text-right`}>{C.base}</th>
-              <th className={th}>{strings.functions.initiatives}</th>
-            </tr>
-          </thead>
-          {cards.map((c) => (
-            <tbody key={c.id} className="function-block">
-              {c.kpis.map((k, i) => (
-                <tr key={`${c.id}-${k.id}`}>
-                  <td className={td}>
-                    {i === 0 && (
-                      <>
-                        <div className="font-heading text-ink">{c.name}</div>
-                        <div className="text-[10px] text-muted">{c.rfq}</div>
-                      </>
-                    )}
-                  </td>
-                  <td className={td}>{k.label}</td>
-                  <td className={`${td} ${num} whitespace-nowrap`}>{k.format(k.value)}</td>
-                  <td className={`${td} ${num} whitespace-nowrap`}>{k.format(k.base)}</td>
-                  <td className={td}>
-                    {i === 0 &&
-                      c.initiatives.map((x) => (
-                        <div key={x.id}>
-                          {x.name} · {strings.portfolio.columns[x.status]}
-                        </div>
-                      ))}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          ))}
-        </table>
+        <p className="text-[10px] text-muted">
+          {strings.scorecard.lead}:{' '}
+          {plan.scorecard
+            .filter((k) => k.lead)
+            .map((k) => kpiName(k.id))
+            .join(', ')}
+          .
+        </p>
       </section>
 
       <footer className="mt-4 border-t border-line pt-2 text-[10px] text-muted">

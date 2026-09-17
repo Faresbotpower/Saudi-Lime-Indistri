@@ -6,17 +6,33 @@ import '../views/compositions.css'
 import '../views/reading-hierarchy.css'
 
 const readingPath: Record<ViewId, [string, string, string]> = {
-  direction: ['Trace what moves the plan', 'Find where to compete', 'Compare market positions'],
-  portfolio: ['Check available capital', 'Review funded initiatives', 'Inspect what waits and why'],
+  direction: [
+    'Follow the shifts into objectives',
+    'Trace what moves the plan',
+    'Compare market positions',
+  ],
+  scorecard: [
+    'Read each perspective',
+    'Compare live values with targets',
+    'Check the OKRs under each objective',
+  ],
+  portfolio: [
+    'Check available capital',
+    'Review funded initiatives and projects',
+    'Inspect what waits and why',
+  ],
+  plans: ['Find your plan', 'Read its projects and capex', 'Review what it needs to work'],
   financials: [
-    'Read the 2031 outcome',
+    'Start from the baseline',
     'Follow the growth trajectory',
     'Compare cash and scenarios',
   ],
-  operations: ['Choose a planning year', 'Compare site utilization', 'Review people and supply'],
-  roadmap: ['Follow the funded sequence', 'Watch critical dependencies', 'Review deferred work'],
-  tracker: ['Enter actual performance', 'Review triggered decisions', 'Follow the revised outlook'],
-  functions: ['Find your function', 'Read what changes', 'Review ownership and decisions'],
+  roadmap: [
+    'Follow the funded sequence',
+    'Read the projects under each bar',
+    'Review deferred work',
+  ],
+  tracker: ['Enter actual performance', 'Review triggered decisions', 'Run the quarterly review'],
 }
 
 /** Each chapter has a distinct masthead; shared context stays in the same place. */

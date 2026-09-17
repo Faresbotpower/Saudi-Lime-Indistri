@@ -58,3 +58,22 @@ describe('Roadmap view', () => {
     expect(p.roadmap.criticalPath).toContain('pcc_plant')
   })
 })
+
+describe('Roadmap projects', () => {
+  beforeEach(() => useLevers.getState().reset())
+
+  it('draws the projects as thin bars under their initiative header bar', () => {
+    render(<Roadmap />)
+    const p = runPlan(scenarioPresets.base, planData)
+    const onRoadmap = new Set(p.roadmap.layers.flatMap((l) => l.items.map((i) => i.id)))
+    const expected = p.plans
+      .flatMap((x) => x.projects)
+      .filter((pr) => onRoadmap.has(pr.initiativeId))
+    expect(screen.getAllByTestId('project-bar')).toHaveLength(expected.length)
+    const first = expected[0]
+    expect(screen.getByTestId(`project-bar-${first.id}`)).toHaveAttribute(
+      'data-start',
+      String(first.startYear),
+    )
+  })
+})

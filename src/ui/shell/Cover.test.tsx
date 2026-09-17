@@ -11,7 +11,7 @@ describe('Cover', () => {
 
   it('shows the wordmark, the Sia logo with powered by, and the illustrative note', () => {
     render(<Cover />)
-    expect(screen.getByText('STRATA')).toBeInTheDocument()
+    expect(screen.getAllByText('STRATA').length).toBeGreaterThan(0)
     expect(screen.getByText(strings.cover.poweredBy)).toBeInTheDocument()
     expect(screen.getByAltText('Sia')).toBeInTheDocument()
     expect(screen.getByText(strings.app.illustrative)).toBeInTheDocument()

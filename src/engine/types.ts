@@ -54,6 +54,8 @@ export type Assumptions = {
     headcount: number
     saudization: number
   }
+  /** Five-year history the plan starts from; the last entry equals baseCase. */
+  history?: { years: number[]; revenue: number[]; ebitda: number[] }
   sites: Site[]
   products: Product[]
   sectors: Sector[]
@@ -90,6 +92,25 @@ export type Rule = {
   leverId: LeverId
 }
 
+export type Project = {
+  id: string
+  name: string
+  capex: number
+  startYear: number
+  durationQuarters: number
+  owner: string
+  deliverable: string
+}
+
+export type PlanId = 'commercial' | 'operations' | 'ai' | 'sustainability' | 'hr'
+
+export type Requirements = {
+  people: string
+  capex: number
+  systems: string
+  decisions: string[]
+}
+
 export type Initiative = {
   id: string
   name: string
@@ -113,13 +134,74 @@ export type Initiative = {
   newProductOrMarket: boolean
   dependencies: string[]
   rules: Rule[]
+  /** Scorecard KPI ids (K1) or free text. */
   kpis: string[]
   risks: string[]
+  /** Objectives this initiative serves; every initiative has at least one. */
+  objectives: string[]
+  /** The functional plan it feeds. */
+  plan: PlanId
+  /** Two to four projects whose capex sums to the initiative capex. */
+  projects: Project[]
+  /** What the initiative needs to work. */
+  requirements: Requirements
+}
+
+export type Pathway = 'optimize' | 'modernize' | 'valueChain' | 'adjacency' | 'geography'
+export type Perspective = 'financial' | 'customer' | 'internal' | 'learning'
+
+export type Shift = {
+  id: string
+  name: string
+  driver: string
+  evidence: string[]
+  pathway: Pathway
+  levers: LeverId[]
+}
+
+export type Objective = {
+  id: string
+  shift: string
+  name: string
+  owner: string
+  target: { metric: string; value: number; year: number }
+  measure: string
+  perspective: Perspective
+  okrs: { kr: string; by: number; target: number }[]
+  detail: { subObjectives: string[]; dependencies: string[]; risks: string[] }
+}
+
+export type KpiDef = {
+  id: string
+  name: string
+  perspective: Perspective
+  unit: string
+  baseline2026: number
+  targets: Record<string, number>
+  /** Engine output path; the KPI reads live when present. */
+  computedFrom?: string
+  /** Multiplier applied to the engine value (100 for ratios shown as percent). */
+  scale?: number
+  lead: boolean
+  direction: 'up' | 'down'
+  cadence: 'quarterly' | 'annual'
+}
+
+export type ObjectivesData = {
+  levers: LeverId[]
+  pathways: Record<Pathway, string>
+  shifts: Shift[]
+  objectives: Objective[]
+  scorecard: { perspectives: Perspective[]; kpis: KpiDef[] }
 }
 
 export type InitiativeData = { layers: { id: string; name: string }[]; initiatives: Initiative[] }
 
-export type PlanData = { assumptions: Assumptions; initiatives: InitiativeData }
+export type PlanData = {
+  assumptions: Assumptions
+  initiatives: InitiativeData
+  objectives: ObjectivesData
+}
 
 /** One line of the audit trail behind a number. */
 export type TraceEntry = {

@@ -3,6 +3,8 @@ import { usePlan } from '../../state/plan'
 import { strings } from '../../strings'
 import { leverValueLabel } from '../triggerText'
 import { SideSheet } from './SideSheet'
+import { cascadeFor } from '../cascade'
+import { planData } from '../../data'
 
 const humanize = (rule: string) =>
   strings.explain.rules[rule] ?? rule.replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
@@ -24,6 +26,7 @@ export function ExplainSheet() {
   const plan = usePlan()
   const E = strings.explain
   const entries = key ? (plan.trace[key] ?? []) : []
+  const chain = key ? cascadeFor(key, planData, plan) : []
   return (
     <SideSheet
       open={!!key}
@@ -31,6 +34,26 @@ export function ExplainSheet() {
       subtitle={key ? `${E.lead} ${key}` : undefined}
       onClose={close}
     >
+      {chain.length > 0 && (
+        <div className="mb-5" data-testid="explain-cascade">
+          <div className="font-heading text-[14px] text-ink">{E.cascade}</div>
+          <p className="mb-2 text-[12px] text-muted">{E.cascadeLead}</p>
+          <ol className="cascade-breadcrumb">
+            {chain.map((n, i) => (
+              <li key={`${n.level}-${n.id}-${i}`} data-level={n.level}>
+                <span className="label text-muted">{E.levels[n.level]}</span>
+                <span
+                  className={
+                    n.id === key?.split('.').slice(1).join('.') ? 'font-heading text-ink' : ''
+                  }
+                >
+                  {n.label}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
       {entries.length === 0 ? (
         <p className="text-[14px] text-muted">{E.none}</p>
       ) : (

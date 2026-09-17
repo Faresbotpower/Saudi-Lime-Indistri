@@ -1,10 +1,12 @@
 import assumptionsJson from '../../../data/assumptions.json'
 import initiativesJson from '../../../data/initiatives.json'
-import type { Assumptions, InitiativeData, Levers, PlanData } from '../types'
+import objectivesJson from '../../../data/objectives.json'
+import type { Assumptions, InitiativeData, Levers, ObjectivesData, PlanData } from '../types'
 
 export const assumptions = assumptionsJson as unknown as Assumptions
 export const initiatives = initiativesJson as unknown as InitiativeData
-export const data: PlanData = { assumptions, initiatives }
+export const objectives = objectivesJson as unknown as ObjectivesData
+export const data: PlanData = { assumptions, initiatives, objectives }
 
 export const base = (): Levers => ({
   ...assumptions.scenarios.base,

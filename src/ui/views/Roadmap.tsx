@@ -9,7 +9,7 @@ export function Roadmap() {
   const R = strings.roadmap
   return (
     <ViewFrame id="roadmap">
-      <Card lead={R.lead} tour="gantt" className="roadmap-timeline">
+      <Card lead={`${R.lead} ${R.projects}`} tour="gantt" className="roadmap-timeline">
         <div className="roadmap-scroll">
           <Gantt plan={plan} />
         </div>
@@ -23,6 +23,9 @@ export function Roadmap() {
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-2.5 w-5 rounded border border-dashed border-amber bg-amber/10" />{' '}
             {R.ghost}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-1.5 w-5 rounded-sm bg-ink/45" /> {R.project}
           </span>
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-2.5 w-2.5 rotate-45 bg-ink" /> {R.milestone}

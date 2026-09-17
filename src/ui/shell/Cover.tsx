@@ -59,7 +59,7 @@ export function Cover({ onExitStart }: { onExitStart?: () => void }) {
       <div className="cover-content">
         <div className="cover-eyebrow">
           <span />
-          {strings.app.tagline}
+          {strings.cover.tagline}
         </div>
         <h1>
           {strings.design.coverLineOne}
@@ -90,6 +90,25 @@ export function Cover({ onExitStart }: { onExitStart?: () => void }) {
           </button>
         </div>
         <p className="cover-hint">{strings.cover.walkthroughHint}</p>
+        <ol className="cover-steps" data-testid="cover-steps" aria-label={strings.approach.landing}>
+          {strings.approach.steps.map((step, i) => (
+            <li key={step} data-phase={i < 4 ? 1 : 2} title={step}>
+              <span className="num">{i + 1}</span>
+              <span>{step}</span>
+            </li>
+          ))}
+          <li data-phase="3" title={strings.approach.phase3}>
+            <span className="cover-steps-slash" aria-hidden="true">
+              /
+            </span>
+            <span>{strings.app.name}</span>
+          </li>
+        </ol>
+        <div className="cover-steps-legend" aria-hidden="true">
+          <span data-phase="1">{strings.approach.phase1}</span>
+          <span data-phase="2">{strings.approach.phase2}</span>
+          <span data-phase="3">{strings.approach.phase3}</span>
+        </div>
       </div>
       <div className="cover-strata-note" aria-hidden="true">
         <span className="strata-note-line" />

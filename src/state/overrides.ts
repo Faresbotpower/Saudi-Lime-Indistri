@@ -58,5 +58,5 @@ export function applyOverrides(data: PlanData, overrides: Overrides): PlanData {
   if (paths.length === 0) return data
   const assumptions = JSON.parse(JSON.stringify(data.assumptions)) as PlanData['assumptions']
   for (const p of paths) writePath(assumptions, p, overrides[p])
-  return { assumptions, initiatives: data.initiatives }
+  return { assumptions, initiatives: data.initiatives, objectives: data.objectives }
 }

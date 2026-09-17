@@ -32,9 +32,9 @@ it('opens the compact lever drawer, edits a lever and returns keyboard focus on 
 it('reveals mobile controls for walkthrough rail focus and closes them for chart focus', () => {
   render(<App />)
   act(() => useLevers.getState().startWalkthrough())
-  act(() => useLevers.getState().setWalkthroughStep(1))
+  act(() => useLevers.getState().setWalkthroughStep(0))
   expect(document.getElementById('lever-drawer')).not.toHaveAttribute('inert')
-  act(() => useLevers.getState().setWalkthroughStep(3))
+  act(() => useLevers.getState().setWalkthroughStep(2))
   expect(document.getElementById('lever-drawer')).toHaveAttribute('inert')
   act(() => useLevers.getState().stopWalkthrough())
 })
@@ -42,7 +42,7 @@ it('reveals mobile controls for walkthrough rail focus and closes them for chart
 it('keeps walkthrough Stop reachable in the compact drawer keyboard loop', () => {
   render(<App />)
   act(() => useLevers.getState().startWalkthrough())
-  act(() => useLevers.getState().setWalkthroughStep(1))
+  act(() => useLevers.getState().setWalkthroughStep(0))
   const close = screen.getByRole('button', { name: 'Close levers' })
   close.focus()
   fireEvent.keyDown(window, { key: 'Tab', shiftKey: true })
@@ -58,7 +58,7 @@ it('replays the spotlight focus when resizing into compact mode during a rail ch
   })
   const { rerender } = render(<App />)
   act(() => useLevers.getState().startWalkthrough())
-  act(() => useLevers.getState().setWalkthroughStep(1))
+  act(() => useLevers.getState().setWalkthroughStep(0))
   compact = true
   rerender(<App />)
   expect(screen.getByRole('button', { name: 'Hide levers' })).toHaveAttribute(
@@ -81,9 +81,9 @@ it('keeps desktop controls on demand and opens them for walkthrough steps', () =
   fireEvent.keyDown(window, { key: 'Escape' })
   expect(document.getElementById('lever-drawer')).toHaveAttribute('inert')
   act(() => useLevers.getState().startWalkthrough())
-  act(() => useLevers.getState().setWalkthroughStep(1))
+  act(() => useLevers.getState().setWalkthroughStep(0))
   expect(document.getElementById('lever-drawer')).not.toHaveAttribute('inert')
-  act(() => useLevers.getState().setWalkthroughStep(3))
+  act(() => useLevers.getState().setWalkthroughStep(2))
   expect(document.getElementById('lever-drawer')).toHaveAttribute('inert')
   act(() => useLevers.getState().stopWalkthrough())
 })

@@ -49,7 +49,9 @@ describe('cost per ton', () => {
   it('reports export logistics cost per ton for the current L5 level', () => {
     expect(computeCost(withL({ L5: 0 }), assumptions).exportLogisticsPerTon).toBe(0)
     expect(computeCost(withL({ L5: 1 }), assumptions).exportLogisticsPerTon).toBe(65)
-    expect(computeCost(withL({ L5: 2 }), assumptions).exportLogisticsPerTon).toBe(140)
+    expect(computeCost(withL({ L5: 2 }), assumptions).exportLogisticsPerTon).toBe(
+      assumptions.export.logisticsCostPerTon.extended,
+    )
   })
 
   it('traces lime cost to L2, L6 and the energy share assumption', () => {

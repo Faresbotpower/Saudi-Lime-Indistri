@@ -25,7 +25,7 @@ type Edge = { x1: number; y1: number; x2: number; y2: number; band: Band }
 type Lit = { hover: Hover | null; path: LitPath; edges: Edge[] }
 const DARK: Lit = {
   hover: null,
-  path: { levers: [], assumptions: [], initiatives: [], lines: [] },
+  path: { levers: [], assumptions: [], initiatives: [], lines: [], shifts: [], objectives: [] },
   edges: [],
 }
 
@@ -96,13 +96,21 @@ export function StrataReveal({ plan }: { plan: PlanResult }) {
 
   // The rail's hover reaches the reveal through the store; a chip hover wins while it lasts.
   useEffect(() => {
-    const apply = (rail: LeverId | null) =>
-      light(chipHover.current ?? (rail ? { kind: 'lever', id: rail } : null))
+    const apply = (rail: LeverId | null, shift: string | null = null) =>
+      light(
+        chipHover.current ??
+          (shift ? { kind: 'shift', id: shift } : rail ? { kind: 'lever', id: rail } : null),
+      )
     const unsub = useLevers.subscribe((s, prev) => {
-      if (s.hoveredLever !== prev.hoveredLever) apply(s.hoveredLever)
+      if (s.hoveredLever !== prev.hoveredLever || s.hoveredShift !== prev.hoveredShift)
+        apply(s.hoveredLever, s.hoveredShift)
     })
-    const t = window.setTimeout(() => apply(useLevers.getState().hoveredLever), 0)
-    const onResize = () => apply(useLevers.getState().hoveredLever)
+    const t = window.setTimeout(
+      () => apply(useLevers.getState().hoveredLever, useLevers.getState().hoveredShift),
+      0,
+    )
+    const onResize = () =>
+      apply(useLevers.getState().hoveredLever, useLevers.getState().hoveredShift)
     window.addEventListener('resize', onResize)
     return () => {
       unsub()
@@ -123,8 +131,8 @@ export function StrataReveal({ plan }: { plan: PlanResult }) {
   }
   const leaveChip = () => {
     chipHover.current = null
-    const rail = useLevers.getState().hoveredLever
-    light(rail ? { kind: 'lever', id: rail } : null)
+    const { hoveredLever: rail, hoveredShift: shift } = useLevers.getState()
+    light(shift ? { kind: 'shift', id: shift } : rail ? { kind: 'lever', id: rail } : null)
   }
 
   const reduced = prefersReducedMotion()

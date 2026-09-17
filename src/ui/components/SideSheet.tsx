@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { strings } from '../../strings'
 import { Slash } from './Slash'
 
@@ -21,7 +22,9 @@ export function SideSheet({ open, title, subtitle, onClose, children }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
-  return (
+  // Portal to the body: the view panel animates with a transform, which would otherwise
+  // become the containing block of a fixed sheet and stretch it to the page height.
+  return createPortal(
     <AnimatePresence>
       {open && (
         <>
@@ -64,6 +67,7 @@ export function SideSheet({ open, title, subtitle, onClose, children }: Props) {
           </motion.aside>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   )
 }

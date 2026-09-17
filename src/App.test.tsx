@@ -12,8 +12,9 @@ describe('shell', () => {
   it('renders the seven tabs, six levers and the permanent banner', () => {
     render(<App />)
     expect(screen.getAllByRole('tab')).toHaveLength(7)
+    const rail = within(document.getElementById('lever-drawer')!)
     for (const id of ['L1', 'L2', 'L3', 'L4', 'L5', 'L6'])
-      expect(screen.getByText(id)).toBeInTheDocument()
+      expect(rail.getByText(id)).toBeInTheDocument()
     expect(screen.getByText(strings.app.illustrative)).toBeInTheDocument()
     expect(screen.getByAltText('Sia')).toBeInTheDocument()
   })

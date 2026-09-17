@@ -3,11 +3,13 @@ import {
   CartesianGrid,
   Line,
   LineChart,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
+import { planData } from '../../../data'
 import type { PlanResult } from '../../../engine'
 import { strings } from '../../../strings'
 import { sarm } from '../../format'
@@ -16,15 +18,36 @@ import { ChartTooltip } from './ChartTooltip'
 
 export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase: boolean }) {
   const L = strings.financials.legend
-  const data = plan.years.map((year, i) => ({
-    year,
-    revenue: plan.financials.revenue[i],
-    ebitda: plan.financials.ebitda[i],
-    baseRevenue: plan.baseCase.revenue[i],
-    baseEbitda: plan.baseCase.ebitda[i],
-  }))
+  const history = planData.assumptions.history
+  const past = history
+    ? history.years
+        .map((year, i) => ({
+          year,
+          historyRevenue: history.revenue[i],
+          historyEbitda: history.ebitda[i],
+        }))
+        .filter((h) => h.year < plan.years[0])
+    : []
+  const data = [
+    ...past,
+    ...plan.years.map((year, i) => ({
+      year,
+      revenue: plan.financials.revenue[i],
+      ebitda: plan.financials.ebitda[i],
+      baseRevenue: plan.baseCase.revenue[i],
+      baseEbitda: plan.baseCase.ebitda[i],
+      // The history lines end on the base year so they meet the plan.
+      ...(i === 0 && history
+        ? { historyRevenue: plan.financials.revenue[0], historyEbitda: plan.financials.ebitda[0] }
+        : {}),
+    })),
+  ]
   return (
-    <div className="analytics-chart h-[320px] w-full" data-testid="chart-revenue-ebitda">
+    <div
+      className="analytics-chart h-[320px] w-full"
+      data-testid="chart-revenue-ebitda"
+      data-history-years={past.length}
+    >
       <ResponsiveContainer
         width="100%"
         height="100%"
@@ -40,6 +63,41 @@ export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase:
             domain={[0, 'auto']}
           />
           <Tooltip content={<ChartTooltip />} cursor={{ stroke: chart.line }} />
+          {past.length > 0 && (
+            <ReferenceLine
+              x={plan.years[0]}
+              stroke={chart.muted}
+              strokeDasharray="2 4"
+              label={{
+                value: strings.financials.baseline,
+                position: 'insideTopLeft',
+                fill: chart.muted,
+                fontSize: 11,
+              }}
+            />
+          )}
+          {past.length > 0 && (
+            <Line
+              dataKey="historyRevenue"
+              name={L.historyRevenue}
+              stroke={chart.muted}
+              strokeWidth={2}
+              strokeOpacity={0.6}
+              dot={{ r: 2, fill: chart.muted, strokeWidth: 0 }}
+              {...chartAnimation(250)}
+            />
+          )}
+          {past.length > 0 && (
+            <Line
+              dataKey="historyEbitda"
+              name={L.historyEbitda}
+              stroke={chart.muted}
+              strokeWidth={2}
+              strokeOpacity={0.6}
+              dot={{ r: 2, fill: chart.muted, strokeWidth: 0 }}
+              {...chartAnimation(250)}
+            />
+          )}
           {!isBase && (
             <Line
               dataKey="baseRevenue"

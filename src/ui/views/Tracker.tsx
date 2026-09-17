@@ -1,4 +1,7 @@
+import { useLevers } from '../../state/levers'
 import { ViewFrame } from '../components/ViewFrame'
+import { ScorecardTrackerRows } from '../components/ScorecardTrackerRows'
+import { QuarterlyReview } from '../components/QuarterlyReview'
 import { Card } from '../components/Card'
 import { ChartLegend } from '../components/ChartLegend'
 import { TrackerTable } from '../components/TrackerTable'
@@ -14,8 +17,23 @@ export function Tracker() {
   const tracked = useTrackedPlan()
   const T = strings.tracker
   const year = planData.assumptions.tracker.editableYear
+  const mode = useLevers((s) => s.trackerMode)
+  const setMode = useLevers((s) => s.setTrackerMode)
   return (
     <ViewFrame id="tracker">
+      <div className="tracker-modes mb-4" role="group" aria-label={T.modes.table}>
+        {(['table', 'quarterly'] as const).map((m) => (
+          <button
+            key={m}
+            type="button"
+            aria-pressed={mode === m}
+            onClick={() => setMode(m)}
+            className={`tracker-mode ${mode === m ? 'is-active' : ''}`}
+          >
+            {T.modes[m]}
+          </button>
+        ))}
+      </div>
       <p className="tracker-note mb-4 text-[14px] text-navy">{T.lead(year)}</p>
       <div className="tracker-comparison grid grid-cols-5 gap-6">
         <div className="col-span-3" data-tour="tracker">
@@ -25,6 +43,13 @@ export function Tracker() {
           <TriggersFired plan={tracked} />
         </div>
       </div>
+      {mode === 'quarterly' ? (
+        <div className="mt-6">
+          <QuarterlyReview />
+        </div>
+      ) : (
+        <ScorecardTrackerRows />
+      )}
       <Card title={T.chart} lead={T.chartLead} className="tracker-outlook mt-6">
         <TrackedChart plan={plan} tracked={tracked} year={year} />
         <div className="mt-3">

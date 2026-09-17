@@ -53,3 +53,36 @@ describe('Tracker view', () => {
     )
   })
 })
+
+describe('Tracker scorecard rows and quarterly review', () => {
+  beforeEach(() => useLevers.getState().reset())
+
+  it('lists every scorecard KPI against its 2027 target and types the lead indicators as actuals', () => {
+    render(<Tracker />)
+    const kpis = planData.objectives.scorecard.kpis
+    expect(screen.getAllByTestId('kpi-row')).toHaveLength(kpis.length)
+    fireEvent.change(screen.getByLabelText('Actual K16'), { target: { value: '140' } })
+    expect(useLevers.getState().actuals).toEqual({ L2: 140 })
+    fireEvent.change(screen.getByLabelText('Actual K7'), { target: { value: '90' } })
+    expect(useLevers.getState().actuals.L1multiplier).toBeCloseTo(0.9, 6)
+    expect(screen.queryByLabelText('Actual K1')).toBeNull()
+  })
+
+  it('runs the quarterly review: KPIs due, triggers evaluated and decisions due for a quarter', () => {
+    render(<Tracker />)
+    fireEvent.change(screen.getByLabelText('Actual L2'), { target: { value: '140' } })
+    fireEvent.click(screen.getByRole('button', { name: strings.tracker.modes.quarterly }))
+    fireEvent.click(screen.getByRole('radio', { name: 'Q2 2027' }))
+    const due = screen.getByTestId('kpis-due')
+    const quarterly = planData.objectives.scorecard.kpis.filter((k) => k.cadence === 'quarterly')
+    expect(within(due).getAllByTestId('kpi-due')).toHaveLength(quarterly.length)
+    const triggers = screen.getByTestId('triggers-evaluated')
+    expect(within(triggers).getByText('Precipitated calcium carbonate plant')).toBeInTheDocument()
+    const decisions = screen.getByTestId('decisions-due')
+    expect(within(decisions).getByText(strings.tracker.decisions.out)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('radio', { name: 'Q4 2027' }))
+    expect(within(screen.getByTestId('kpis-due')).getAllByTestId('kpi-due')).toHaveLength(
+      planData.objectives.scorecard.kpis.length,
+    )
+  })
+})

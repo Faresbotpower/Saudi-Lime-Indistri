@@ -21,106 +21,80 @@ export type Chapter = {
 
 const T = strings.walkthrough
 const tour = (id: string) => `[data-tour="${id}"]`
-const chapter = (n: number, seconds: number, actions: Action[], focus?: string): Chapter => ({
+/** Reading pace: about eighteen characters a second, never under twelve seconds. */
+const pace = (n: number) => Math.max(12, Math.round((T.captions[n - 1].length / 18) * 10) / 10)
+const chapter = (n: number, actions: Action[], focus?: string): Chapter => ({
   title: T.titles[n - 1],
   caption: T.captions[n - 1],
-  seconds,
+  seconds: pace(n),
   focus,
   actions,
 })
 
-/** The explainer: what STRATA is and how each part works. Each chapter runs for a reading pace in seconds. */
+/** The walkthrough follows the approach: facts, shifts, objectives, scorecard, initiatives, projects, plans, model, then make it live. */
 export const chapters: Chapter[] = [
-  chapter(1, 23.3, [
-    {
-      at: 0,
-      run: (api) => {
-        api.reset()
-        api.clearActuals()
-        api.closeInitiative()
-        api.closeExplain()
-        if (api.explain) api.toggleExplain()
-        api.setInputsOpen('L2', false)
-        api.setView('financials')
-      },
-    },
-  ]),
   chapter(
-    2,
-    24.1,
+    1,
     [
-      { at: 7, run: (api) => api.applyPreset('growth') },
-      { at: 11.5, run: (api) => api.applyPreset('base') },
-      { at: 16, run: (_api, animate) => animate('L2', 100, 120, 5, 800) },
-      { at: 21, run: (api) => api.setLever('L2', 100) },
+      {
+        at: 0,
+        run: (api) => {
+          api.reset()
+          api.clearActuals()
+          api.closeInitiative()
+          api.closeExplain()
+          if (api.explain) api.toggleExplain()
+          api.setBaselineOpen(false)
+          api.setOpenShift(null)
+          api.setTrackerMode('table')
+          api.setView('direction')
+        },
+      },
     ],
     tour('rail'),
+  ),
+  chapter(
+    2,
+    [
+      { at: 0, run: (api) => api.setView('direction') },
+      { at: 4, run: (api) => api.setOpenShift('S1') },
+      { at: 14, run: (api) => api.setHoveredShift('S5') },
+      { at: 15, run: (_a, _b, focus) => focus(tour('strata')) },
+      {
+        at: 24,
+        run: (api) => {
+          api.setHoveredShift(null)
+          api.setOpenShift(null)
+        },
+      },
+    ],
+    tour('cascade'),
   ),
   chapter(
     3,
-    32,
     [
-      { at: 1, run: (api) => api.setInputsOpen('L2', true) },
-      { at: 2, run: (_a, _b, focus) => focus('[data-testid="inputs-L2"]') },
-      {
-        at: 10,
-        run: (api) => {
-          // Type natural gas at 9 SAR per MMBtu: the index becomes 138 and every view recomputes.
-          api.setOverride('energy.fuel.gasSarPerMmbtu', 9)
-          api.setLever('L2', 138)
-        },
-      },
-      { at: 14, run: (_a, _b, focus) => focus(tour('kpis')) },
-      { at: 20, run: (_a, _b, focus) => focus('[data-testid="inputs-L2"]') },
-      {
-        at: 27,
-        run: (api) => {
-          api.resetOverrides()
-          api.setLever('L2', 100)
-          api.setInputsOpen('L2', false)
-        },
-      },
+      { at: 0, run: (api) => api.setView('scorecard') },
+      { at: 8, run: (_api, animate) => animate('L2', 100, 140, 5, 1200) },
+      { at: 18, run: (_a, _b, focus) => focus(tour('okrs')) },
+      { at: 26, run: (api) => api.setLever('L2', 100) },
     ],
-    tour('rail'),
+    tour('scorecard'),
   ),
   chapter(
     4,
-    28.7,
-    [
-      { at: 12, run: (_a, _b, focus) => focus(tour('tabs')) },
-      { at: 24, run: (_a, _b, focus) => focus(null) },
-    ],
-    tour('main-chart'),
-  ),
-  chapter(
-    5,
-    23.1,
-    [
-      { at: 0, run: (api) => api.setView('financials') },
-      { at: 8, run: (_a, _b, focus) => focus(tour('main-chart')) },
-      { at: 12, run: (_api, animate) => animate('L2', 100, 125, 5, 900) },
-      { at: 14, run: (_a, _b, focus) => focus(tour('kpis')) },
-      { at: 21.5, run: (api) => api.setLever('L2', 100) },
-    ],
-    tour('kpis'),
-  ),
-  chapter(
-    6,
-    30,
     [
       { at: 0, run: (api) => api.setView('portfolio') },
       // Energy to 140: the PCC plant fails its rule (energy at or below 130) and slides from Deferred to Out.
-      { at: 8, run: (_api, animate) => animate('L2', 100, 140, 5, 1600) },
-      { at: 15, run: (_a, _b, focus) => focus(tour('capital')) },
+      { at: 7, run: (_api, animate) => animate('L2', 100, 140, 5, 1600) },
       {
-        at: 19,
+        at: 15,
         run: (api, _b, focus) => {
           focus(null)
           api.openInitiative('pcc_plant')
         },
       },
       {
-        at: 28,
+        at: 27,
         run: (api) => {
           api.closeInitiative()
           api.setLever('L2', 100)
@@ -130,94 +104,88 @@ export const chapters: Chapter[] = [
     tour('columns'),
   ),
   chapter(
-    7,
-    23.3,
+    5,
     [
-      { at: 0, run: (api) => api.setView('direction') },
-      { at: 5, run: (api) => api.setHoveredLever('L3') },
-      { at: 14, run: (api) => api.setHoveredLever(null) },
-      { at: 14.5, run: (_a, _b, focus) => focus(tour('matrix')) },
-      { at: 19.5, run: (_a, _b, focus) => focus(tour('class-table')) },
+      { at: 0, run: (api) => api.setView('plans') },
+      { at: 6, run: (_a, _b, focus) => focus('[data-testid="plan-operations"]') },
+      { at: 10, run: (_api, animate) => animate('L2', 100, 140, 5, 1200) },
+      { at: 20, run: (_a, _b, focus) => focus('[data-testid="plan-hr"]') },
+      { at: 27, run: (api) => api.setLever('L2', 100) },
     ],
-    tour('strata'),
+    tour('plans'),
   ),
+  chapter(
+    6,
+    [
+      { at: 0, run: (api) => api.setView('financials') },
+      { at: 5, run: (api) => api.setBaselineOpen(true) },
+      { at: 12, run: (api) => api.setBaselineOpen(false) },
+      { at: 13, run: (_a, _b, focus) => focus(tour('main-chart')) },
+      { at: 14, run: (_api, animate) => animate('L2', 100, 140, 5, 1200) },
+      { at: 18, run: (_a, _b, focus) => focus(tour('kpis')) },
+      { at: 25, run: (api) => api.setLever('L2', 100) },
+    ],
+    tour('baseline'),
+  ),
+  chapter(7, [{ at: 0, run: (api) => api.setView('roadmap') }], tour('gantt')),
   chapter(
     8,
-    18.7,
-    [
-      { at: 0, run: (api) => api.setView('operations') },
-      { at: 2.5, run: (_a, _b, focus) => focus(tour('sites')) },
-      { at: 12, run: (_a, _b, focus) => focus(tour('people')) },
-    ],
-    tour('scrubber'),
-  ),
-  chapter(9, 18.2, [{ at: 0, run: (api) => api.setView('roadmap') }], tour('gantt')),
-  chapter(
-    10,
-    14,
     [
       { at: 0, run: (api) => api.setView('tracker') },
       { at: 4, run: (api) => api.setActual('L2', 140) },
-      { at: 7.5, run: (_a, _b, focus) => focus(tour('triggers')) },
+      { at: 7, run: (_a, _b, focus) => focus(tour('triggers')) },
+      { at: 13, run: (_a, _b, focus) => focus(tour('scorecard-rows')) },
+      {
+        at: 19,
+        run: (api, _b, focus) => {
+          api.setTrackerMode('quarterly')
+          focus(tour('quarterly'))
+        },
+      },
+      {
+        at: 28,
+        run: (api) => {
+          api.clearActuals()
+          api.setTrackerMode('table')
+        },
+      },
     ],
     tour('tracker'),
   ),
   chapter(
-    11,
-    28,
+    9,
     [
+      { at: 0, run: (api) => api.setView('portfolio') },
       {
-        at: 0,
-        run: (api) => {
-          api.clearActuals()
-          api.setView('functions')
-        },
-      },
-      // Energy to 140 again: every function card shows where the shock lands against Base.
-      { at: 5, run: (_api, animate) => animate('L2', 100, 140, 5, 1200) },
-      { at: 9, run: (_a, _b, focus) => focus('[data-testid="function-finance"]') },
-      { at: 15, run: (_a, _b, focus) => focus('[data-testid="function-supply"]') },
-      { at: 20, run: (_a, _b, focus) => focus('[data-testid="function-executive"]') },
-      { at: 26, run: (api) => api.setLever('L2', 100) },
-    ],
-    tour('functions'),
-  ),
-  chapter(
-    12,
-    15.6,
-    [
-      { at: 0, run: (api) => api.setView('financials') },
-      {
-        at: 3.5,
+        at: 2,
         run: (api) => {
           if (!api.explain) api.toggleExplain()
         },
       },
-      { at: 6, run: (_a, _b, focus) => focus(tour('kpis')) },
       {
-        at: 8.5,
+        at: 5,
         run: (api, _b, focus) => {
           focus(null)
-          api.openExplain('financials.ebitdaMargin')
+          api.openExplain('initiative.pcc_plant')
         },
       },
       {
-        at: 14.5,
-        run: (api) => {
+        at: 16,
+        run: (api, _b, focus) => {
           api.closeExplain()
           if (api.explain) api.toggleExplain()
+          focus(tour('export'))
         },
       },
     ],
     tour('explain'),
   ),
-  chapter(13, 18, [], tour('export')),
-  chapter(14, 14, [
+  chapter(10, [
     {
       at: 0,
       run: (api) => {
         api.reset()
-        api.setView('financials')
+        api.setView('direction')
       },
     },
   ]),

@@ -1,5 +1,6 @@
 import assumptionsJson from '../data/assumptions.json'
 import initiativesJson from '../data/initiatives.json'
+import objectivesJson from '../data/objectives.json'
 
 export type LeverOptionValue = string
 export type L1Value = { option: 'delayed' | 'onPlan' | 'accelerated'; multiplier: number }
@@ -37,15 +38,17 @@ export const assumptions = assumptionsJson as unknown as typeof assumptionsJson 
   scenarios: Record<ScenarioId, LeverValues>
 }
 export const initiatives = initiativesJson
+export const objectives = objectivesJson as unknown as ObjectivesData
 
 export const leverDefs: LeverDef[] = assumptions.levers
 export const scenarioPresets: Record<ScenarioId, LeverValues> = assumptions.scenarios
 export const scenarioOrder: ScenarioId[] = ['base', 'growth', 'upside', 'downside']
 
-import type { PlanData } from './engine/types'
+import type { ObjectivesData, PlanData } from './engine/types'
 
-/** The two data files as the engine expects them. The only place numbers live. */
+/** The three data files as the engine expects them. The only place numbers live. */
 export const planData: PlanData = {
   assumptions: assumptionsJson as unknown as PlanData['assumptions'],
   initiatives: initiativesJson as unknown as PlanData['initiatives'],
+  objectives: objectivesJson as unknown as ObjectivesData,
 }

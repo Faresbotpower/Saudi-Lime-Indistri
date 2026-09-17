@@ -7,6 +7,8 @@ import { RevenueEbitdaChart } from '../components/charts/RevenueEbitdaChart'
 import { CapexFcfChart } from '../components/charts/CapexFcfChart'
 import { chart } from '../components/charts/theme'
 import { usePlan } from '../../state/plan'
+import { useLevers } from '../../state/levers'
+import { BaselineSheet } from '../components/BaselineSheet'
 import { strings } from '../../strings'
 import { pct1, sarm, signed, signedPts } from '../format'
 
@@ -19,9 +21,28 @@ export function Financials() {
   const last = plan.years.length - 1
   const S = strings.financials
   const isBase = plan.scenarioName === 'base'
+  const openBaseline = useLevers((s) => s.setBaselineOpen)
 
   return (
     <ViewFrame id="financials">
+      <div className="financial-baseline" data-tour="baseline">
+        <button
+          type="button"
+          onClick={() => openBaseline(true)}
+          aria-label={S.baseline}
+          className="baseline-chip"
+          title={S.baselineLead}
+        >
+          <span className="baseline-chip-mark" aria-hidden="true">
+            /
+          </span>
+          {S.baseline}
+          <span className="num">
+            {sarm(plan.financials.revenue[0])} {S.units.sarm}
+          </span>
+        </button>
+        <span className="text-[13px] text-muted">{S.baselineLead}</span>
+      </div>
       <div data-tour="kpis" className="financial-kpis grid grid-cols-4 gap-6">
         <KpiTile
           label={S.kpi.revenue2031}
@@ -78,6 +99,7 @@ export function Financials() {
         <div className="mt-3">
           <ChartLegend
             items={[
+              { label: S.legend.history, color: chart.muted },
               { label: S.legend.revenue, color: chart.navy },
               { label: S.legend.ebitda, color: chart.teal },
               ...(isBase
@@ -110,6 +132,7 @@ export function Financials() {
       </div>
 
       <p className="mt-6 text-[13px] text-muted">{strings.common.illustrativeFootnote}</p>
+      <BaselineSheet />
     </ViewFrame>
   )
 }

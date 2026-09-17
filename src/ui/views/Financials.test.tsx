@@ -73,3 +73,29 @@ describe('Financial plan view', () => {
     expect(screen.getByText(strings.common.illustrativeFootnote)).toBeInTheDocument()
   })
 })
+
+describe('Financial plan baseline and history', () => {
+  beforeEach(() => useLevers.getState().reset())
+
+  it('opens the 2026 actuals card from the Baseline chip with the five-year history', async () => {
+    render(<Financials />)
+    fireEvent.click(screen.getByRole('button', { name: strings.financials.baseline }))
+    const sheet = screen.getByRole('dialog')
+    const a = planData.assumptions
+    expect(within(sheet).getByTestId('baseline-revenue')).toHaveTextContent(
+      fmt0(a.baseCase.revenue),
+    )
+    expect(within(sheet).getByTestId('baseline-ebitda')).toHaveTextContent(fmt0(a.baseCase.ebitda))
+    for (const y of a.history!.years) expect(within(sheet).getByText(String(y))).toBeInTheDocument()
+    expect(within(sheet).getByText(strings.financials.deliverable)).toBeInTheDocument()
+  })
+
+  it('draws the history years before the divider', () => {
+    render(<Financials />)
+    const chart = screen.getByTestId('chart-revenue-ebitda')
+    expect(chart).toHaveAttribute(
+      'data-history-years',
+      String(planData.assumptions.history!.years.length - 1),
+    )
+  })
+})

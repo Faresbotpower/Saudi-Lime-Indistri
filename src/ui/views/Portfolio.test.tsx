@@ -82,10 +82,44 @@ describe('Growth portfolio view', () => {
     const init = planData.initiatives.initiatives.find((i) => i.id === 'pcc_plant')!
     expect(within(sheet).getByText(init.objective)).toBeInTheDocument()
     expect(within(sheet).getByText(init.rationale)).toBeInTheDocument()
-    for (const k of init.kpis) expect(within(sheet).getByText(k)).toBeInTheDocument()
+    const kpiName = (k: string) =>
+      planData.objectives.scorecard.kpis.find((x) => x.id === k)?.name ?? k
+    for (const k of init.kpis) expect(within(sheet).getByText(kpiName(k))).toBeInTheDocument()
     for (const r of init.risks) expect(within(sheet).getByText(r)).toBeInTheDocument()
     expect(within(sheet).getByText(strings.portfolio.sheet.milestones)).toBeInTheDocument()
     fireEvent.click(within(sheet).getByRole('button', { name: strings.portfolio.sheet.close }))
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+  })
+})
+
+describe('Growth portfolio cascade', () => {
+  beforeEach(() => useLevers.getState().reset())
+
+  it('shows the objectives served and the project count on the card', () => {
+    render(<Portfolio />)
+    const card = screen.getByTestId('card-pcc_plant')
+    const init = planData.initiatives.initiatives.find((i) => i.id === 'pcc_plant')!
+    for (const o of init.objectives) expect(within(card).getByText(o)).toBeInTheDocument()
+    expect(
+      within(card).getByText(strings.portfolio.card.projects(init.projects.length)),
+    ).toBeInTheDocument()
+  })
+
+  it('opens the sheet with the cascade breadcrumb, the projects and the requirements', () => {
+    render(<Portfolio />)
+    fireEvent.click(within(screen.getByTestId('card-pcc_plant')).getByRole('button'))
+    const sheet = screen.getByRole('dialog')
+    const init = planData.initiatives.initiatives.find((i) => i.id === 'pcc_plant')!
+    const objective = planData.objectives.objectives.find((o) => o.id === init.objectives[0])!
+    const shift = planData.objectives.shifts.find((s) => s.id === objective.shift)!
+    const crumb = within(sheet).getByTestId('cascade-breadcrumb')
+    expect(crumb).toHaveTextContent(shift.name)
+    expect(crumb).toHaveTextContent(objective.name)
+    expect(within(sheet).getAllByTestId('sheet-project')).toHaveLength(init.projects.length)
+    for (const p of init.projects) expect(within(sheet).getByText(p.name)).toBeInTheDocument()
+    expect(within(sheet).getByText(init.requirements.people)).toBeInTheDocument()
+    for (const d of init.requirements.decisions)
+      expect(within(sheet).getByText(d)).toBeInTheDocument()
+    expect(within(sheet).getByText('Revenue from new products and markets')).toBeInTheDocument()
   })
 })
