@@ -26,7 +26,8 @@ const pace = (n: number) => Math.max(12, Math.round((T.captions[n - 1].length / 
 const chapter = (n: number, actions: Action[], focus?: string): Chapter => ({
   title: T.titles[n - 1],
   caption: T.captions[n - 1],
-  seconds: pace(n),
+  // A chapter outlasts its last action by three seconds, so every reset fires before the next chapter.
+  seconds: Math.max(pace(n), ...actions.map((a) => a.at + 3)),
   focus,
   actions,
 })
@@ -51,7 +52,7 @@ export const chapters: Chapter[] = [
         },
       },
     ],
-    tour('rail'),
+    tour('tabs'),
   ),
   chapter(
     2,

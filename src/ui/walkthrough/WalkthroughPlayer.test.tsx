@@ -21,6 +21,27 @@ describe('walkthrough player', () => {
     }
   })
 
+  it('never ends a chapter before its last action has fired', () => {
+    for (const c of chapters)
+      for (const a of c.actions) expect(c.seconds, c.title).toBeGreaterThan(a.at + 1)
+  })
+
+  it('leaves the levers, sheets and tracker as it found them after every chapter', () => {
+    render(<WalkthroughPlayer />)
+    act(() => useLevers.getState().startWalkthrough())
+    for (const c of chapters) act(() => vi.advanceTimersByTime(c.seconds * 1000 + 20))
+    const s = useLevers.getState()
+    expect(s.walkthrough.active).toBe(false)
+    expect(s.levers.L2).toBe(100)
+    expect(s.scenario).toBe('base')
+    expect(s.actuals).toEqual({})
+    expect(s.openInitiativeId).toBeNull()
+    expect(s.baselineOpen).toBe(false)
+    expect(s.explainKey).toBeNull()
+    expect(s.explain).toBe(false)
+    expect(s.trackerMode).toBe('table')
+  })
+
   it('renders nothing until started, then shows the chapter bar with the caption', () => {
     render(<WalkthroughPlayer />)
     expect(screen.queryByTestId('walkthrough-bar')).toBeNull()
