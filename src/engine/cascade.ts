@@ -78,9 +78,10 @@ export type CascadeSource = {
   financials: Record<string, number[]>
   volumes: Record<string, number[]>
   people: Record<string, number[]>
-  supplyChain: Record<string, number>
+  supplyChain: Record<string, number | number[]>
   capital: Record<string, number>
   diversificationShare2031: number
+  emissions: { intensity: number[]; totalKt: number[] }
 }
 
 /** Resolve a computedFrom path to a series aligned with the years. Scalars fill every year. */

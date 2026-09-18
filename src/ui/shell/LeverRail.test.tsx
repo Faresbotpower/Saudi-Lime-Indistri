@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, waitFor, within } from '@testing-librar
 import { leverDefs } from '../../data'
 import { useLevers } from '../../state/levers'
 import { LeverRail } from './LeverRail'
+import { strings } from '../../strings'
 
 describe('scenario control rail', () => {
   beforeEach(() => {
@@ -17,7 +18,8 @@ describe('scenario control rail', () => {
       expect(within(rail).getByRole('heading', { name: def.name })).toBeInTheDocument()
       expect(within(rail).queryByText(def.description)).not.toBeInTheDocument()
     }
-    expect(within(rail).getAllByRole('radiogroup')).toHaveLength(4)
+    // L1, L4, L5, L6 plus the named gas settings on L2 and the Derived switch on L3.
+    expect(within(rail).getAllByRole('radiogroup')).toHaveLength(6)
     expect(within(rail).getAllByRole('slider')).toHaveLength(3)
     expect(within(rail).getByLabelText(/Exact value, energy index/)).toBeVisible()
     const energy = within(rail).getByTestId('inputs-L2')
@@ -40,5 +42,18 @@ describe('scenario control rail', () => {
     expect(document.querySelector('[data-tour="rail"]')).toBeVisible()
     expect(document.querySelector('[data-tour="presets"]')).toBeVisible()
     expect(document.querySelector('[data-tour="explain"]')).toBeVisible()
+  })
+})
+
+describe('energy lever named settings', () => {
+  it('offers gas on time, gas late one year and gas at 140 as named settings on the index', () => {
+    useLevers.getState().reset()
+    render(<LeverRail />)
+    fireEvent.click(screen.getByRole('radio', { name: strings.levers.L2.options.gasAt140 }))
+    expect(useLevers.getState().levers.L2).toBe(140)
+    fireEvent.click(screen.getByRole('radio', { name: strings.levers.L2.options.lateOneYear }))
+    expect(useLevers.getState().levers.L2).toBe(120)
+    fireEvent.click(screen.getByRole('radio', { name: strings.levers.L2.options.onTime }))
+    expect(useLevers.getState().levers.L2).toBe(100)
   })
 })

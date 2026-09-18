@@ -310,6 +310,15 @@ export function Report() {
             ))}
           </tbody>
         </table>
+        <p className="text-[10px] text-navy">
+          {strings.financials.proForma.actual}: EBITDA {sarm(plan.financials.ebitda[0])} ·{' '}
+          {strings.financials.proForma.proForma}: EBITDA {sarm(plan.proForma2026.ebitda)} ·{' '}
+          {strings.financials.proForma.energy}{' '}
+          {Math.round(plan.proForma2026.energyCostPerTonLimeActual)} to{' '}
+          {Math.round(plan.proForma2026.energyCostPerTonLimeOnGas)} SAR/t.
+          {plan.envelopeDerivation &&
+            ` ${strings.financials.envelope.envelope}: SAR ${sarm(plan.envelopeDerivation.envelope)}m derived from the plan.`}
+        </p>
         {planData.assumptions.history && (
           <p className="text-[10px] text-muted">
             {strings.financials.legend.history}:{' '}
@@ -479,7 +488,8 @@ export function Report() {
       </section>
 
       <footer className="mt-4 border-t border-line pt-2 text-[10px] text-muted">
-        {strings.app.illustrativeLong} · {R.poweredBy}
+        {strings.app.illustrativeLong} · {strings.app.owners.model} {strings.app.owners.tracker}{' '}
+        {strings.app.hosting} · {R.poweredBy}
       </footer>
     </div>
   )

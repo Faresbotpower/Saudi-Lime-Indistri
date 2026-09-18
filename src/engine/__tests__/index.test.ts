@@ -13,7 +13,7 @@ describe('runPlan', () => {
     expect(r.classification.length).toBeGreaterThan(6)
     expect(r.initiatives).toHaveLength(data.initiatives.initiatives.length)
     expect(r.roadmap.layers).toHaveLength(5)
-    expect(r.capital.envelope).toBe(600)
+    expect(r.capital.envelope).toBe(data.assumptions.scenarios.base.L3)
   })
 
   it('names the scenario after a matching preset and Custom otherwise', () => {
@@ -46,14 +46,15 @@ describe('runPlan', () => {
       expect(hi.financials.ebitda[i]).toBeLessThan(b.financials.ebitda[i])
   })
 
-  it('feeds classification back into the rules, so the bricks exit is viable and funded on Base', () => {
+  it('feeds the bricks margin back into the rules: keep on gas at Base, exit when the gas allocation slips', () => {
     const r = runPlan(base(), data)
-    const bricks = r.initiatives.find((i) => i.id === 'bricks_exit')!
-    expect(['harvest', 'exit']).toContain(
-      r.classification.find((c) => c.id === 'bricks_mkt')!.category,
-    )
-    expect(bricks.status).toBe('in')
-    expect(bricks.capex).toBe(0)
+    const bricks = r.initiatives.find((i) => i.id === 'bricks_choice')!
+    expect(bricks.status).toBe('out')
+    expect(bricks.trigger).toEqual({ leverId: 'L2', threshold: 115, direction: 'above' })
+    const late = runPlan(withL({ L2: 140 }), data)
+    const choice = late.initiatives.find((i) => i.id === 'bricks_choice')!
+    expect(choice.status).toBe('in')
+    expect(choice.capex).toBe(0)
   })
 
   it('reports the diversification share of 2031 revenue from new products and markets', () => {

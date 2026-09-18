@@ -39,8 +39,9 @@ describe('price', () => {
 
   it('weights the family list price by product capacity, so lime blends quicklime and dololime', () => {
     const p = run()
-    // lime family capacity: quicklime 1140 at 420, dololime 90 at 510
-    const expected = (1140 * 420 + 90 * 510) / 1230
+    // lime family list price blends quicklime and dololime by capacity
+    const cap = (k: string) => assumptions.sites.reduce((s, x) => s + (x.capacityKt[k] ?? 0), 0)
+    const expected = (cap('lime') * 420 + cap('dololime') * 510) / (cap('lime') + cap('dololime'))
     expect(p.domesticPriceByFamily.lime[0]).toBeCloseTo(expected, 6)
     expect(p.domesticPriceByFamily.limestone[0]).toBeCloseTo(58, 6)
   })

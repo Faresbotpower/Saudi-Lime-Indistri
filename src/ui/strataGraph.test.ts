@@ -27,7 +27,7 @@ describe('strata graph', () => {
       expect.arrayContaining(['jeddah_export_terminal', 'gcc_export_sales']),
     )
     expect(g.leverInitiatives.L4).toEqual(
-      expect.arrayContaining(['pcc_plant', 'western_quarry_acq', 'steel_jv']),
+      expect.arrayContaining(['pcc_plant', 'western_quarry_acq', 'bolt_on_acquisition']),
     )
     expect(g.leverInitiatives.L2).toEqual(expect.arrayContaining(['pcc_plant', 'kiln_efficiency']))
     expect(g.leverInitiatives.L6).toEqual(expect.arrayContaining(['carbon_capture_pilot']))
@@ -50,7 +50,7 @@ describe('strata graph', () => {
       'cumulativeFcf',
     ])
     expect(g.initiativeLines.kiln_efficiency).toEqual(['ebitda', 'capex', 'fcf', 'cumulativeFcf'])
-    expect(g.initiativeLines.bricks_exit).toEqual(['revenue', 'ebitda', 'fcf', 'cumulativeFcf'])
+    expect(g.initiativeLines.bricks_choice).toEqual(['revenue', 'ebitda', 'fcf', 'cumulativeFcf'])
   })
 
   it('lights the full path from a lever, top to bottom', () => {

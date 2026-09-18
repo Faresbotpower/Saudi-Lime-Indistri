@@ -1,5 +1,5 @@
 {
-  "_note": "ILLUSTRATIVE DATA. Eighteen initiatives invented for the STRATA proof of concept. Money in SAR million. Rules are evaluated by the engine: 'strategic' failures make the initiative OUT, 'capital' or 'dependency' failures make it DEFERRED. Rule expressions use lever ids and engine outputs. Each initiative names the objectives it serves, the functional plan it feeds, two to four projects whose capex sums to the initiative capex, and what it needs to work. KPI entries that look like K1 reference the scorecard in objectives.json.",
+  "_note": "ILLUSTRATIVE DATA. Twenty initiatives invented for the STRATA proof of concept. Money in SAR million. Rules are evaluated by the engine: 'strategic' failures make the initiative OUT, 'capital' or 'dependency' failures make it DEFERRED. Rule expressions use lever ids and engine outputs. Each initiative names the objectives it serves, the functional plan it feeds, two to four projects whose capex sums to the initiative capex, and what it needs to work. KPI entries that look like K1 reference the scorecard in objectives.json. Scaled to a company of SLIC's size. No shared ownership structures: SLIC has ruled them out.",
   "layers": [
     {
       "id": "quick_wins",
@@ -31,11 +31,11 @@
       "owner": "VP Commercial",
       "objective": "Move key accounts to indexed contracts and tiered pricing",
       "rationale": "Margin leakage on legacy fixed-price contracts; 60% of lime volume is under contracts older than 3 years",
-      "capex": 4,
+      "capex": 2,
       "startYearEarliest": 2027,
       "rampYears": 1,
-      "revenueRunRate": 18,
-      "ebitdaRunRate": 15,
+      "revenueRunRate": 6,
+      "ebitdaRunRate": 5,
       "headcountDelta": 0,
       "complexity": "low",
       "inorganic": false,
@@ -58,7 +58,7 @@
         {
           "id": "pricing_reset_p1",
           "name": "Contract book review and energy clause template",
-          "capex": 1,
+          "capex": 0,
           "startYear": 2027,
           "durationQuarters": 2,
           "owner": "VP Commercial",
@@ -76,7 +76,7 @@
         {
           "id": "pricing_reset_p3",
           "name": "Tiered price list and quoting tool",
-          "capex": 1,
+          "capex": 0,
           "startYear": 2027,
           "durationQuarters": 2,
           "owner": "Commercial Excellence Lead",
@@ -85,7 +85,7 @@
       ],
       "requirements": {
         "people": "Two commercial analysts for twelve months; key account managers trained on the clause",
-        "capex": 4,
+        "capex": 2,
         "systems": "Quoting tool with the energy clause and a monthly index feed",
         "decisions": [
           "Board approval of the indexed pricing policy",
@@ -100,15 +100,15 @@
       "site": "riyadh",
       "owner": "Plant Director Riyadh",
       "objective": "Cut fuel intensity per ton of lime by 12%",
-      "rationale": "Riyadh kilns are the oldest in the fleet; energy is 48% of lime cost",
-      "capex": 45,
+      "rationale": "Riyadh kilns are the oldest SLIC runs; energy is about half of lime cost",
+      "capex": 19,
       "startYearEarliest": 2027,
       "rampYears": 2,
       "revenueRunRate": 0,
-      "ebitdaRunRate": 11,
+      "ebitdaRunRate": 4,
       "ebitdaScalesWith": "L2",
       "ebitdaScaleFactor": 0.012,
-      "headcountDelta": -8,
+      "headcountDelta": -4,
       "complexity": "medium",
       "inorganic": false,
       "newProductOrMarket": false,
@@ -130,7 +130,7 @@
         {
           "id": "kiln_efficiency_p1",
           "name": "Burner and preheater retrofit, kiln 2",
-          "capex": 22,
+          "capex": 10,
           "startYear": 2027,
           "durationQuarters": 4,
           "owner": "Plant Director Riyadh",
@@ -139,7 +139,7 @@
         {
           "id": "kiln_efficiency_p2",
           "name": "Waste heat recovery and insulation",
-          "capex": 13,
+          "capex": 5,
           "startYear": 2027,
           "durationQuarters": 3,
           "owner": "Plant Director Riyadh",
@@ -148,7 +148,7 @@
         {
           "id": "kiln_efficiency_p3",
           "name": "Kiln control upgrade",
-          "capex": 10,
+          "capex": 4,
           "startYear": 2028,
           "durationQuarters": 3,
           "owner": "Plant Engineering Manager",
@@ -157,12 +157,16 @@
       ],
       "requirements": {
         "people": "Retrofit team of eight for eighteen months; two kiln outages of six weeks each",
-        "capex": 45,
+        "capex": 19,
         "systems": "Combustion control system and energy metering per kiln",
         "decisions": [
           "Outage window agreed with the commercial team",
           "Retrofit against replacement decided for kilns 1 and 3"
         ]
+      },
+      "emissions": {
+        "gjReduction": 0.1,
+        "site": "riyadh"
       }
     },
     {
@@ -173,12 +177,12 @@
       "owner": "COO",
       "objective": "Raise kiln availability from 86% to 92% across all sites",
       "rationale": "Unplanned downtime cost SAR 22m in the base year",
-      "capex": 28,
+      "capex": 12,
       "startYearEarliest": 2027,
       "rampYears": 2,
-      "revenueRunRate": 9,
-      "ebitdaRunRate": 12,
-      "headcountDelta": 6,
+      "revenueRunRate": 3,
+      "ebitdaRunRate": 4,
+      "headcountDelta": 3,
       "complexity": "medium",
       "inorganic": false,
       "newProductOrMarket": false,
@@ -201,7 +205,7 @@
         {
           "id": "predictive_maintenance_p1",
           "name": "Plant data platform and historian",
-          "capex": 9,
+          "capex": 4,
           "startYear": 2027,
           "durationQuarters": 3,
           "owner": "COO",
@@ -210,7 +214,7 @@
         {
           "id": "predictive_maintenance_p2",
           "name": "Condition monitoring on every kiln",
-          "capex": 11,
+          "capex": 5,
           "startYear": 2027,
           "durationQuarters": 4,
           "owner": "Maintenance Manager",
@@ -219,7 +223,7 @@
         {
           "id": "predictive_maintenance_p3",
           "name": "Failure prediction models and work order integration",
-          "capex": 8,
+          "capex": 3,
           "startYear": 2028,
           "durationQuarters": 4,
           "owner": "Reliability Lead",
@@ -228,7 +232,7 @@
       ],
       "requirements": {
         "people": "Reliability lead, two data engineers, maintenance planners retrained",
-        "capex": 28,
+        "capex": 12,
         "systems": "Data platform, sensor network, maintenance system integration",
         "decisions": [
           "Data ownership between plants and head office settled",
@@ -244,12 +248,12 @@
       "owner": "CHRO",
       "objective": "Reach Nitaqat target of 50% Saudization while lowering cost per ton by 6%",
       "rationale": "Current 41% Saudization is below target band; productivity per head trails regional peers by 15%",
-      "capex": 12,
+      "capex": 5,
       "startYearEarliest": 2027,
       "rampYears": 3,
       "revenueRunRate": 0,
-      "ebitdaRunRate": 8,
-      "headcountDelta": -40,
+      "ebitdaRunRate": 3,
+      "headcountDelta": -22,
       "saudizationTarget": 0.52,
       "complexity": "medium",
       "inorganic": false,
@@ -272,7 +276,7 @@
         {
           "id": "workforce_productivity_p1",
           "name": "Technician academy",
-          "capex": 6,
+          "capex": 3,
           "startYear": 2027,
           "durationQuarters": 4,
           "owner": "CHRO",
@@ -281,7 +285,7 @@
         {
           "id": "workforce_productivity_p2",
           "name": "Shift model and role redesign",
-          "capex": 3,
+          "capex": 1,
           "startYear": 2027,
           "durationQuarters": 2,
           "owner": "HR Business Partner Operations",
@@ -290,7 +294,7 @@
         {
           "id": "workforce_productivity_p3",
           "name": "Digital work orders and time capture",
-          "capex": 3,
+          "capex": 1,
           "startYear": 2028,
           "durationQuarters": 3,
           "owner": "HR Systems Lead",
@@ -299,7 +303,7 @@
       ],
       "requirements": {
         "people": "Academy lead and four instructors; supervisors freed for coaching",
-        "capex": 12,
+        "capex": 5,
         "systems": "Learning platform and handheld work orders",
         "decisions": [
           "Nitaqat plan endorsed by the Board",
@@ -308,30 +312,30 @@
       }
     },
     {
-      "id": "fleet_logistics",
-      "name": "Fleet outsourcing and logistics optimization",
+      "id": "logistics_contracting",
+      "name": "Third-party logistics contracting and EXW terms",
       "layer": "quick_wins",
       "site": null,
       "owner": "VP Supply Chain",
-      "objective": "Cut outbound logistics cost per ton by 10%",
-      "rationale": "Owned fleet utilization is 58%; third-party rates in Central Region have fallen",
-      "capex": 3,
+      "objective": "Tender third-party freight on all lanes and move key accounts to EXW terms",
+      "rationale": "SLIC has no own trucks; freight is bought lane by lane. A pooled tender and EXW pricing take cost and risk out of delivered sales",
+      "capex": 1,
       "startYearEarliest": 2027,
       "rampYears": 1,
       "revenueRunRate": 0,
-      "ebitdaRunRate": 7,
-      "headcountDelta": -25,
+      "ebitdaRunRate": 2,
+      "headcountDelta": -4,
       "complexity": "low",
       "inorganic": false,
       "newProductOrMarket": false,
       "dependencies": [],
       "rules": [],
       "kpis": [
-        "Logistics cost per ton",
+        "Logistics cost per ton delivered",
         "On-time delivery"
       ],
       "risks": [
-        "Service level during transition"
+        "Carrier capacity in peak months"
       ],
       "objectives": [
         "O1",
@@ -340,30 +344,31 @@
       "plan": "operations",
       "projects": [
         {
-          "id": "fleet_logistics_p1",
-          "name": "Fleet outsourcing tender",
+          "id": "logistics_contracting_p1",
+          "name": "Pooled freight tender on the main lanes",
           "capex": 1,
           "startYear": 2027,
           "durationQuarters": 2,
           "owner": "VP Supply Chain",
-          "deliverable": "Contract signed with a third-party carrier"
+          "deliverable": "Framework contracts with two carriers per lane"
         },
         {
-          "id": "fleet_logistics_p2",
-          "name": "Route and load planning tool",
-          "capex": 2,
+          "id": "logistics_contracting_p2",
+          "name": "EXW terms and route planning tool",
+          "capex": 0,
           "startYear": 2027,
           "durationQuarters": 3,
           "owner": "Logistics Manager",
-          "deliverable": "Daily plans issued from the tool"
+          "deliverable": "Key accounts on EXW; daily plans issued from the tool"
         }
       ],
       "requirements": {
-        "people": "Logistics planner; drivers transferred to the carrier",
-        "capex": 3,
-        "systems": "Transport management tool with customer delivery windows",
+        "people": "Logistics planner and a contracts analyst",
+        "capex": 1,
+        "systems": "Transport management tool with carrier rates and delivery windows",
         "decisions": [
-          "Fleet sale and driver transfer approved"
+          "Freight tender awarded",
+          "EXW pricing policy approved"
         ]
       }
     },
@@ -375,15 +380,15 @@
       "owner": "COO",
       "objective": "Add 200 kt lime capacity to serve steel and water treatment growth",
       "rationale": "Central Region lime utilization exceeds 85% by 2028 in the base case",
-      "capex": 185,
+      "capex": 78,
       "startYearEarliest": 2027,
       "rampYears": 3,
       "capacityAddKt": {
-        "lime": 200
+        "lime": 100
       },
-      "revenueRunRate": 84,
-      "ebitdaRunRate": 31,
-      "headcountDelta": 45,
+      "revenueRunRate": 29,
+      "ebitdaRunRate": 11,
+      "headcountDelta": 25,
       "complexity": "high",
       "inorganic": false,
       "newProductOrMarket": false,
@@ -412,7 +417,7 @@
         {
           "id": "alkharj_kiln_p1",
           "name": "Engineering, permits and site works",
-          "capex": 25,
+          "capex": 11,
           "startYear": 2027,
           "durationQuarters": 4,
           "owner": "COO",
@@ -421,7 +426,7 @@
         {
           "id": "alkharj_kiln_p2",
           "name": "Kiln supply and erection",
-          "capex": 120,
+          "capex": 50,
           "startYear": 2028,
           "durationQuarters": 6,
           "owner": "Project Director Al Kharj",
@@ -430,7 +435,7 @@
         {
           "id": "alkharj_kiln_p3",
           "name": "Quarry face extension and crushing",
-          "capex": 25,
+          "capex": 11,
           "startYear": 2028,
           "durationQuarters": 4,
           "owner": "Plant Director Al Kharj",
@@ -439,7 +444,7 @@
         {
           "id": "alkharj_kiln_p4",
           "name": "Commissioning and ramp",
-          "capex": 15,
+          "capex": 6,
           "startYear": 2029,
           "durationQuarters": 4,
           "owner": "Plant Director Al Kharj",
@@ -448,7 +453,7 @@
       ],
       "requirements": {
         "people": "Project director and owner team of twelve; forty operators hired and trained",
-        "capex": 185,
+        "capex": 78,
         "systems": "Project controls and a kiln control system",
         "decisions": [
           "Final investment decision on the Al Kharj kiln",
@@ -464,15 +469,15 @@
       "owner": "VP Commercial",
       "objective": "Double dololime capacity to 180 kt for electric arc furnace demand",
       "rationale": "Steel producers are shifting to EAF, which uses more dololime per ton of steel",
-      "capex": 62,
+      "capex": 26,
       "startYearEarliest": 2028,
       "rampYears": 2,
       "capacityAddKt": {
-        "dololime": 90
+        "dololime": 45
       },
-      "revenueRunRate": 46,
-      "ebitdaRunRate": 17,
-      "headcountDelta": 18,
+      "revenueRunRate": 16,
+      "ebitdaRunRate": 6,
+      "headcountDelta": 10,
       "complexity": "medium",
       "inorganic": false,
       "newProductOrMarket": false,
@@ -501,7 +506,7 @@
         {
           "id": "dololime_line_p1",
           "name": "Dolomite sourcing and quality program",
-          "capex": 12,
+          "capex": 5,
           "startYear": 2028,
           "durationQuarters": 3,
           "owner": "VP Commercial",
@@ -510,7 +515,7 @@
         {
           "id": "dololime_line_p2",
           "name": "Kiln modification for dololime",
-          "capex": 38,
+          "capex": 16,
           "startYear": 2028,
           "durationQuarters": 4,
           "owner": "Plant Director Al Kharj",
@@ -519,7 +524,7 @@
         {
           "id": "dololime_line_p3",
           "name": "EAF steel qualification trials",
-          "capex": 12,
+          "capex": 5,
           "startYear": 2029,
           "durationQuarters": 3,
           "owner": "Technical Sales Manager",
@@ -528,7 +533,7 @@
       ],
       "requirements": {
         "people": "Technical sales manager; process engineer for the trials",
-        "capex": 62,
+        "capex": 26,
         "systems": "Grade tracking in the lab system",
         "decisions": [
           "Dolomite supply agreement signed"
@@ -543,12 +548,12 @@
       "owner": "VP Supply Chain",
       "objective": "Bulk export capability of 250 kt per year through Jeddah Islamic Port",
       "rationale": "Jeddah runs at 64% utilization; East Africa and South Asia lime demand grows 6 to 8% with limited local capacity",
-      "capex": 95,
+      "capex": 40,
       "startYearEarliest": 2027,
       "rampYears": 2,
-      "revenueRunRate": 72,
-      "ebitdaRunRate": 19,
-      "headcountDelta": 30,
+      "revenueRunRate": 25,
+      "ebitdaRunRate": 7,
+      "headcountDelta": 16,
       "complexity": "high",
       "inorganic": false,
       "newProductOrMarket": true,
@@ -578,7 +583,7 @@
         {
           "id": "jeddah_export_terminal_p1",
           "name": "Port concession and terminal design",
-          "capex": 10,
+          "capex": 4,
           "startYear": 2028,
           "durationQuarters": 3,
           "owner": "VP Supply Chain",
@@ -587,7 +592,7 @@
         {
           "id": "jeddah_export_terminal_p2",
           "name": "Storage, bagging and bulk loading",
-          "capex": 60,
+          "capex": 25,
           "startYear": 2028,
           "durationQuarters": 5,
           "owner": "Project Director Jeddah",
@@ -596,7 +601,7 @@
         {
           "id": "jeddah_export_terminal_p3",
           "name": "Inland link and rail siding",
-          "capex": 25,
+          "capex": 11,
           "startYear": 2029,
           "durationQuarters": 4,
           "owner": "Logistics Manager",
@@ -605,7 +610,7 @@
       ],
       "requirements": {
         "people": "Project director and terminal crew of twenty",
-        "capex": 95,
+        "capex": 40,
         "systems": "Terminal operating system and export documentation",
         "decisions": [
           "Export ambition set beyond the GCC",
@@ -621,12 +626,12 @@
       "owner": "VP Commercial",
       "objective": "Road export of lime and GCC to UAE, Kuwait and Bahrain, 100 kt by 2031",
       "rationale": "Regional buyers import from Oman and Egypt at a landed cost SLIC can beat from Riyadh",
-      "capex": 8,
+      "capex": 3,
       "startYearEarliest": 2027,
       "rampYears": 3,
-      "revenueRunRate": 38,
-      "ebitdaRunRate": 8,
-      "headcountDelta": 10,
+      "revenueRunRate": 13,
+      "ebitdaRunRate": 3,
+      "headcountDelta": 6,
       "complexity": "low",
       "inorganic": false,
       "newProductOrMarket": true,
@@ -654,7 +659,7 @@
         {
           "id": "gcc_export_sales_p1",
           "name": "GCC market entry and distributor agreements",
-          "capex": 3,
+          "capex": 1,
           "startYear": 2027,
           "durationQuarters": 3,
           "owner": "VP Commercial",
@@ -663,7 +668,7 @@
         {
           "id": "gcc_export_sales_p2",
           "name": "Export sales team and trade finance",
-          "capex": 5,
+          "capex": 2,
           "startYear": 2027,
           "durationQuarters": 4,
           "owner": "Export Sales Manager",
@@ -672,7 +677,7 @@
       ],
       "requirements": {
         "people": "Export sales manager and two account managers",
-        "capex": 8,
+        "capex": 3,
         "systems": "Export documentation and trade finance line",
         "decisions": [
           "Export price floor approved"
@@ -687,12 +692,12 @@
       "owner": "CEO",
       "objective": "Enter PCC for paper, paints and plastics with a 60 kt plant",
       "rationale": "Downstream margin is 2x lime; domestic PCC is fully imported",
-      "capex": 210,
+      "capex": 88,
       "startYearEarliest": 2028,
       "rampYears": 3,
-      "revenueRunRate": 96,
-      "ebitdaRunRate": 34,
-      "headcountDelta": 60,
+      "revenueRunRate": 34,
+      "ebitdaRunRate": 13,
+      "headcountDelta": 33,
       "complexity": "high",
       "inorganic": false,
       "newProductOrMarket": true,
@@ -731,7 +736,7 @@
         {
           "id": "pcc_plant_p1",
           "name": "Feasibility, technology licence and offtake",
-          "capex": 15,
+          "capex": 6,
           "startYear": 2028,
           "durationQuarters": 4,
           "owner": "CEO",
@@ -740,7 +745,7 @@
         {
           "id": "pcc_plant_p2",
           "name": "Plant construction",
-          "capex": 160,
+          "capex": 67,
           "startYear": 2029,
           "durationQuarters": 6,
           "owner": "Project Director PCC",
@@ -749,7 +754,7 @@
         {
           "id": "pcc_plant_p3",
           "name": "Commissioning and market qualification",
-          "capex": 35,
+          "capex": 15,
           "startYear": 2030,
           "durationQuarters": 4,
           "owner": "Plant Director PCC",
@@ -758,7 +763,7 @@
       ],
       "requirements": {
         "people": "Project director, process licensor team, thirty operators",
-        "capex": 210,
+        "capex": 88,
         "systems": "Process control and quality lab for fine carbonates",
         "decisions": [
           "Final investment decision on PCC",
@@ -774,12 +779,12 @@
       "owner": "Plant Director Jeddah",
       "objective": "Move GCC output from filler grade to coated fine grades for paints and plastics",
       "rationale": "Price premium of 40% for fine grades; Jeddah has idle milling capacity",
-      "capex": 34,
+      "capex": 14,
       "startYearEarliest": 2027,
       "rampYears": 2,
-      "revenueRunRate": 22,
-      "ebitdaRunRate": 9,
-      "headcountDelta": 8,
+      "revenueRunRate": 8,
+      "ebitdaRunRate": 3,
+      "headcountDelta": 4,
       "complexity": "medium",
       "inorganic": false,
       "newProductOrMarket": true,
@@ -800,7 +805,7 @@
         {
           "id": "gcc_grade_upgrade_p1",
           "name": "Fine grinding and classification line",
-          "capex": 26,
+          "capex": 11,
           "startYear": 2027,
           "durationQuarters": 4,
           "owner": "Plant Director Jeddah",
@@ -809,7 +814,7 @@
         {
           "id": "gcc_grade_upgrade_p2",
           "name": "Coating and packaging for fine grades",
-          "capex": 8,
+          "capex": 3,
           "startYear": 2028,
           "durationQuarters": 3,
           "owner": "Plant Director Jeddah",
@@ -818,7 +823,7 @@
       ],
       "requirements": {
         "people": "Process engineer and quality technician",
-        "capex": 34,
+        "capex": 14,
         "systems": "Particle size analysis in the lab",
         "decisions": [
           "Grade roadmap agreed with the top paint and plastics accounts"
@@ -833,12 +838,12 @@
       "owner": "VP Commercial",
       "objective": "Bundle hydrated lime with dosing equipment and service contracts for desalination and municipal plants",
       "rationale": "Water treatment is the fastest-growing domestic segment; service contracts lock in 5-year volume",
-      "capex": 15,
+      "capex": 6,
       "startYearEarliest": 2027,
       "rampYears": 2,
-      "revenueRunRate": 30,
-      "ebitdaRunRate": 8,
-      "headcountDelta": 14,
+      "revenueRunRate": 10,
+      "ebitdaRunRate": 3,
+      "headcountDelta": 8,
       "complexity": "medium",
       "inorganic": false,
       "newProductOrMarket": true,
@@ -859,7 +864,7 @@
         {
           "id": "water_treatment_bundle_p1",
           "name": "Slaking and dosing service offer",
-          "capex": 9,
+          "capex": 4,
           "startYear": 2027,
           "durationQuarters": 3,
           "owner": "VP Commercial",
@@ -868,7 +873,7 @@
         {
           "id": "water_treatment_bundle_p2",
           "name": "Field service team and spare parts",
-          "capex": 6,
+          "capex": 2,
           "startYear": 2027,
           "durationQuarters": 4,
           "owner": "Service Manager",
@@ -877,7 +882,7 @@
       ],
       "requirements": {
         "people": "Service manager and eight field technicians",
-        "capex": 15,
+        "capex": 6,
         "systems": "Service scheduling and remote dosing telemetry",
         "decisions": [
           "Service pricing approved"
@@ -892,12 +897,12 @@
       "owner": "VP Commercial",
       "objective": "Build a 40-dealer network for agricultural lime in Qassim, Hail and Al Jouf",
       "rationale": "Agriculture is fragmented and unserved; low capex, moderate margin",
-      "capex": 6,
+      "capex": 3,
       "startYearEarliest": 2028,
       "rampYears": 2,
-      "revenueRunRate": 14,
-      "ebitdaRunRate": 3,
-      "headcountDelta": 6,
+      "revenueRunRate": 5,
+      "ebitdaRunRate": 1,
+      "headcountDelta": 3,
       "complexity": "low",
       "inorganic": false,
       "newProductOrMarket": true,
@@ -918,7 +923,7 @@
         {
           "id": "agri_channel_p1",
           "name": "Dealer recruitment and credit terms",
-          "capex": 2,
+          "capex": 1,
           "startYear": 2028,
           "durationQuarters": 3,
           "owner": "VP Commercial",
@@ -927,7 +932,7 @@
         {
           "id": "agri_channel_p2",
           "name": "Bagged agricultural lime line",
-          "capex": 4,
+          "capex": 2,
           "startYear": 2028,
           "durationQuarters": 3,
           "owner": "Plant Director Riyadh",
@@ -936,7 +941,7 @@
       ],
       "requirements": {
         "people": "Channel manager and two field agronomists",
-        "capex": 6,
+        "capex": 3,
         "systems": "Dealer portal and credit control",
         "decisions": [
           "Dealer credit policy approved"
@@ -951,15 +956,15 @@
       "owner": "CEO",
       "objective": "Acquire a limestone quarry within 80 km of Jeddah to secure reserves and aggregates share",
       "rationale": "Jeddah reserves cover 14 years; Western Region aggregates demand is giga-project driven",
-      "capex": 140,
+      "capex": 59,
       "startYearEarliest": 2028,
       "rampYears": 1,
       "capacityAddKt": {
-        "limestone": 600
+        "limestone": 300
       },
-      "revenueRunRate": 41,
-      "ebitdaRunRate": 14,
-      "headcountDelta": 55,
+      "revenueRunRate": 14,
+      "ebitdaRunRate": 5,
+      "headcountDelta": 30,
       "complexity": "high",
       "inorganic": true,
       "newProductOrMarket": false,
@@ -994,7 +999,7 @@
         {
           "id": "western_quarry_acq_p1",
           "name": "Target screening and due diligence",
-          "capex": 5,
+          "capex": 2,
           "startYear": 2028,
           "durationQuarters": 3,
           "owner": "CEO",
@@ -1003,7 +1008,7 @@
         {
           "id": "western_quarry_acq_p2",
           "name": "Acquisition and integration",
-          "capex": 135,
+          "capex": 57,
           "startYear": 2029,
           "durationQuarters": 4,
           "owner": "CFO",
@@ -1012,83 +1017,11 @@
       ],
       "requirements": {
         "people": "Deal team of four; site management retained",
-        "capex": 140,
+        "capex": 59,
         "systems": "Reserve model and integration of the quarry into planning",
         "decisions": [
           "Risk appetite at least selective",
           "Board approval of the transaction"
-        ]
-      }
-    },
-    {
-      "id": "steel_jv",
-      "name": "Captive lime joint venture with a steel producer",
-      "layer": "diversification",
-      "site": "alkharj",
-      "owner": "CEO",
-      "objective": "50/50 JV for a 150 kt kiln inside a steel complex with a 15-year offtake",
-      "rationale": "Locks in the largest customer segment and shares capex",
-      "capex": 90,
-      "startYearEarliest": 2028,
-      "rampYears": 3,
-      "capacityAddKt": {
-        "lime": 150
-      },
-      "revenueRunRate": 58,
-      "ebitdaRunRate": 21,
-      "headcountDelta": 25,
-      "complexity": "high",
-      "inorganic": true,
-      "newProductOrMarket": false,
-      "dependencies": [],
-      "rules": [
-        {
-          "type": "strategic",
-          "expr": "L4 >= 3",
-          "label": "Risk appetite set to aggressive",
-          "leverId": "L4"
-        }
-      ],
-      "kpis": [
-        "K6",
-        "Offtake volume"
-      ],
-      "risks": [
-        "Partner governance",
-        "Transfer pricing"
-      ],
-      "objectives": [
-        "O15",
-        "O7"
-      ],
-      "plan": "commercial",
-      "projects": [
-        {
-          "id": "steel_jv_p1",
-          "name": "Joint venture agreement and offtake terms",
-          "capex": 5,
-          "startYear": 2029,
-          "durationQuarters": 4,
-          "owner": "CEO",
-          "deliverable": "Signed joint venture and twenty-year offtake"
-        },
-        {
-          "id": "steel_jv_p2",
-          "name": "Captive kiln at the steel site",
-          "capex": 85,
-          "startYear": 2030,
-          "durationQuarters": 6,
-          "owner": "Project Director JV",
-          "deliverable": "Captive kiln commissioned"
-        }
-      ],
-      "requirements": {
-        "people": "JV manager and a plant team of twenty-five",
-        "capex": 90,
-        "systems": "Shared production planning with the steel partner",
-        "decisions": [
-          "Risk appetite set to aggressive",
-          "Board approval of the joint venture"
         ]
       }
     },
@@ -1100,14 +1033,14 @@
       "owner": "Head of Sustainability",
       "objective": "Capture 30 kt CO2 per year from Riyadh kilns for sale to food and beverage and PCC",
       "rationale": "Only viable when carbon carries a cost; positions SLIC for regulated markets and EU CBAM-exposed customers",
-      "capex": 70,
+      "capex": 29,
       "startYearEarliest": 2028,
       "rampYears": 2,
-      "revenueRunRate": 6,
-      "ebitdaRunRate": 2,
+      "revenueRunRate": 2,
+      "ebitdaRunRate": 1,
       "ebitdaScalesWith": "L6",
       "ebitdaScaleFactor": 0.08,
-      "headcountDelta": 12,
+      "headcountDelta": 7,
       "complexity": "high",
       "inorganic": false,
       "newProductOrMarket": true,
@@ -1138,7 +1071,7 @@
         {
           "id": "carbon_capture_pilot_p1",
           "name": "Emissions inventory and capture technology selection",
-          "capex": 5,
+          "capex": 2,
           "startYear": 2028,
           "durationQuarters": 3,
           "owner": "Head of Sustainability",
@@ -1147,7 +1080,7 @@
         {
           "id": "carbon_capture_pilot_p2",
           "name": "Capture pilot unit on one kiln",
-          "capex": 50,
+          "capex": 21,
           "startYear": 2028,
           "durationQuarters": 5,
           "owner": "Head of Sustainability",
@@ -1156,7 +1089,7 @@
         {
           "id": "carbon_capture_pilot_p3",
           "name": "CO2 utilization offtake",
-          "capex": 15,
+          "capex": 6,
           "startYear": 2029,
           "durationQuarters": 4,
           "owner": "Sustainability Projects Lead",
@@ -1165,28 +1098,31 @@
       ],
       "requirements": {
         "people": "Sustainability projects lead and two process engineers",
-        "capex": 70,
+        "capex": 29,
         "systems": "Emissions monitoring and reporting",
         "decisions": [
           "Carbon cost at least voluntary",
           "Pilot funding approved"
         ]
+      },
+      "emissions": {
+        "co2CapturedKt": 20
       }
     },
     {
-      "id": "bricks_exit",
-      "name": "Bricks line: harvest and exit",
+      "id": "bricks_choice",
+      "name": "Bricks: keep, fix or exit",
       "layer": "quick_wins",
       "site": "riyadh",
       "owner": "CFO",
-      "objective": "Run bricks for cash with zero growth capex and exit by 2029 if margin stays below 8%",
-      "rationale": "Bricks earn a 6% margin on 9% share in a declining market; capacity and management attention are better used on lime",
+      "objective": "Decide the bricks line after the gas switch: keep as is, fix the cost base, or exit",
+      "rationale": "The 2021 plan recommended exiting bricks and SLIC kept the line. Gas changes its cost base; the decision is taken on the margin the line earns after the switch",
       "capex": 0,
       "startYearEarliest": 2027,
       "rampYears": 1,
-      "revenueRunRate": -31,
-      "ebitdaRunRate": 4,
-      "headcountDelta": -35,
+      "revenueRunRate": -11,
+      "ebitdaRunRate": 1,
+      "headcountDelta": -19,
       "complexity": "low",
       "inorganic": false,
       "newProductOrMarket": false,
@@ -1194,17 +1130,19 @@
       "rules": [
         {
           "type": "strategic",
-          "expr": "classification.bricks.category in ['harvest','exit']",
-          "label": "Bricks classified harvest or exit",
-          "leverId": "L1"
+          "expr": "margin.bricks[2028] < 0.08",
+          "label": "Bricks margin below 8% in 2028, after the gas switch",
+          "leverId": "L2"
         }
       ],
       "kpis": [
         "K3",
+        "Bricks margin after the gas switch",
         "Exit date"
       ],
       "risks": [
-        "Workforce redeployment"
+        "Redeployment of the bricks workforce",
+        "Bricks margin recovers on gas and the exit is premature"
       ],
       "objectives": [
         "O11"
@@ -1212,22 +1150,22 @@
       "plan": "commercial",
       "projects": [
         {
-          "id": "bricks_exit_p1",
-          "name": "Harvest plan and customer transition",
+          "id": "bricks_choice_p1",
+          "name": "Bricks margin review after the gas switch",
           "capex": 0,
           "startYear": 2027,
-          "durationQuarters": 3,
+          "durationQuarters": 2,
           "owner": "CFO",
-          "deliverable": "Customers transitioned, line run for cash"
+          "deliverable": "Keep, fix or exit recommendation to the Board"
         },
         {
-          "id": "bricks_exit_p2",
-          "name": "Line sale or closure and workforce redeployment",
+          "id": "bricks_choice_p2",
+          "name": "Exit or fix execution",
           "capex": 0,
           "startYear": 2028,
-          "durationQuarters": 2,
+          "durationQuarters": 3,
           "owner": "CHRO",
-          "deliverable": "Line closed or sold, workforce redeployed"
+          "deliverable": "Line closed, sold or re-based; workforce redeployed"
         }
       ],
       "requirements": {
@@ -1235,8 +1173,8 @@
         "capex": 0,
         "systems": "None",
         "decisions": [
-          "Bricks classified harvest or exit",
-          "Board approval of the exit"
+          "Bricks margin read on gas for two quarters",
+          "Board decision: keep, fix or exit"
         ]
       }
     },
@@ -1248,14 +1186,14 @@
       "owner": "Plant Director Riyadh",
       "objective": "Replace kilns 1 and 3 at Riyadh with one modern kiln instead of a second retrofit",
       "rationale": "Both kilns are past design life. A retrofit keeps them running; a replacement pays only when energy is dear enough to reward the efficiency gain",
-      "capex": 120,
+      "capex": 50,
       "startYearEarliest": 2028,
       "rampYears": 2,
       "revenueRunRate": 0,
-      "ebitdaRunRate": 22,
+      "ebitdaRunRate": 8,
       "ebitdaScalesWith": "L2",
       "ebitdaScaleFactor": 0.015,
-      "headcountDelta": -15,
+      "headcountDelta": -8,
       "complexity": "high",
       "inorganic": false,
       "newProductOrMarket": false,
@@ -1289,7 +1227,7 @@
         {
           "id": "riyadh_kiln_replace_p1",
           "name": "Replace or retrofit study and kiln specification",
-          "capex": 5,
+          "capex": 2,
           "startYear": 2028,
           "durationQuarters": 2,
           "owner": "Plant Director Riyadh",
@@ -1298,7 +1236,7 @@
         {
           "id": "riyadh_kiln_replace_p2",
           "name": "New kiln supply and erection",
-          "capex": 95,
+          "capex": 40,
           "startYear": 2028,
           "durationQuarters": 6,
           "owner": "Project Director Riyadh",
@@ -1307,7 +1245,7 @@
         {
           "id": "riyadh_kiln_replace_p3",
           "name": "Decommissioning of kilns 1 and 3",
-          "capex": 20,
+          "capex": 8,
           "startYear": 2030,
           "durationQuarters": 3,
           "owner": "Plant Director Riyadh",
@@ -1316,12 +1254,225 @@
       ],
       "requirements": {
         "people": "Project director and owner team of eight; operators retrained on the new kiln",
-        "capex": 120,
+        "capex": 50,
         "systems": "Kiln control system integrated with the plant data platform",
         "decisions": [
           "Replace against retrofit decided by the Board",
           "Capital envelope wide enough after the Al Kharj kiln"
         ]
+      },
+      "emissions": {
+        "gjReduction": 0.15,
+        "site": "riyadh"
+      }
+    },
+    {
+      "id": "mineral_processing_services",
+      "name": "Mineral-processing services adjacency",
+      "layer": "diversification",
+      "site": null,
+      "owner": "CEO",
+      "objective": "Offer lime-based mineral-processing services to a large mining customer as a diversification case, evaluated on its own capex and return",
+      "rationale": "A mining customer has asked for processing services. It is evaluated as a diversification case on its own return: SLIC owns the assets and the contract",
+      "capex": 38,
+      "startYearEarliest": 2028,
+      "rampYears": 2,
+      "revenueRunRate": 26,
+      "ebitdaRunRate": 9,
+      "headcountDelta": 14,
+      "complexity": "high",
+      "inorganic": false,
+      "newProductOrMarket": true,
+      "dependencies": [],
+      "rules": [
+        {
+          "type": "strategic",
+          "expr": "L4 >= 3",
+          "label": "Risk appetite set to aggressive: a diversification case outside the core",
+          "leverId": "L4"
+        }
+      ],
+      "kpis": [
+        "K5",
+        "Service contract revenue",
+        "Return on the processing assets"
+      ],
+      "risks": [
+        "Single-customer exposure",
+        "Contract terms shorter than asset life"
+      ],
+      "objectives": [
+        "O8",
+        "O15"
+      ],
+      "plan": "commercial",
+      "projects": [
+        {
+          "id": "mineral_processing_services_p1",
+          "name": "Case evaluation and contract terms",
+          "capex": 3,
+          "startYear": 2028,
+          "durationQuarters": 3,
+          "owner": "CEO",
+          "deliverable": "Investment case and contract heads of terms"
+        },
+        {
+          "id": "mineral_processing_services_p2",
+          "name": "Processing unit at the customer site",
+          "capex": 35,
+          "startYear": 2029,
+          "durationQuarters": 5,
+          "owner": "Project Director Services",
+          "deliverable": "Processing unit commissioned under contract"
+        }
+      ],
+      "requirements": {
+        "people": "Services manager and an operating crew of twelve",
+        "capex": 38,
+        "systems": "Contract billing and service performance tracking",
+        "decisions": [
+          "Risk appetite set to aggressive",
+          "Contract signed before construction"
+        ]
+      }
+    },
+    {
+      "id": "bolt_on_acquisition",
+      "name": "Bolt-on acquisition, domestic",
+      "layer": "diversification",
+      "site": null,
+      "owner": "CEO",
+      "objective": "Acquire a domestic quarry or lime producer of the Atra 2024 kind when a target becomes available",
+      "rationale": "Atra Mining in 2024 showed the model: consolidated volume, a wider reserve base and one more region served. The trigger is a target becoming available at a price the envelope carries",
+      "capex": 50,
+      "startYearEarliest": 2028,
+      "rampYears": 2,
+      "revenueRunRate": 30,
+      "ebitdaRunRate": 9,
+      "capacityAddKt": {
+        "limestone": 150
+      },
+      "headcountDelta": 30,
+      "complexity": "high",
+      "inorganic": true,
+      "newProductOrMarket": true,
+      "dependencies": [],
+      "rules": [
+        {
+          "type": "strategic",
+          "expr": "L4 >= 3",
+          "label": "Risk appetite set to aggressive",
+          "leverId": "L4"
+        }
+      ],
+      "kpis": [
+        "K6",
+        "Consolidated volume",
+        "Reserve life"
+      ],
+      "risks": [
+        "No target available in the window",
+        "Valuation gap",
+        "Integration under one ERP"
+      ],
+      "objectives": [
+        "O15"
+      ],
+      "plan": "operations",
+      "projects": [
+        {
+          "id": "bolt_on_acquisition_p1",
+          "name": "Target screen and due diligence",
+          "capex": 2,
+          "startYear": 2028,
+          "durationQuarters": 3,
+          "owner": "CEO",
+          "deliverable": "Recommended target and valuation"
+        },
+        {
+          "id": "bolt_on_acquisition_p2",
+          "name": "Acquisition and integration",
+          "capex": 48,
+          "startYear": 2029,
+          "durationQuarters": 4,
+          "owner": "CFO",
+          "deliverable": "Target consolidated and on the Infor ERP"
+        }
+      ],
+      "requirements": {
+        "people": "Deal team of four; site management retained",
+        "capex": 50,
+        "systems": "Integration into planning and the Infor ERP",
+        "decisions": [
+          "Risk appetite set to aggressive",
+          "Board approval of the transaction"
+        ]
+      }
+    },
+    {
+      "id": "ancillary_electrification",
+      "name": "Electrification of ancillary drives and heat",
+      "layer": "foundation",
+      "site": null,
+      "owner": "Head of Sustainability",
+      "objective": "Move ancillary drives, dryers and hydration heat from diesel to grid electricity",
+      "rationale": "After the kilns switch to gas, ancillaries are the next fuel emissions. Electrification is cheap and reads as a decarbonization step",
+      "capex": 6,
+      "startYearEarliest": 2028,
+      "rampYears": 2,
+      "revenueRunRate": 0,
+      "ebitdaRunRate": 1,
+      "ebitdaScalesWith": "L6",
+      "ebitdaScaleFactor": 0.02,
+      "headcountDelta": 0,
+      "complexity": "low",
+      "inorganic": false,
+      "newProductOrMarket": false,
+      "dependencies": [
+        "kiln_efficiency"
+      ],
+      "rules": [],
+      "kpis": [
+        "K15",
+        "Ancillary energy from grid, share"
+      ],
+      "risks": [
+        "Grid connection lead time"
+      ],
+      "objectives": [
+        "O12"
+      ],
+      "plan": "sustainability",
+      "projects": [
+        {
+          "id": "ancillary_electrification_p1",
+          "name": "Ancillary energy audit and grid connection",
+          "capex": 2,
+          "startYear": 2028,
+          "durationQuarters": 3,
+          "owner": "Head of Sustainability",
+          "deliverable": "Audit and connection agreement"
+        },
+        {
+          "id": "ancillary_electrification_p2",
+          "name": "Electric drives and hydration heat",
+          "capex": 4,
+          "startYear": 2029,
+          "durationQuarters": 4,
+          "owner": "Plant Engineering Manager",
+          "deliverable": "Ancillaries on grid electricity at all sites"
+        }
+      ],
+      "requirements": {
+        "people": "Electrical engineer for eighteen months",
+        "capex": 6,
+        "systems": "Energy metering by drive",
+        "decisions": [
+          "Grid connection capacity confirmed"
+        ]
+      },
+      "emissions": {
+        "fuelCo2ReductionShare": 0.06
       }
     }
   ]

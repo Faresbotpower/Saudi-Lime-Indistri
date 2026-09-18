@@ -28,7 +28,8 @@ describe('Explain sheet', () => {
     )
     const buttons = screen.getAllByRole('button', { name: strings.explain.icon })
     expect(buttons.length).toBeGreaterThanOrEqual(4)
-    fireEvent.click(buttons[1])
+    const marginTile = screen.getAllByTestId('kpi-tile')[1]
+    fireEvent.click(within(marginTile).getByRole('button', { name: strings.explain.icon }))
     const sheet = screen.getByRole('dialog')
     expect(within(sheet).getByText(strings.explain.title)).toBeInTheDocument()
     expect(within(sheet).getAllByTestId('trace-entry').length).toBeGreaterThan(0)

@@ -63,6 +63,8 @@ type LeversState = {
   /** The printable report is mounted only while printing. */
   printing: boolean
   setLever: <K extends LeverId>(id: K, value: LeverValues[K]) => void
+  /** Switch the capital envelope between a Board-set value and one derived from the plan. */
+  setDerivedEnvelope: (on: boolean) => void
   applyPreset: (id: ScenarioId) => void
   reset: () => void
   setView: (view: ViewId) => void
@@ -98,6 +100,7 @@ const sameLevers = (a: LeverValues, b: LeverValues) =>
   Math.abs(a.L1.multiplier - b.L1.multiplier) < 1e-9 &&
   a.L2 === b.L2 &&
   a.L3 === b.L3 &&
+  !!a.L3derived === !!b.L3derived &&
   a.L4 === b.L4 &&
   a.L5 === b.L5 &&
   a.L6 === b.L6
@@ -127,6 +130,11 @@ export const useLevers = create<LeversState>((set) => ({
   overrides: {},
   inputsOpen: {},
   printing: typeof window !== 'undefined' && /[?&]print=1/.test(window.location.search),
+  setDerivedEnvelope: (on) =>
+    set((s) => {
+      const levers = { ...s.levers, L3derived: on || undefined } as LeverValues
+      return { levers, scenario: scenarioFor(levers) }
+    }),
   setLever: (id, value) =>
     set((s) => {
       const levers = { ...s.levers, [id]: value } as LeverValues

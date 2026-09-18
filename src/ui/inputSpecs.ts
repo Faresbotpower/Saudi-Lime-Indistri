@@ -71,15 +71,32 @@ export function inputsFor(id: LeverId | 'base', data: PlanData, l1Option: string
           id: 'fuel',
           title: G.fuel,
           fields: [
-            { path: 'energy.fuel.gasSarPerMmbtu', label: L.gas, unit: U.mmbtu, step: 0.1, min: 0 },
+            { path: 'energy.fuels.gas', label: L.gas, unit: U.sarGj, step: 0.5, min: 0 },
+            { path: 'energy.fuels.diesel', label: L.diesel, unit: U.sarGj, step: 0.5, min: 0 },
+            { path: 'energy.fuels.crude', label: L.crude, unit: U.sarGj, step: 0.5, min: 0 },
+            { path: 'energy.gjPerTonLime', label: L.gjPerTon, unit: U.gjT, step: 0.1, min: 1 },
+          ],
+        },
+        {
+          id: 'transition',
+          title: G.transition,
+          fields: [
+            ...a.sites.map((s) => ({
+              path: `energy.gasTransition.${s.id}`,
+              label: `${s.name}, ${L.gasYear}`,
+              unit: U.year,
+              step: 1,
+              min: a.baseYear,
+              max: a.planYears[a.planYears.length - 1] + 1,
+            })),
             {
-              path: 'energy.fuel.dieselSarPerLitre',
-              label: L.diesel,
-              unit: U.litre,
-              step: 0.01,
-              min: 0,
+              path: 'energy.gasDelayIndex',
+              label: L.delayIndex,
+              unit: U.index,
+              step: 5,
+              min: 100,
+              max: 160,
             },
-            { path: 'energy.fuel.gasShare', label: L.gasShare, ...pct, step: 1, min: 0, max: 100 },
           ],
         },
         {
@@ -280,16 +297,4 @@ export function inputsFor(id: LeverId | 'base', data: PlanData, l1Option: string
         },
       ]
   }
-}
-
-/** Energy index implied by fuel prices: 100 x (share x gas/base + (1 - share) x diesel/base). */
-export function indexFromFuel(
-  gas: number,
-  diesel: number,
-  share: number,
-  base: { gasSarPerMmbtu: number; dieselSarPerLitre: number },
-): number {
-  const g = base.gasSarPerMmbtu > 0 ? gas / base.gasSarPerMmbtu : 1
-  const d = base.dieselSarPerLitre > 0 ? diesel / base.dieselSarPerLitre : 1
-  return Math.round(100 * (share * g + (1 - share) * d))
 }

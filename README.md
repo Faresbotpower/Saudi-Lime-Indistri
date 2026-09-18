@@ -1,6 +1,6 @@
 # STRATA
 
-Dynamic strategy cockpit for Saudi Lime Industries Company, 2027 to 2031. A Sia proof of concept. All data is illustrative.
+Dynamic strategy cockpit for Saudi Lime Industries Company, 2027 to 2031. A Sia proof of concept. All data is illustrative, scaled to a company of SLIC's size (2026 revenue about SAR 300m), not SLIC's actuals; it is replaced with SLIC data in Phase 3.
 
 STRATA is the layer the approved plan lands in. The approach has ten steps in two phases (four of analysis, six of business plan building) and then Phase 3, make it live. The cascade the app carries is the one the plan is built in: facts, shifts, objectives, scorecard, initiatives, projects, plans, model. Nothing from Phase 1 is reworked in Phase 2, and nothing from Phase 2 is rebuilt here.
 
@@ -17,13 +17,13 @@ Node 20.19 or newer, or 22.12 or newer, is recommended by Vite 8. Vercel's defau
 
 ## Deploy
 
-Import the repository in Vercel, or run `vercel deploy --prod` from this folder. `vercel.json` sets the build command and output directory. No environment variables, no server functions. The app is static files and runs from any hosting, including a plain file server.
+Import the repository in Vercel, or run `vercel deploy --prod` from this folder. `vercel.json` sets the build command and output directory. No environment variables, no server functions. The app is static files and runs from any hosting: an SLIC internal web server, a SharePoint document library, or any static host, all without licence. That is the answer for the IT discussion.
 
 ## How to change the numbers
 
 Every number lives in two files, and nothing else needs to change:
 
-- `data/assumptions.json`: base year and five-year history, sites, products, sectors, prices, cost structure, lever definitions, scenario presets.
+- `data/assumptions.json`: base year, five-year history and the previous plan's 2024 targets, sites, products, sectors, prices, cost structure, the energy block (fuel prices per GJ, kiln energy per ton, each site's 2026 fuel mix and gas transition year, emission factors, the 2025 GHG baseline), the envelope rule, lever definitions, scenario presets.
 - `data/initiatives.json`: the initiative portfolio with viability rules, and on every initiative the objectives it serves, the functional plan it feeds, two to four projects whose capex sums to the initiative capex, and what it needs to work.
 - `data/objectives.json`: the shift agenda (ten shifts on the chairman pathways, each decided against its levers), fifteen objectives with owners, targets and OKRs, and the balanced scorecard (twenty KPIs with 2026 baselines and 2027 to 2031 targets; `computedFrom` makes a KPI read live from the engine; `lead: true` marks the readings the triggers use).
 
@@ -61,9 +61,17 @@ Every lever card has an Inputs section. It holds the exact lever value (multipli
 4. Financial plan. Click Baseline 2026, then move Energy cost to 140. EBITDA compresses, the PCC plant drops out, the Operations plan loses its projects, the roadmap re-sequences.
 5. Close on the Tracker. Type a 2027 energy actual of 140, read the triggers fired, then switch to Quarterly review and pick Q2 2027: the KPIs due, the triggers evaluated, the decisions due. This is what SLIC owns after handover.
 
+## The gas transition, the envelope and the owners
+
+SLIC's sites run on diesel and crude in 2026 and move to natural gas from 2027 (Jeddah 2028). Lime energy cost per ton is computed from each site's fuel mix and the fuel prices per GJ, per site and per year, and bricks kilns burn the same site fuel. Lever L2 is the gas price index with three named settings: Gas on time (100), Gas late one year (120, the allocation slips a year at every site) and Gas at 140. The Financial plan shows 2026 twice, the actual on diesel and crude and the pro forma on gas, and the plan line starts from the pro forma. Emissions per ton are process plus fuel; the Sustainability plan shows the path from the 2025 baseline to 2031 with the decarbonization roadmap (gas by site, kiln efficiency, electrification of ancillaries, the capture pilot) and the carbon cost exposure under L6.
+
+SLIC has no capital envelope. Lever L3 has a Derived setting that computes one from the plan: after-tax operating cash flow of the base business over 2027 to 2031, less maintenance capex and a dividend floor, plus debt capacity at the net debt ceiling (`envelopeRule` in the assumptions). The Financial plan shows the three lines and the result.
+
+Owners after handover, as SLIC stated them: financial model, Finance Department; tracker and quarterly cycle, Organizational Excellence Department. Acquisitions are in (a domestic bolt-on of the Atra 2024 kind, and a mineral-processing services adjacency evaluated on its own return); shared ownership structures are excluded and the words do not appear in the data or the interface. Logistics is third party and EXW. Bricks stay an existing line with a keep, fix or exit choice decided on the margin after the gas switch.
+
 ## Screenshots for the proposal
 
-`docs/screenshots/` holds the three the proposal needs, taken from the deployed build at 1440 by 900: `financial-plan-energy-140.png` (a bad gas year), `growth-portfolio-pcc-open.png` (the PCC plant sheet with its trigger, projects and requirements), `tracker-2027-actuals.png` (a 2027 energy actual and the triggers fired), plus the cover and the cascade. `docs/STRATA-report-base.pdf` is the exported report under Base.
+`docs/screenshots/` holds the three the proposal needs, taken from the deployed build at 1440 by 900: `financial-plan-gas-140.png` (actual against pro forma 2026 under Gas at 140), `growth-portfolio-bricks-open.png` (the Bricks keep, fix or exit card with its trigger), `tracker-quarterly-review.png` (quarterly review mode with 2027 actuals), plus the cover and the cascade. `docs/STRATA-report-base.pdf` is the exported report under Base.
 
 ## Deployment protection
 
@@ -71,19 +79,20 @@ Keep the GitHub repository private. A private repository does not protect the Ve
 
 ## Build status
 
-The build order in `CLAUDE.md` is complete and the update brief (STRATA_Update_Brief_v2) is applied on top: the engine under `src/engine` behind `runPlan(levers, data)` ends with a cascade step that rolls every initiative down to its projects and up to its objectives and its plan, and reads the scorecard live. Seven views: Strategic direction, Scorecard, Growth portfolio, Plans and requirements, Financial plan, Roadmap (quarterly Gantt in the five layers with ghost bars, dependency lines, critical path and milestones), and Tracker (2027 actuals for demand, energy and carbon re-run the engine; the triggers-fired panel lists the decisions now due; the quarterly review reads a quarter). View 1 carries the Strata reveal: three bands (assumptions, initiatives, plan) that light top to bottom with connector lines when a lever or a chip is hovered, the Where-to-play 2x2 with animated bubbles, and the classification table with the change against Base. 217 tests.
+The build order in `CLAUDE.md` is complete and the update brief (STRATA_Update_Brief_v2) is applied on top: the engine under `src/engine` behind `runPlan(levers, data)` ends with a cascade step that rolls every initiative down to its projects and up to its objectives and its plan, and reads the scorecard live. Seven views: Strategic direction, Scorecard, Growth portfolio, Plans and requirements, Financial plan, Roadmap (quarterly Gantt in the five layers with ghost bars, dependency lines, critical path and milestones), and Tracker (2027 actuals for demand, energy and carbon re-run the engine; the triggers-fired panel lists the decisions now due; the quarterly review reads a quarter). View 1 carries the Strata reveal: three bands (assumptions, initiatives, plan) that light top to bottom with connector lines when a lever or a chip is hovered, the Where-to-play 2x2 with animated bubbles, and the classification table with the change against Base. 231 tests.
 
 Step 10 added the 2.5 s intro (once per session, click to skip), the Explain toggle (slash icons on every KPI, card, site and classification row open a sheet with the trace and lever values), the lever ripple timing (rail 0 ms, cards 100 ms, chart lines 250 ms, roadmap bars 350 ms), a 16 ms throttle on slider input, reduced-motion handling for Framer and Recharts, and a projector legibility pass (14 px body, 16 px tables).
 
 The store's default view is Strategic direction. Testing note: Chrome freezes animations in a hidden tab, so a view switch driven by the exit animation never completes there. Keep the tab visible when checking motion by hand.
 
-Calibration note: list prices and unit costs in the data do not reproduce the 2026 actuals on their own. The engine computes a price factor and an all-in cost factor once under the Base preset so the base year matches `baseCase.revenue` and `baseCase.ebitda`, and writes both to the trace. If you change volumes, prices or costs, expect those factors to move; keep them near 1 by updating `baseCase` too.
+Calibration note: the illustrative base is scaled to SLIC's size. The previous plan (2021 to 2024) targeted revenue of 187 and EBITDA of 55 from a 2020 base around 135, and SLIC acquired Atra Mining in 2024, so the 2026 base is revenue 300, EBITDA 60 (20 percent), capex 25, headcount 650. Lime-family volumes are half and limestone volumes two fifths of the first illustrative set, initiative capex is 42 percent and run-rate value 35 percent of it, and the capital envelope default is 250 (range 100 to 600). List prices and unit costs in the data do not reproduce the 2026 actuals on their own: the engine computes a price factor and an all-in cost factor once under the Base preset so the base year matches `baseCase.revenue` and `baseCase.ebitda`, and writes both to the trace. Under Base the plan runs revenue 300 to about 450 and EBITDA 60 to about 155 by 2031 (the gas switch alone restates 2026 EBITDA to about 82), cumulative free cash flow about 330, capital committed 175 of 250; Downside defers two initiatives; Gas at 140 flips the PCC plant out and brings the bricks exit in. If you change volumes, prices, costs or fuel prices, expect those numbers to move; keep the calibration factors near 1 by updating `baseCase` too.
 
 Portfolio rules worth knowing:
 
 - Export volumes are gated by initiatives: level 1 (GCC) needs `gcc_export_sales`, level 2 needs `jeddah_export_terminal` (`export.requiresInitiative`). Their P&L comes from the volume model, not their run rates, so nothing is counted twice. The same applies to initiatives with `capacityAddKt`.
 - A viable initiative with negative NPV at the plan discount rate is deferred with reason "returns" and is never funded. Remove the `belowHurdle` filter in `src/engine/portfolio.ts` to fund by envelope alone.
 - Terminal value is `terminalMultiple` times 2031 EBITDA for every initiative.
-- Export tons carry variable cost plus logistics; domestic tons carry the calibrated all-in cost. `logisticsCostPerTon.extended` is set to 95 SAR per ton so the East Africa and South Asia leg reads as grow under the Extended ambition; at 140 it was break-even and classified as restructure. The threshold is about 100.
+- Export tons carry variable cost plus logistics (third party, EXW); domestic tons carry the calibrated all-in cost. `logisticsCostPerTon.extended` is set to 95 SAR per ton so the East Africa and South Asia leg reads as grow under the Extended ambition.
 - The Riyadh kiln replacement (`riyadh_kiln_replace`) is a strategic choice against the retrofit: out unless the energy index is at or above 115, then funded within the envelope like any other initiative (deferred on capital when the envelope is tight). It does not touch the Base case.
+- The bricks choice (`bricks_choice`) reads the bricks margin in 2028 from the rule context (`margin.bricks[2028] < 0.08`): on gas at index 100 the line earns above the threshold and the exit stays out; from index 115 the gas allocation is dearer or later and the exit comes in.
 - Classification thresholds live in `classificationThresholds`; the family category used by rules (for example the bricks exit) is that of the family's largest cell by 2031 revenue.

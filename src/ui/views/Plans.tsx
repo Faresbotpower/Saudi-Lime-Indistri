@@ -6,6 +6,7 @@ import { Slash } from '../components/Slash'
 import { SiteCard } from '../components/SiteCard'
 import { PeoplePanel } from '../components/PeoplePanel'
 import { SupplyPanel } from '../components/SupplyPanel'
+import { EmissionsPanel } from '../components/EmissionsPanel'
 import { usePlan, useTrackedPlan, useData, presetPlans } from '../../state/plan'
 import { strings } from '../../strings'
 import { planCards } from '../plans'
@@ -214,6 +215,11 @@ export function Plans() {
                 <div className="mt-6">
                   <SupplyPanel plan={plan} />
                 </div>
+              </div>
+            )}
+            {c.id === 'sustainability' && (
+              <div className="mt-6" data-tour="emissions">
+                <EmissionsPanel plan={plan} />
               </div>
             )}
             {c.id === 'hr' && (

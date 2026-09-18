@@ -20,7 +20,7 @@ describe('Scorecard view', () => {
     expect(within(margin).getByTestId('kpi-live')).toHaveTextContent(
       (plan.financials.ebitdaMargin[5] * 100).toFixed(1),
     )
-    expect(within(margin).getByTestId('kpi-baseline')).toHaveTextContent('23')
+    expect(within(margin).getByTestId('kpi-baseline')).toHaveTextContent('20')
     expect(
       within(screen.getByTestId('kpi-row-K13')).getByText(strings.scorecard.entered),
     ).toBeInTheDocument()

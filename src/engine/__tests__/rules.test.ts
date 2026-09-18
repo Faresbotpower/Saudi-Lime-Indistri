@@ -65,8 +65,8 @@ describe('lever grids', () => {
     ])
     expect(leverGrid('L4', assumptions)).toEqual([1, 2, 3])
     expect(leverGrid('L6', assumptions)).toEqual([0, 40, 120])
-    expect(leverGrid('L3', assumptions)[0]).toBe(200)
-    expect(leverGrid('L3', assumptions).at(-1)).toBe(1500)
+    expect(leverGrid('L3', assumptions)[0]).toBe(100)
+    expect(leverGrid('L3', assumptions).at(-1)).toBe(600)
     const l1 = leverGrid('L1', assumptions)
     expect(l1[0]).toBeCloseTo(0.7, 9)
     expect(l1.at(-1)).toBeCloseTo(1.3, 9)
@@ -75,7 +75,7 @@ describe('lever grids', () => {
 
   it('reads and writes a lever value, treating L1 as its multiplier', () => {
     expect(leverValue(base(), 'L1')).toBe(1)
-    expect(leverValue(base(), 'L3')).toBe(600)
+    expect(leverValue(base(), 'L3')).toBe(250)
     const moved = withLeverValue(base(), 'L1', 0.8)
     expect(moved.L1).toEqual({ option: 'onPlan', multiplier: 0.8 })
     expect(withLeverValue(base(), 'L2', 140).L2).toBe(140)

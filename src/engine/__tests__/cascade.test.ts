@@ -125,7 +125,6 @@ describe('cascade roll-up', () => {
       else if (feeding.every((s) => s === 'in')) expect(o.status).toBe('on_track')
       else expect(o.status).toBe('at_risk')
     }
-    expect(byId.O15.status).toBe('unfunded')
     expect(byId.O3.status).toBe('on_track')
   })
 
@@ -145,7 +144,7 @@ describe('cascade roll-up', () => {
     expect(base.scorecard).toHaveLength(kpis.length)
     const margin = row('K1')
     expect(margin.live![5]).toBeCloseTo(base.financials.ebitdaMargin[5] * 100, 6)
-    expect(margin.live![0]).toBeCloseTo(23, 0)
+    expect(margin.live![0]).toBeCloseTo(20, 0)
     expect(row('K2').live![5]).toBeCloseTo(base.financials.revenue[5], 6)
     expect(row('K16').live![5]).toBe(100)
     expect(row('K16').lead).toBe(true)
@@ -175,14 +174,17 @@ describe('cascade roll-up', () => {
 describe('housekeeping', () => {
   it('keeps the Base case where the brief pins it', () => {
     const b = runPlan(withL({}), data)
-    expect(Math.round(b.financials.revenue[0])).toBe(612)
-    expect(Math.round(b.financials.revenue[5])).toBe(908)
-    expect(Math.round(b.financials.ebitda[0])).toBe(141)
-    expect(Math.round(b.financials.ebitda[5])).toBe(298)
-    expect(b.financials.cumulativeFcf[5]).toBeGreaterThan(600)
-    expect(b.financials.cumulativeFcf[5]).toBeLessThan(680)
-    expect(b.capital.committed).toBe(402)
-    expect(b.capital.envelope).toBe(600)
+    // Scaled to a company of SLIC's size: 300 to about 435 revenue, 60 to about 155 EBITDA.
+    expect(Math.round(b.financials.revenue[0])).toBe(300)
+    expect(b.financials.revenue[5]).toBeGreaterThan(400)
+    expect(b.financials.revenue[5]).toBeLessThan(490)
+    expect(Math.round(b.financials.ebitda[0])).toBe(60)
+    expect(b.financials.ebitda[5]).toBeGreaterThan(130)
+    expect(b.financials.ebitda[5]).toBeLessThan(180)
+    expect(b.financials.cumulativeFcf[5]).toBeGreaterThan(250)
+    expect(b.financials.cumulativeFcf[5]).toBeLessThan(400)
+    expect(b.capital.committed).toBe(175)
+    expect(b.capital.envelope).toBe(250)
   })
 
   it('reads East Africa and South Asia as grow at Base logistics', () => {
@@ -193,9 +195,9 @@ describe('housekeeping', () => {
   it('offers the Riyadh kiln replacement as a strategic choice on energy and capital', () => {
     const b = runPlan(withL({}), data)
     expect(b.initiatives.find((i) => i.id === 'riyadh_kiln_replace')!.status).toBe('out')
-    const hot = runPlan(withL({ L2: 140, L3: 1200 }), data)
+    const hot = runPlan(withL({ L2: 140, L3: 600 }), data)
     expect(hot.initiatives.find((i) => i.id === 'riyadh_kiln_replace')!.status).toBe('in')
-    const tight = runPlan(withL({ L2: 140, L3: 200 }), data)
+    const tight = runPlan(withL({ L2: 140, L3: 100 }), data)
     expect(tight.initiatives.find((i) => i.id === 'riyadh_kiln_replace')!.status).toBe('deferred')
   })
 })

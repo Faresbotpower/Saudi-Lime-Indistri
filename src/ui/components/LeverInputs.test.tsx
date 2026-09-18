@@ -3,8 +3,6 @@ import { LeverRail } from '../shell/LeverRail'
 import { TopBar } from '../shell/TopBar'
 import { useLevers } from '../../state/levers'
 import { strings } from '../../strings'
-import { planData } from '../../data'
-import { indexFromFuel } from '../inputSpecs'
 
 const openInputs = (id: string) => {
   const box = screen.getByTestId(`inputs-${id}`)
@@ -30,15 +28,13 @@ describe('typed inputs under the levers', () => {
     expect(screen.getByText('137')).toBeInTheDocument()
   })
 
-  it('fuel prices set the energy index through the base prices in the data', () => {
+  it('fuel prices and the gas transition years are typed inputs behind the energy lever', () => {
     render(<LeverRail />)
     openInputs('L2')
-    fireEvent.change(screen.getByLabelText(/Natural gas/), { target: { value: '9' } })
-    const base = planData.assumptions.energy.fuel!
-    expect(useLevers.getState().levers.L2).toBe(
-      indexFromFuel(9, base.dieselSarPerLitre, base.gasShare, base),
-    )
-    expect(useLevers.getState().overrides['energy.fuel.gasSarPerMmbtu']).toBe(9)
+    fireEvent.change(screen.getByLabelText(/Natural gas/), { target: { value: '15' } })
+    expect(useLevers.getState().overrides['energy.fuels.gas']).toBe(15)
+    expect(useLevers.getState().levers.L2).toBe(100)
+    expect(screen.getByLabelText(/Jeddah, gas from/)).toHaveValue(2028)
   })
 
   it('an underlying assumption becomes an override in the store, shown as edited, and resets', () => {
@@ -71,9 +67,9 @@ describe('typed inputs under the levers', () => {
   it('the base year card exposes 2026 actuals, prices, capacity and people', () => {
     render(<LeverRail />)
     const box = openInputs('base')
-    expect(within(box).getByLabelText(/^Revenue/)).toHaveValue(612)
+    expect(within(box).getByLabelText(/^Revenue/)).toHaveValue(300)
     expect(within(box).getByLabelText(/Quicklime and hydrated lime, List price/)).toHaveValue(420)
-    expect(within(box).getByLabelText(/Riyadh, Quicklime and hydrated lime/)).toHaveValue(520)
+    expect(within(box).getByLabelText(/Riyadh, Quicklime and hydrated lime/)).toHaveValue(260)
     expect(within(box).getByLabelText(/Nitaqat target/)).toHaveValue(50)
   })
 

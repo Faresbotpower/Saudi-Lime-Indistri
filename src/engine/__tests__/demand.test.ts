@@ -12,21 +12,29 @@ describe('demand', () => {
     for (const s of assumptions.sectors) expect(d.bySector[s.id][0]).toBeCloseTo(s.baseVolumeKt, 6)
   })
 
+  const vol = (id: string) => assumptions.sectors.find((s) => s.id === id)!.baseVolumeKt
+
   it('compounds growth scaled by the L1 multiplier and applies giga phasing by sensitivity', () => {
     const d = computeDemand(base(), assumptions, { selected: [] })
     // steel 2027: 410 * (1 + 0.045 * 1.0) ^ 1 * (1 + (1.00 - 1) * 0.3)
-    expect(d.bySector.steel[1]).toBeCloseTo(410 * 1.045, 6)
+    expect(d.bySector.steel[1]).toBeCloseTo(vol('steel') * 1.045, 6)
     // steel 2028: 410 * 1.045 ^ 2 * (1 + (1.03 - 1) * 0.3)
-    expect(d.bySector.steel[2]).toBeCloseTo(410 * 1.045 * 1.045 * 1.009, 6)
+    expect(d.bySector.steel[2]).toBeCloseTo(vol('steel') * 1.045 * 1.045 * 1.009, 6)
     // construction 2031: 1650 * 1.038^5 * (1 + (1.09 - 1) * 0.8)
-    expect(d.bySector.construction[5]).toBeCloseTo(1650 * Math.pow(1.038, 5) * 1.072, 6)
+    expect(d.bySector.construction[5]).toBeCloseTo(
+      vol('construction') * Math.pow(1.038, 5) * 1.072,
+      6,
+    )
   })
 
   it('uses the delayed phasing curve when L1 is delayed', () => {
     const d = computeDemand(withL({ L1: { option: 'delayed', multiplier: 1.0 } }), assumptions, {
       selected: [],
     })
-    expect(d.bySector.construction[1]).toBeCloseTo(1650 * 1.038 * (1 + (0.92 - 1) * 0.8), 6)
+    expect(d.bySector.construction[1]).toBeCloseTo(
+      vol('construction') * 1.038 * (1 + (0.92 - 1) * 0.8),
+      6,
+    )
   })
 
   it('lower L1 multiplier lowers demand for every positive-growth sector in every plan year', () => {
@@ -47,7 +55,10 @@ describe('demand', () => {
       'lime',
       'limestone',
     ])
-    expect(d.domesticByFamily.lime[0]).toBeCloseTo(410 + 95 + 130 + 60, 6)
+    expect(d.domesticByFamily.lime[0]).toBeCloseTo(
+      vol('steel') + vol('glass') + vol('water') + vol('agriculture'),
+      6,
+    )
   })
 
   it('adds no export demand when L5 is domestic', () => {
@@ -58,7 +69,7 @@ describe('demand', () => {
 
   it('adds GCC export potential when L5 is GCC and the GCC sales initiative is selected, zero in the base year', () => {
     const d = computeDemand(withL({ L5: 1 }), assumptions, { selected: ['gcc_export_sales'] })
-    expect(d.exportKt).toEqual([0, 20, 45, 70, 90, 100])
+    expect(d.exportKt).toEqual([0, ...assumptions.export.potentialKt['1']])
     const none = computeDemand(withL({ L5: 1 }), assumptions, { selected: [] })
     expect(none.exportKt).toEqual([0, 0, 0, 0, 0, 0])
     expect(none.exportLevel).toBe(0)
@@ -69,9 +80,9 @@ describe('demand', () => {
     const withTerminal = computeDemand(withL({ L5: 2 }), assumptions, {
       selected: ['gcc_export_sales', 'jeddah_export_terminal'],
     })
-    expect(without.exportKt).toEqual([0, 20, 45, 70, 90, 100])
+    expect(without.exportKt).toEqual([0, ...assumptions.export.potentialKt['1']])
     expect(without.exportLevel).toBe(1)
-    expect(withTerminal.exportKt).toEqual([0, 20, 60, 120, 180, 230])
+    expect(withTerminal.exportKt).toEqual([0, ...assumptions.export.potentialKt['2']])
     expect(withTerminal.exportLevel).toBe(2)
   })
 

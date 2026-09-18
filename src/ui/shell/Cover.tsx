@@ -127,6 +127,7 @@ export function Cover({ onExitStart }: { onExitStart?: () => void }) {
         </div>
         <div className="cover-footer-credit">
           <span>{strings.app.builtBy}</span>
+          <span className="cover-hosting">{strings.app.hosting}</span>
           <span className="cover-disclaimer">
             <i />
             {strings.app.illustrative}

@@ -57,11 +57,58 @@ export function runCore(
     volumeKt[i] = vol
   }
 
+  const marginByFamily: Record<string, number[]> = {}
+  for (const fam of Object.keys(capacity.servedByFamily))
+    marginByFamily[fam] = demand.years.map((_, i) => {
+      const p = price.domesticPriceByFamily[fam][i] * calibration.price
+      const carbon = fam === 'lime' ? cost.carbonByYear[i] : 0
+      const c = (cost.costPerTonByFamily[fam][i] - carbon) * calibration.cost + carbon
+      return p > 0 ? 1 - c / p : 0
+    })
+
+  // 2026 restated as if every site were already on gas at the base index: the plan starts here.
+  const limeTons2026 = capacity.servedByFamily.lime?.[0] ?? 0
+  const energySaving2026 =
+    ((cost.energyCostPerTonLimeByYear[0] - cost.energyCostPerTonLimeOnGas) *
+      calibration.cost *
+      limeTons2026) /
+    1000
+  const proForma2026 = {
+    revenue: revenue[0],
+    ebitda: ebitda[0] + energySaving2026,
+    energyCostPerTonLimeActual: cost.energyCostPerTonLimeByYear[0],
+    energyCostPerTonLimeOnGas: cost.energyCostPerTonLimeOnGas,
+    energySaving: energySaving2026,
+  }
+
   const trace: Trace = {
     ...demand.trace,
     ...capacity.trace,
     ...price.trace,
     ...cost.trace,
+    proForma2026: [
+      {
+        rule: 'proForma.actual',
+        assumptionKey: 'energy.siteFuelMix2026',
+        value: Math.round(cost.energyCostPerTonLimeByYear[0]),
+      },
+      {
+        rule: 'proForma.gas',
+        assumptionKey: 'energy.fuels.gas',
+        value: Math.round(cost.energyCostPerTonLimeOnGas),
+      },
+      {
+        rule: 'proForma.tons',
+        assumptionKey: 'capacity.served.lime',
+        value: Math.round(limeTons2026),
+      },
+      { rule: 'calibration.cost', assumptionKey: 'calibration.cost', value: calibration.cost },
+      {
+        rule: 'proForma.ebitda',
+        assumptionKey: 'baseCase.ebitda',
+        value: Math.round(proForma2026.ebitda),
+      },
+    ],
     calibration: [
       { rule: 'calibration.price', assumptionKey: 'baseCase.revenue', value: a.baseCase.revenue },
       { rule: 'calibration.price', assumptionKey: 'calibration.price', value: calibration.price },
@@ -102,6 +149,8 @@ export function runCore(
     cost,
     calibration,
     baseBusiness: { revenue, cost: costSeries, ebitda, volumeKt },
+    marginByFamily,
+    proForma2026,
     trace,
   }
 }

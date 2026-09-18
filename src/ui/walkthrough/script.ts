@@ -119,12 +119,24 @@ export const chapters: Chapter[] = [
     6,
     [
       { at: 0, run: (api) => api.setView('financials') },
-      { at: 5, run: (api) => api.setBaselineOpen(true) },
-      { at: 12, run: (api) => api.setBaselineOpen(false) },
-      { at: 13, run: (_a, _b, focus) => focus(tour('main-chart')) },
-      { at: 14, run: (_api, animate) => animate('L2', 100, 140, 5, 1200) },
-      { at: 18, run: (_a, _b, focus) => focus(tour('kpis')) },
-      { at: 25, run: (api) => api.setLever('L2', 100) },
+      { at: 4, run: (_a, _b, focus) => focus(tour('main-chart')) },
+      { at: 9, run: (_a, _b, focus) => focus(tour('pro-forma')) },
+      {
+        at: 17,
+        run: (api, _b, focus) => {
+          api.setDerivedEnvelope(true)
+          focus(tour('envelope'))
+        },
+      },
+      {
+        at: 24,
+        run: (api, _b, focus) => {
+          api.setDerivedEnvelope(false)
+          focus(tour('kpis'))
+        },
+      },
+      { at: 25, run: (_api, animate) => animate('L2', 100, 140, 5, 1200) },
+      { at: 32, run: (api) => api.setLever('L2', 100) },
     ],
     tour('baseline'),
   ),

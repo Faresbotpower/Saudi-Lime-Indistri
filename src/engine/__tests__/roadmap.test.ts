@@ -31,7 +31,7 @@ describe('roadmap', () => {
   })
 
   it('shows capital-deferred initiatives as ghosts at their earliest start with the extra envelope needed', () => {
-    const { p, r } = run(withL({ L3: 350 }))
+    const { p, r } = run(withL({ L3: 150 }))
     const ghosts = r.layers.flatMap((l) => l.items).filter((i) => i.status === 'deferred')
     const deferred = Object.entries(p.entries).filter(
       ([, e]) => e.status === 'deferred' && e.reason === 'capital',
@@ -39,7 +39,7 @@ describe('roadmap', () => {
     expect(ghosts.map((g) => g.id).sort()).toEqual(deferred.map(([id]) => id).sort())
     for (const g of ghosts) {
       const e = p.entries[g.id]
-      expect(g.needsCapital).toBe(e.trigger!.threshold - 350)
+      expect(g.needsCapital).toBe(e.trigger!.threshold - 150)
       expect(g.start).toBe(e.startYear)
     }
   })
@@ -52,7 +52,7 @@ describe('roadmap', () => {
   })
 
   it('draws dependency links between selected bars and marks the critical path', () => {
-    const { r } = run(withL({ L3: 1500 }))
+    const { r } = run(withL({ L3: 600 }))
     expect(r.links.some((l) => l.from === 'kiln_efficiency' && l.to === 'pcc_plant')).toBe(true)
     expect(r.criticalPath.length).toBeGreaterThan(0)
     const items = Object.fromEntries(r.layers.flatMap((l) => l.items).map((i) => [i.id, i]))

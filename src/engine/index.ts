@@ -1,11 +1,13 @@
 import { buildCascade, type ObjectiveResult, type PlanRollup, type ScorecardRow } from './cascade'
 import { classify, type Category, type Cell } from './classify'
 import { consolidate, type SiteResult } from './consolidate'
+import { computeEmissions, type EmissionsResult } from './emissions'
+import { deriveEnvelope, type EnvelopeDerivation } from './envelope'
 import { runCore } from './core'
 import { selectPortfolio } from './portfolio'
 import { buildRoadmap, type Roadmap } from './roadmap'
 import { evaluateViability, contextFor, type Trigger } from './viability'
-import type { Levers, PlanData, Trace, TraceEntry } from './types'
+import type { Levers, PlanData, ProForma2026, Trace, TraceEntry } from './types'
 import { yearsOf } from './years'
 
 export type { Levers, PlanData, TraceEntry, Trace } from './types'
@@ -20,6 +22,10 @@ export type {
   ScorecardRow,
 } from './cascade'
 export { PLAN_IDS } from './cascade'
+export type { EmissionsResult } from './emissions'
+export type { EnvelopeDerivation } from './envelope'
+export { deriveEnvelope } from './envelope'
+export type { ProForma2026 } from './types'
 
 /** Actuals entered in the tracker for one elapsed year. */
 export type Actuals = { year: number; L1multiplier?: number; L2?: number; L6?: number }
@@ -86,10 +92,21 @@ export type PlanResult = {
   sites: SiteResult[]
   people: { headcount: number[]; saudization: number[]; costPerTon: number[] }
   supplyChain: {
+    /** 2031 energy cost per ton of lime, on gas. */
     energyCostPerTonLime: number
+    /** Energy cost per ton of lime by year, base year on the 2026 fuel mix. */
+    energyCostPerTonLimeByYear: number[]
+    /** Which fuel each site burns each year. */
+    fuelBySite: Record<string, ('mix' | 'gas')[]>
     carbonCostPerTonLime: number
     exportLogisticsPerTon: number
   }
+  /** The base year restated as if every site were already on gas; the plan starts here. */
+  proForma2026: ProForma2026
+  /** Emissions path of the lime business and the decarbonization roadmap. */
+  emissions: EmissionsResult
+  /** Present when L3 is set to Derived: how the envelope was computed from the plan. */
+  envelopeDerivation?: EnvelopeDerivation
   /** Tonnage and price signals behind the P&L, by year (base year first). */
   volumes: {
     servedKt: number[]
@@ -117,6 +134,7 @@ export type PlanResult = {
 
 /** Name of the preset whose lever values match exactly, otherwise custom. */
 export function scenarioNameFor(levers: Levers, data: PlanData): string {
+  if (levers.L3derived) return 'custom'
   const same = (a: Levers, b: Levers) =>
     a.L1.option === b.L1.option &&
     Math.abs(a.L1.multiplier - b.L1.multiplier) < 1e-9 &&
@@ -146,6 +164,9 @@ export function runPlan(
 ): PlanResult {
   const scenarioName = scenarioNameFor(levers, data)
   const isBase = scenarioName === 'base'
+  // Derived envelope: L3 is computed from the plan itself before anything else runs.
+  const derivation = levers.L3derived ? deriveEnvelope(levers, data) : undefined
+  if (derivation) levers = { ...levers, L3: derivation.envelope }
   const plain = runOnce(levers, data)
   const baseCase = isBase
     ? plain.financials
@@ -154,7 +175,8 @@ export function runPlan(
   const hasActuals =
     !!actuals &&
     (actuals.L1multiplier !== undefined || actuals.L2 !== undefined || actuals.L6 !== undefined)
-  if (!hasActuals) return { ...plain, baseCase, scenarioName, triggersFired: [] }
+  if (!hasActuals)
+    return { ...plain, baseCase, scenarioName, triggersFired: [], envelopeDerivation: derivation }
 
   // Tracked run: the elapsed year takes the actual values; decisions are re-taken on them.
   const decided: Levers = {
@@ -177,7 +199,14 @@ export function runPlan(
       reason: i.reason,
       trigger: i.trigger,
     }))
-  return { ...tracked, baseCase, scenarioName, actuals, triggersFired }
+  return {
+    ...tracked,
+    baseCase,
+    scenarioName,
+    actuals,
+    triggersFired,
+    envelopeDerivation: derivation,
+  }
 }
 
 /**
@@ -203,6 +232,7 @@ function runOnce(
   const cons = consolidate(levers, data, portfolio, yearOverrides)
   const classification = classify(levers, data, cons.core)
   const roadmap = buildRoadmap(levers, data, portfolio)
+  const emissions = computeEmissions(levers, data, portfolio, cons.core)
 
   const financials: Financials = {
     revenue: cons.financials.revenue,
@@ -243,6 +273,10 @@ function runOnce(
   }
   const supplyChain = {
     energyCostPerTonLime: cons.core.cost.energyCostPerTonByFamily.lime * cons.core.calibration.cost,
+    energyCostPerTonLimeByYear: cons.core.cost.energyCostPerTonLimeByYear.map(
+      (x) => x * cons.core.calibration.cost,
+    ),
+    fuelBySite: cons.core.cost.fuelBySite,
     carbonCostPerTonLime: cons.core.cost.carbonCostPerTonLime,
     exportLogisticsPerTon: cons.core.cost.exportLogisticsPerTon,
   }
@@ -251,9 +285,10 @@ function runOnce(
     financials: financials as unknown as Record<string, number[]>,
     volumes,
     people: cons.people as unknown as Record<string, number[]>,
-    supplyChain,
+    supplyChain: supplyChain as unknown as Record<string, number | number[]>,
     capital: portfolio.capital as unknown as Record<string, number>,
     diversificationShare2031,
+    emissions: { intensity: emissions.intensity, totalKt: emissions.totalKt },
   })
 
   const trace: Trace = {
@@ -261,6 +296,8 @@ function runOnce(
     ...classification.trace,
     ...roadmap.trace,
     ...cascade.trace,
+    ...emissions.trace,
+    ...(levers.L3derived ? deriveEnvelope(levers, data).trace : {}),
     'financials.ebitdaMargin': [
       {
         rule: 'consolidate.margin',
@@ -326,6 +363,14 @@ function runOnce(
     sites: cons.sites,
     people: cons.people,
     supplyChain,
+    proForma2026: {
+      ...cons.core.proForma2026,
+      energyCostPerTonLimeActual:
+        cons.core.proForma2026.energyCostPerTonLimeActual * cons.core.calibration.cost,
+      energyCostPerTonLimeOnGas:
+        cons.core.proForma2026.energyCostPerTonLimeOnGas * cons.core.calibration.cost,
+    },
+    emissions,
     volumes,
     classification: classification.cells.map((c: Cell) => ({
       id: c.id,

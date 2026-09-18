@@ -18,7 +18,7 @@ describe('viability', () => {
     const v = run()
     expect(v.jeddah_export_terminal.status).toBe('out')
     expect(v.jeddah_export_terminal.reason).toContain('Export ambition')
-    expect(v.steel_jv.status).toBe('out')
+    expect(v.bolt_on_acquisition.status).toBe('out')
     expect(v.carbon_capture_pilot.status).toBe('out')
   })
 
@@ -29,7 +29,11 @@ describe('viability', () => {
       threshold: 2,
       direction: 'above',
     })
-    expect(v.steel_jv.trigger).toEqual({ leverId: 'L4', threshold: 3, direction: 'above' })
+    expect(v.carbon_capture_pilot.trigger).toEqual({
+      leverId: 'L6',
+      threshold: 40,
+      direction: 'above',
+    })
     expect(v.carbon_capture_pilot.trigger).toEqual({
       leverId: 'L6',
       threshold: 40,
@@ -121,7 +125,7 @@ describe('viability', () => {
 
   it('fails closed on rules that need outputs not yet in the context', () => {
     const v = run()
-    expect(v.bricks_exit.status).toBe('out')
+    expect(v.bricks_choice.status).toBe('out')
   })
 
   it('trigger points, when re-applied as lever values, flip the rule they claim to flip', () => {

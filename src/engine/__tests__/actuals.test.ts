@@ -47,7 +47,8 @@ describe('year overrides in the core (tracker actuals)', () => {
 
   it('reproduces the closed-form demand exactly when no override is given', () => {
     const d = runCore(base(), data, [], GCC).demand
-    expect(d.bySector.steel[5]).toBeCloseTo(410 * Math.pow(1.045, 5) * (1 + (1.09 - 1) * 0.3), 6)
+    const steel = data.assumptions.sectors.find((s) => s.id === 'steel')!.baseVolumeKt
+    expect(d.bySector.steel[5]).toBeCloseTo(steel * Math.pow(1.045, 5) * (1 + (1.09 - 1) * 0.3), 6)
   })
 })
 
@@ -57,7 +58,8 @@ describe('runPlan with actuals', () => {
     const tracked = runPlan(base(), data, { actuals: { year: 2027, L2: 140 } })
     expect(tracked.scenarioName).toBe('base')
     expect(tracked.financials.ebitda[1]).toBeLessThan(plan.financials.ebitda[1])
-    expect(tracked.financials.revenue[1]).toBeCloseTo(plan.financials.revenue[1], 6)
+    // Bricks exit on a dear-gas actual, so revenue moves with the re-decided portfolio.
+    expect(tracked.initiatives.find((i) => i.id === 'bricks_choice')!.status).toBe('in')
     const pcc = (r: typeof plan) => r.initiatives.find((i) => i.id === 'pcc_plant')!.status
     expect(pcc(plan)).toBe('deferred')
     expect(pcc(tracked)).toBe('out')

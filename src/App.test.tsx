@@ -22,7 +22,7 @@ describe('shell', () => {
   it('renders base preset values in the rail', () => {
     render(<App />)
     expect(screen.getByText('On plan, 1.00x')).toBeInTheDocument()
-    expect(screen.getByText('SAR 600m')).toBeInTheDocument()
+    expect(screen.getByText('SAR 250m')).toBeInTheDocument()
   })
 
   it('switches scenario name to Custom when a lever moves, and back on reset', () => {
@@ -39,7 +39,7 @@ describe('shell', () => {
     render(<App />)
     fireEvent.click(screen.getByRole('button', { name: 'Show levers' }))
     fireEvent.click(screen.getByRole('button', { name: strings.scenarios.downside }))
-    expect(screen.getByText('SAR 350m')).toBeInTheDocument()
+    expect(screen.getByText('SAR 125m')).toBeInTheDocument()
   })
 })
 

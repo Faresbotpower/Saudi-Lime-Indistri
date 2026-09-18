@@ -35,7 +35,7 @@ describe('From facts to objectives band', () => {
     ).toHaveAttribute('data-lit', 'true')
     expect(
       inits
-        .getByText('Fleet outsourcing and logistics optimization')
+        .getByText('Third-party logistics contracting and EXW terms')
         .closest('[data-testid="chip"]'),
     ).toHaveAttribute('data-lit', 'false')
     expect(screen.getByTestId('shift-S5')).toHaveAttribute('data-lit', 'true')

@@ -11,10 +11,11 @@ const demandFor = (levers = base(), terminal = false) =>
 describe('capacity and utilization', () => {
   it('sums site capacity by family, folding dololime into lime', () => {
     const c = computeCapacity(demandFor(), assumptions, [])
-    expect(c.capacityByFamily.lime).toEqual(new Array(6).fill(520 + 380 + 90 + 240))
-    expect(c.capacityByFamily.limestone).toEqual(new Array(6).fill(2100))
-    expect(c.capacityByFamily.carbonate).toEqual(new Array(6).fill(90))
-    expect(c.capacityByFamily.bricks).toEqual(new Array(6).fill(120))
+    const sum = (k: string) => assumptions.sites.reduce((s, x) => s + (x.capacityKt[k] ?? 0), 0)
+    expect(c.capacityByFamily.lime).toEqual(new Array(6).fill(sum('lime') + sum('dololime')))
+    expect(c.capacityByFamily.limestone).toEqual(new Array(6).fill(sum('limestone')))
+    expect(c.capacityByFamily.carbonate).toEqual(new Array(6).fill(sum('gcc')))
+    expect(c.capacityByFamily.bricks).toEqual(new Array(6).fill(sum('bricks')))
   })
 
   it('ramps initiative capacity linearly from its start year', () => {
@@ -27,7 +28,10 @@ describe('capacity and utilization', () => {
       site: 'alkharj',
     }
     const c = computeCapacity(demandFor(), assumptions, [add])
-    const baseLime = 1230
+    const baseLime = assumptions.sites.reduce(
+      (s, x) => s + (x.capacityKt.lime ?? 0) + (x.capacityKt.dololime ?? 0),
+      0,
+    )
     expect(c.capacityByFamily.lime).toEqual([
       baseLime,
       baseLime,
@@ -36,7 +40,11 @@ describe('capacity and utilization', () => {
       baseLime + 200,
       baseLime + 200,
     ])
-    expect(c.capacityBySite.alkharj.lime[3]).toBeCloseTo(380 + 90 + 200, 6)
+    const alkharj = assumptions.sites.find((s) => s.id === 'alkharj')!.capacityKt
+    expect(c.capacityBySite.alkharj.lime[3]).toBeCloseTo(
+      (alkharj.lime ?? 0) + (alkharj.dololime ?? 0) + 200,
+      6,
+    )
   })
 
   it('reproduces each site base utilization in the base year', () => {

@@ -9,12 +9,14 @@ export type LeverValues = {
   L1: L1Value
   L2: number
   L3: number
+  /** Envelope derived from the plan by the envelope rule; L3 is ignored while true. */
+  L3derived?: boolean
   L4: number
   L5: number
   L6: number
 }
 
-export type LeverId = keyof LeverValues
+export type LeverId = 'L1' | 'L2' | 'L3' | 'L4' | 'L5' | 'L6'
 
 export type LeverDef = {
   id: LeverId
@@ -29,6 +31,10 @@ export type LeverDef = {
   default: number | L1Value
   moves: string[]
   description: string
+  /** Named settings on a slider lever. */
+  marks?: { value: number; key: string }[]
+  /** The lever can be derived from the plan (capital envelope). */
+  derived?: boolean
 }
 
 export type ScenarioId = 'base' | 'growth' | 'upside' | 'downside'

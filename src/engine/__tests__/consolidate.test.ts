@@ -74,7 +74,7 @@ describe('consolidation', () => {
     expect(c.people.saudization[1]).toBeGreaterThan(0.41)
     expect(c.people.saudization[1]).toBeLessThan(0.52)
     expect(c.people.headcount[5]).not.toBeCloseTo(1180, 0)
-    const noWorkforce = run(withL({ L3: 200 }))
+    const noWorkforce = run(withL({ L3: 100 }))
     if (noWorkforce.p.entries.workforce_productivity.status !== 'in')
       expect(noWorkforce.c.people.saudization[5]).toBeCloseTo(0.41, 9)
   })
@@ -96,8 +96,8 @@ describe('consolidation', () => {
   })
 
   it('a larger envelope commits more capex over the plan', () => {
-    const small = run(withL({ L3: 200 })).c
-    const large = run(withL({ L3: 1200 })).c
+    const small = run(withL({ L3: 100 })).c
+    const large = run(withL({ L3: 600 })).c
     const sum = (xs: number[]) => xs.reduce((s, x) => s + x, 0)
     expect(sum(large.financials.capex)).toBeGreaterThan(sum(small.financials.capex))
   })

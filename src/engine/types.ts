@@ -3,6 +3,8 @@
 export type L1Option = 'delayed' | 'onPlan' | 'accelerated'
 
 export type Levers = {
+  /** When true the capital envelope is derived from the plan by the envelope rule and L3 is ignored. */
+  L3derived?: boolean
   L1: { option: L1Option; multiplier: number }
   L2: number
   L3: number
@@ -11,7 +13,9 @@ export type Levers = {
   L6: number
 }
 
-export type LeverId = keyof Levers
+export type LeverId = 'L1' | 'L2' | 'L3' | 'L4' | 'L5' | 'L6'
+
+export type Fuel = 'diesel' | 'crude' | 'gas'
 
 export type Site = {
   id: string
@@ -69,8 +73,34 @@ export type Assumptions = {
   priceElasticity: { coefficient: number; clamp: [number, number] }
   energy: {
     baseIndex: number
-    fuel?: { gasSarPerMmbtu: number; dieselSarPerLitre: number; gasShare: number }
+    /** SAR per GJ by fuel. */
+    fuels: Record<Fuel, number>
+    gjPerTonLime: number
+    /** Kiln energy for bricks, burned with the site fuel where bricks are made. */
+    gjPerTonBricks?: number
+    siteFuelMix2026: Record<string, Partial<Record<Fuel, number>>>
+    /** First year each site runs on gas. */
+    gasTransition: Record<string, number>
+    /** An energy index at or above this slips the gas allocation one year per site. */
+    gasDelayIndex: number
+    /** tCO2 per GJ by fuel. */
+    emissionFactors: Record<Fuel, number>
+    ghgBaseline: { year: number; totalKtCo2: number }
   }
+  envelopeRule: {
+    taxRate: number
+    dividendFloorPctOfEbitda: number
+    maxNetDebtToEbitda: number
+    netDebt2026: number
+    roundTo: number
+  }
+  previousPlan?: {
+    name: string
+    year: number
+    targets: { revenue2024: number; ebitda2024: number }
+    note: string
+  }
+  logistics?: { model: string }
   carbon: { sarPerTon: Record<string, number> }
   people: {
     baseHeadcount: number
@@ -145,6 +175,13 @@ export type Initiative = {
   projects: Project[]
   /** What the initiative needs to work. */
   requirements: Requirements
+  /** Decarbonization effect once in plan. */
+  emissions?: {
+    gjReduction?: number
+    site?: string
+    co2CapturedKt?: number
+    fuelCo2ReductionShare?: number
+  }
 }
 
 export type Pathway = 'optimize' | 'modernize' | 'valueChain' | 'adjacency' | 'geography'
@@ -257,6 +294,16 @@ export type PriceResult = {
 }
 
 export type CostResult = {
+  /** Energy cost per ton of lime by year, capacity-weighted across sites, from the fuel mix. */
+  energyCostPerTonLimeByYear: number[]
+  /** Per site by year, SAR per ton of lime. */
+  energyCostPerTonLimeBySite: Record<string, number[]>
+  /** Which fuel each site burns each year. */
+  fuelBySite: Record<string, ('mix' | 'gas')[]>
+  /** Total emissions per ton of lime by year (process plus fuel), capacity-weighted. */
+  emissionsPerTonLimeByYear: number[]
+  /** Energy cost per ton of lime in the base year if every site were already on gas at the base index. */
+  energyCostPerTonLimeOnGas: number
   costPerTonByFamily: Record<string, Series>
   energyCostPerTonByFamily: Record<string, number>
   carbonCostPerTonLime: number
@@ -274,5 +321,17 @@ export type CoreResult = {
   cost: CostResult
   calibration: { price: number; cost: number }
   baseBusiness: { revenue: Series; cost: Series; ebitda: Series; volumeKt: Series }
+  /** Margin by product family and year after calibration: one minus calibrated cost over calibrated price. */
+  marginByFamily: Record<string, Series>
+  /** The base year restated as if every site were already on gas. */
+  proForma2026: ProForma2026
   trace: Trace
+}
+
+export type ProForma2026 = {
+  revenue: number
+  ebitda: number
+  energyCostPerTonLimeActual: number
+  energyCostPerTonLimeOnGas: number
+  energySaving: number
 }

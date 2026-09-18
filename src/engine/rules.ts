@@ -11,6 +11,8 @@ export type RuleContext = {
   levers: Levers
   utilization?: Record<string, Record<string, Record<number, number>>>
   classification?: Record<string, { category: string }>
+  /** Base-business margin by product family and year, after calibration. */
+  margin?: Record<string, Record<number, number>>
 }
 
 const COMPARE = /^([A-Za-z_][\w.]*)(?:\[(\d{4})\])?\s*(>=|<=|>|<|==|!=)\s*(-?\d+(?:\.\d+)?)$/
@@ -38,7 +40,7 @@ export function parseRule(expr: string): ParsedRule {
 function resolve(ctx: RuleContext, path: string): unknown {
   let cur: unknown = ctx.levers as unknown as Record<string, unknown>
   const parts = path.split('.')
-  if (parts[0] === 'utilization' || parts[0] === 'classification') {
+  if (parts[0] === 'utilization' || parts[0] === 'classification' || parts[0] === 'margin') {
     cur = ctx[parts[0]]
     parts.shift()
   }

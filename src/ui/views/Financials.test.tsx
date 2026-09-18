@@ -99,3 +99,48 @@ describe('Financial plan baseline and history', () => {
     )
   })
 })
+
+describe('Financial plan under the gas transition', () => {
+  beforeEach(() => useLevers.getState().reset())
+
+  it('shows 2026 twice: the actual on diesel and crude and the pro forma on gas', () => {
+    render(<Financials />)
+    const plan = runPlan(scenarioPresets.base, planData)
+    expect(
+      within(screen.getByTestId('pro-forma-actual')).getByText(fmt0(plan.financials.ebitda[0])),
+    ).toBeInTheDocument()
+    expect(
+      within(screen.getByTestId('pro-forma-proforma')).getByText(fmt0(plan.proForma2026.ebitda)),
+    ).toBeInTheDocument()
+    expect(plan.proForma2026.ebitda).toBeGreaterThan(plan.financials.ebitda[0])
+    fireEvent.click(screen.getByRole('button', { name: strings.financials.baseline }))
+    expect(screen.getByTestId('baseline-proforma-ebitda')).toHaveTextContent(
+      fmt0(plan.proForma2026.ebitda),
+    )
+    expect(screen.getByText(strings.inputs.baseNote)).toBeInTheDocument()
+  })
+
+  it('derives the capital envelope from the plan when the lever is set to Derived', () => {
+    render(
+      <>
+        <LeverRail />
+        <Financials />
+      </>,
+    )
+    expect(
+      within(screen.getByTestId('envelope-card')).getByText(strings.financials.envelope.hint),
+    ).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('radio', { name: strings.levers.L3.derived }))
+    const plan = runPlan({ ...scenarioPresets.base, L3derived: true }, planData)
+    expect(useLevers.getState().levers.L3derived).toBe(true)
+    expect(useLevers.getState().scenario).toBe('custom')
+    expect(screen.getByTestId('envelope-value')).toHaveTextContent(
+      fmt0(plan.envelopeDerivation!.envelope),
+    )
+    expect(screen.getByTestId('envelope-cash')).toHaveTextContent(
+      fmt0(plan.envelopeDerivation!.cashGenerated),
+    )
+    fireEvent.click(screen.getByRole('radio', { name: strings.levers.L3.set }))
+    expect(useLevers.getState().levers.L3derived).toBeUndefined()
+  })
+})

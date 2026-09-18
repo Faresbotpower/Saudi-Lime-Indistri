@@ -9,6 +9,8 @@ import { chart } from '../components/charts/theme'
 import { usePlan } from '../../state/plan'
 import { useLevers } from '../../state/levers'
 import { BaselineSheet } from '../components/BaselineSheet'
+import { ProFormaPanel } from '../components/ProFormaPanel'
+import { EnvelopeCard } from '../components/EnvelopeCard'
 import { strings } from '../../strings'
 import { pct1, sarm, signed, signedPts } from '../format'
 
@@ -43,6 +45,7 @@ export function Financials() {
         </button>
         <span className="text-[13px] text-muted">{S.baselineLead}</span>
       </div>
+      <ProFormaPanel plan={plan} />
       <div data-tour="kpis" className="financial-kpis grid grid-cols-4 gap-6">
         <KpiTile
           label={S.kpi.revenue2031}
@@ -129,6 +132,10 @@ export function Financials() {
         <Card title={S.strip} lead={S.stripLead} className="col-span-2">
           <ScenarioStrip plan={plan} />
         </Card>
+      </div>
+
+      <div className="mt-6" data-tour="envelope">
+        <EnvelopeCard plan={plan} />
       </div>
 
       <p className="mt-6 text-[13px] text-muted">{strings.common.illustrativeFootnote}</p>

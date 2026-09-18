@@ -39,6 +39,33 @@ export function BaselineSheet() {
           ))}
         </dl>
         <p className="mt-2 text-[12px] text-muted">{strings.financials.deliverable}</p>
+        <p className="mt-1 text-[12px] text-muted">{strings.inputs.baseNote}</p>
+      </div>
+      <div className="mb-5" data-testid="baseline-pro-forma">
+        <div className="label mb-1 text-muted">{strings.financials.proForma.title}</div>
+        <dl className="num grid grid-cols-2 gap-x-6 gap-y-1 text-[14px]">
+          <dt className="text-muted">{strings.financials.proForma.actual}</dt>
+          <dd className="text-ink">{sarm(plan.financials.ebitda[0])} SAR m</dd>
+          <dt className="text-muted">{strings.financials.proForma.proForma}</dt>
+          <dd data-testid="baseline-proforma-ebitda" className="text-ink">
+            {sarm(plan.proForma2026.ebitda)} SAR m
+          </dd>
+          <dt className="text-muted">{strings.financials.proForma.energy}</dt>
+          <dd className="text-ink">
+            {Math.round(plan.proForma2026.energyCostPerTonLimeActual)} to{' '}
+            {Math.round(plan.proForma2026.energyCostPerTonLimeOnGas)} SAR/t
+          </dd>
+        </dl>
+        {a.previousPlan && (
+          <p className="mt-2 text-[12px] text-muted">
+            {strings.financials.previousPlanNote(
+              a.previousPlan.name,
+              a.previousPlan.targets.revenue2024,
+              a.previousPlan.targets.ebitda2024,
+            )}{' '}
+            {a.previousPlan.note}
+          </p>
+        )}
       </div>
       {history && (
         <div className="mb-5">

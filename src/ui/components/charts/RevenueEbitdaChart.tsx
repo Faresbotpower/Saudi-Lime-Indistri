@@ -3,6 +3,7 @@ import {
   CartesianGrid,
   Line,
   LineChart,
+  ReferenceDot,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
@@ -19,6 +20,7 @@ import { ChartTooltip } from './ChartTooltip'
 export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase: boolean }) {
   const L = strings.financials.legend
   const history = planData.assumptions.history
+  const previous = planData.assumptions.previousPlan
   const past = history
     ? history.years
         .map((year, i) => ({
@@ -36,9 +38,13 @@ export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase:
       ebitda: plan.financials.ebitda[i],
       baseRevenue: plan.baseCase.revenue[i],
       baseEbitda: plan.baseCase.ebitda[i],
-      // The history lines end on the base year so they meet the plan.
+      // The history lines end on the actual base year; the plan line starts from the pro forma on gas.
       ...(i === 0 && history
-        ? { historyRevenue: plan.financials.revenue[0], historyEbitda: plan.financials.ebitda[0] }
+        ? {
+            historyRevenue: plan.financials.revenue[0],
+            historyEbitda: plan.financials.ebitda[0],
+            ebitda: plan.proForma2026.ebitda,
+          }
         : {}),
     })),
   ]
@@ -63,6 +69,42 @@ export function RevenueEbitdaChart({ plan, isBase }: { plan: PlanResult; isBase:
             domain={[0, 'auto']}
           />
           <Tooltip content={<ChartTooltip />} cursor={{ stroke: chart.line }} />
+          {previous && (
+            <ReferenceDot
+              x={previous.year}
+              y={previous.targets.revenue2024}
+              r={5}
+              fill="none"
+              stroke={chart.muted}
+              strokeDasharray="2 2"
+              label={{
+                value: L.previousPlan,
+                position: 'top',
+                fill: chart.muted,
+                fontSize: 11,
+              }}
+            />
+          )}
+          {previous && (
+            <ReferenceDot
+              x={previous.year}
+              y={previous.targets.ebitda2024}
+              r={5}
+              fill="none"
+              stroke={chart.muted}
+              strokeDasharray="2 2"
+            />
+          )}
+          {history && (
+            <ReferenceDot
+              x={plan.years[0]}
+              y={plan.proForma2026.ebitda}
+              r={5}
+              fill={chart.teal}
+              stroke="#fff"
+              label={{ value: L.proForma2026, position: 'right', fill: chart.teal, fontSize: 11 }}
+            />
+          )}
           {past.length > 0 && (
             <ReferenceLine
               x={plan.years[0]}

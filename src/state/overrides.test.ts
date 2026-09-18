@@ -6,9 +6,9 @@ describe('assumption overrides', () => {
   it('reads dotted paths, resolving array items by id', () => {
     expect(readPath(planData.assumptions, 'sectors.steel.growth')).toBe(0.045)
     expect(readPath(planData.assumptions, 'products.lime.basePrice')).toBe(420)
-    expect(readPath(planData.assumptions, 'sites.riyadh.capacityKt.lime')).toBe(520)
-    expect(readPath(planData.assumptions, 'export.potentialKt.1.2')).toBe(70)
-    expect(readPath(planData.assumptions, 'baseCase.revenue')).toBe(612)
+    expect(readPath(planData.assumptions, 'sites.riyadh.capacityKt.lime')).toBe(260)
+    expect(readPath(planData.assumptions, 'export.potentialKt.1.2')).toBe(35)
+    expect(readPath(planData.assumptions, 'baseCase.revenue')).toBe(300)
     expect(readPath(planData.assumptions, 'nothing.here')).toBeUndefined()
   })
 

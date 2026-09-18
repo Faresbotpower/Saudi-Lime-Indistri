@@ -86,10 +86,14 @@ function leverValueLabel(def: LeverDef, levers: LeverValues): string {
   switch (def.id) {
     case 'L1':
       return `${strings.levers.L1.options[levers.L1.option]}, ${levers.L1.multiplier.toFixed(2)}x`
-    case 'L2':
-      return `${levers.L2}`
+    case 'L2': {
+      const mark = def.marks?.find((m) => m.value === levers.L2)
+      return mark
+        ? strings.levers.L2.options[mark.key as keyof typeof strings.levers.L2.options]
+        : `${levers.L2}`
+    }
     case 'L3':
-      return `SAR ${fmt.format(levers.L3)}m`
+      return levers.L3derived ? strings.levers.L3.derived : `SAR ${fmt.format(levers.L3)}m`
     case 'L4':
     case 'L5':
     case 'L6': {
@@ -108,6 +112,7 @@ function leverValueLabel(def: LeverDef, levers: LeverValues): string {
 function Lever({ def }: { def: LeverDef }) {
   const levers = useLevers((s) => s.levers)
   const setLever = useLevers((s) => s.setLever)
+  const setDerivedEnvelope = useLevers((s) => s.setDerivedEnvelope)
   const setHovered = useLevers((s) => s.setHoveredLever)
   const lit = useLevers((s) => s.litLevers.includes(def.id))
 
@@ -146,19 +151,47 @@ function Lever({ def }: { def: LeverDef }) {
       case 'L2':
       case 'L3':
         return (
-          <div className="flex items-center gap-3">
-            <span className="num w-8 text-[13px] text-muted-dark">{def.range![0]}</span>
-            <Slider
-              min={def.range![0]}
-              max={def.range![1]}
-              step={def.step ?? 1}
-              value={levers[def.id]}
-              ariaLabel={def.name}
-              onChange={(v) => setLever(def.id, v)}
-            />
-            <span className="num w-10 text-right text-[13px] text-muted-dark">
-              {fmt.format(def.range![1])}
-            </span>
+          <div className="grid gap-2">
+            {def.id === 'L2' && def.marks && (
+              <Segmented
+                label={strings.levers.L2.hint}
+                options={def.marks.map((m) => m.key)}
+                labels={strings.levers.L2.options}
+                value={def.marks.find((m) => m.value === levers.L2)?.key ?? ''}
+                onChange={(k) => setLever('L2', def.marks!.find((m) => m.key === k)!.value)}
+              />
+            )}
+            {def.id === 'L3' && def.derived && (
+              <div>
+                <Segmented
+                  label={strings.levers.L3.derivedHint}
+                  options={['set', 'derived']}
+                  labels={{ set: strings.levers.L3.set, derived: strings.levers.L3.derived }}
+                  value={levers.L3derived ? 'derived' : 'set'}
+                  onChange={(k) => setDerivedEnvelope(k === 'derived')}
+                />
+                <p className="mt-1 text-[12px] text-muted-dark">{strings.levers.L3.derivedHint}</p>
+              </div>
+            )}
+            <div
+              className={`flex items-center gap-3${def.id === 'L3' && levers.L3derived ? ' opacity-40' : ''}`}
+            >
+              <span className="num w-8 text-[13px] text-muted-dark">{def.range![0]}</span>
+              <Slider
+                min={def.range![0]}
+                max={def.range![1]}
+                step={def.step ?? 1}
+                value={levers[def.id]}
+                ariaLabel={def.name}
+                onChange={(v) => {
+                  if (def.id === 'L3' && levers.L3derived) setDerivedEnvelope(false)
+                  setLever(def.id, v)
+                }}
+              />
+              <span className="num w-10 text-right text-[13px] text-muted-dark">
+                {fmt.format(def.range![1])}
+              </span>
+            </div>
           </div>
         )
       default: {
@@ -278,6 +311,9 @@ export function LeverRail() {
           </h3>
           <LeverInputs id="base">
             <p className="lever-context-copy">{strings.inputs.baseLead}</p>
+            <p className="lever-context-copy" data-testid="base-note">
+              {strings.inputs.baseNote}
+            </p>
           </LeverInputs>
         </section>
       </div>

@@ -29,7 +29,12 @@ export function contextFor(
       core.years.forEach((y, i) => (utilization[region][fam][y] = series[i]))
     }
   }
-  return { levers, utilization, classification }
+  const margin: RuleContext['margin'] = {}
+  for (const [fam, series] of Object.entries(core.marginByFamily)) {
+    margin[fam] = {}
+    core.years.forEach((y, i) => (margin[fam][y] = series[i]))
+  }
+  return { levers, utilization, classification, margin }
 }
 
 /**

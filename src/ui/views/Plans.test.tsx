@@ -60,3 +60,17 @@ describe('Plans and requirements view', () => {
     expect(pccRows()[0]).toHaveAttribute('data-status', 'out')
   })
 })
+
+describe('Sustainability plan emissions path', () => {
+  beforeEach(() => useLevers.getState().reset())
+
+  it('shows the emissions path from the 2025 baseline and the decarbonization roadmap', () => {
+    render(<Plans />)
+    const plan = runPlan(scenarioPresets.base, planData)
+    const panel = within(screen.getByTestId('plan-sustainability')).getByTestId('emissions-panel')
+    expect(within(panel).getAllByTestId('emissions-year')).toHaveLength(plan.years.length + 1)
+    expect(within(panel).getByText('2025')).toBeInTheDocument()
+    expect(within(panel).getAllByTestId('roadmap-step').length).toBe(plan.emissions.roadmap.length)
+    expect(within(panel).getByText('Gas at Riyadh')).toBeInTheDocument()
+  })
+})

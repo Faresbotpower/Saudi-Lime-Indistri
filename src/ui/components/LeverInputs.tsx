@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { planData, type LeverId } from '../../data'
+import type { LeverId } from '../../data'
 import { useLevers } from '../../state/levers'
 import { readPath } from '../../state/overrides'
 import { useData } from '../../state/plan'
 import { strings } from '../../strings'
-import { indexFromFuel, inputsFor, type Field } from '../inputSpecs'
+import { inputsFor, type Field } from '../inputSpecs'
 import { NumberField } from './NumberField'
 
 type Props = { id: LeverId | 'base'; children?: ReactNode }
@@ -32,18 +32,6 @@ export function LeverInputs({ id, children }: Props) {
   }
   const write = (f: Field, v: number | undefined) => {
     setOverride(f.path, v === undefined ? undefined : f.scale ? v / f.scale : v)
-    if (id === 'L2' && f.path.startsWith('energy.fuel.')) {
-      // Fuel prices set the index; the engine keeps working on the index.
-      const merged = {
-        ...overrides,
-        [f.path]: v === undefined ? undefined : f.scale ? v / f.scale : v,
-      }
-      const base = planData.assumptions.energy.fuel!
-      const gas = merged['energy.fuel.gasSarPerMmbtu'] ?? base.gasSarPerMmbtu
-      const diesel = merged['energy.fuel.dieselSarPerLitre'] ?? base.dieselSarPerLitre
-      const share = merged['energy.fuel.gasShare'] ?? base.gasShare
-      setLever('L2', Math.max(0, indexFromFuel(gas, diesel, share, base)))
-    }
   }
 
   const exact = (() => {
