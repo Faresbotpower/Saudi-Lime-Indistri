@@ -930,10 +930,10 @@ button:active:not(:disabled) {
 .view-direction .view-hero-art {
   background-position: 90% 30%;
 }
-[role='dialog'] {
+[role='dialog']:not(#lever-drawer) {
   border-left: 1px solid var(--line);
 }
-[role='dialog'] > div:first-child {
+[role='dialog']:not(#lever-drawer) > div:first-child {
   background: #edf2e8;
   padding-block: 28px;
 }

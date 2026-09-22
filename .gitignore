@@ -26,3 +26,6 @@ dist-ssr
 
 # Large walkthrough recording, kept locally
 docs/walkthrough/*.gif
+
+# /brag launch video output (rendered locally, not part of the app)
+brag-output/
